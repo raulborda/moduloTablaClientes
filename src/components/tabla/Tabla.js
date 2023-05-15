@@ -1,9 +1,14 @@
+import { Table } from 'antd';
 import React from 'react';
+import "./style.css";
 
 const Tabla = () => {
     return (
         <>
-            <h3>Hola</h3>
+        <div className='div_wrapper'>
+            <h1>holi</h1>
+           <Table/>
+        </div>
         </>
     );
 };
