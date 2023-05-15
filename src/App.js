@@ -9,11 +9,16 @@ function App() {
 
   const [infoClientes, setInfoclientes] = useState([]);
 
+   //const idU = localStorage.getItem("usuario");
+  //const idU = 8;
+  const [idUsu, setUsu] = useState(1);
+
 
   return ( 
       <GlobalContext.Provider
         value={{
           infoClientes, setInfoclientes,
+          idUsu, setUsu,
         }}
       >
         <ConfigProvider
