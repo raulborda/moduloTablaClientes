@@ -1,14 +1,15 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Divider, Table } from "antd";
-import React, { useContext, useEffect } from "react";
+import { Divider, Input, Table } from "antd";
+import React, { useContext, useEffect, useState } from "react";
 import "./style.css";
 import { GlobalContext } from "../context/GlobalContext";
 
 const TablaCli = () => {
   const URL = process.env.REACT_APP_URL;
 
-  const { infoClientes, setInfoclientes, idUsu } =
-    useContext(GlobalContext);
+  const { infoClientes, setInfoclientes, idUsu } = useContext(GlobalContext);
+
+  const [searchValue, setSearchValue] = useState("");
 
   //* EJECUTA LAS FUNCION QUE TRAE LA INFO y TRAE LOS DATOS PARA LLENAR TABLA CLIENTES
 
@@ -29,23 +30,21 @@ const TablaCli = () => {
     }
   }, [idUsu]);
 
-
   console.log(infoClientes);
 
-
-//   function traeClientes() {
-//     const data = new FormData();
-//     fetch(`${URL}tablaClientes.php`, {
-//       method: "POST",
-//       body: data,
-//     }).then(function (response) {
-//       response.text().then((resp) => {
-//         const data = resp;
-//         const objetoData = JSON.parse(data);
-//         setInfoclientes(objetoData);
-//       });
-//     });
-//   }
+  //   function traeClientes() {
+  //     const data = new FormData();
+  //     fetch(`${URL}tablaClientes.php`, {
+  //       method: "POST",
+  //       body: data,
+  //     }).then(function (response) {
+  //       response.text().then((resp) => {
+  //         const data = resp;
+  //         const objetoData = JSON.parse(data);
+  //         setInfoclientes(objetoData);
+  //       });
+  //     });
+  //   }
 
   const columns = [
     {
@@ -53,6 +52,7 @@ const TablaCli = () => {
       dataIndex: "cuenta",
       key: "cuenta",
       align: "center",
+      width: "50px",
     },
     {
       title: "CLIENTES",
@@ -95,51 +95,80 @@ const TablaCli = () => {
     },
   ];
 
-  const data = infoClientes.map((c, index) => ({
-    cuenta: c.cli_idsistema,
-    clientes: c.cli_nombre,
-    zonas: c.gruuno_desc,
-    centro: c.grudos_desc,
-    propietario: c.usu_nombre,
-    email: c.cli_email1,
-    telefono: c.cli_telefono1,
-  }));
+//   const data = infoClientes.map((c, index) => ({
+//     cuenta: c.cli_idsistema,
+//     clientes: c.cli_nombre,
+//     zonas: c.gruuno_desc,
+//     centro: c.grudos_desc,
+//     propietario: c.usu_nombre,
+//     email: c.cli_email1,
+//     telefono: c.cli_telefono1,
+//   }));
 
-    // const data = [
-    //   {
-    //     cuenta: "1",
-    //     clientes: "Mike",
-    //     zonas: "10 Downing Street",
-    //     centro: "Mike",
-    //     propietario: 32,
-    //     email: "10 Downing Street",
-    //     telefono: "10 Downing Street",
+  // const data = filterData([
+  //   {
+  //     cuenta: "1",
+  //     clientes: "Mike",
+  //     zonas: "10 Downing Street",
+  //     centro: "Mike",
+  //     propietario: 32,
+  //     email: "10 Downing Street",
+  //     telefono: "10 Downing Street",
 
-    //   },
-    //   {
-    //     cuenta: "2",
-    //     clientes: "John",
-    //     zonas: "10 Downing Street",
-    //     centro: "John",
-    //     propietario: 42,
-    //     email: "10 Downing Street",
-    //     telefono: "10 Downing Street",
-    //   },
-    // ];
+  //   },
+  //   {
+  //     cuenta: "2",
+  //     clientes: "John",
+  //     zonas: "10 Downing Street",
+  //     centro: "John",
+  //     propietario: 42,
+  //     email: "10 Downing Street",
+  //     telefono: "10 Downing Street",
+  //   },
+  // ]);
 
+  const handleCliente = (record) => {
+    console.log("Cliente seleccionado: ", record);
+    // Aquí puedes realizar las acciones que necesites con la información del cliente
+  };
 
-    const handleCliente = (record) => {
-        console.log("Cliente seleccionado: ", record);
-        // Aquí puedes realizar las acciones que necesites con la información del cliente
-      };
-
-
+  const filterData = (data) => {
+    if (searchValue === "") {
+      return data;
+    }
+    return data.filter((item) => {
+      return (
+        item.clientes.toLowerCase().includes(searchValue.toLowerCase()) ||
+        item.cuenta.toString().includes(searchValue)
+      );
+    });
+  };
+  
+  const data = filterData(
+    infoClientes.map((c, index) => ({
+      cuenta: c.cli_idsistema,
+      clientes: c.cli_nombre,
+      zonas: c.gruuno_desc,
+      centro: c.grudos_desc,
+      propietario: c.usu_nombre,
+      email: c.cli_email1,
+      telefono: c.cli_telefono1,
+    }))
+  );
+  
 
   return (
     <>
       <div className="div_wrapper">
         <h1 className="titulos">CLIENTES</h1>
         <Divider style={{ marginBottom: "10px", marginTop: "0px" }} />
+        <Input
+        style={{width:"200px", marginBottom:"10px"}}
+          type="text"
+          value={searchValue}
+          onChange={(e) => setSearchValue(e.target.value)}
+          placeholder="Buscar por cliente o cuenta"
+        />
         <Table dataSource={data} columns={columns} />
       </div>
     </>
