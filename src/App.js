@@ -1,6 +1,6 @@
 import { ConfigProvider } from "antd";
 import "./App.css";
-import "./components/context/GlobalContext";
+import {GlobalContext} from "./components/context/GlobalContext";
 import esES from "antd/lib/locale/es_ES";
 import TablaCli from "./components/tabla/Tabla";
 import { useState } from "react";
@@ -10,10 +10,9 @@ function App() {
   const [infoClientes, setInfoclientes] = useState([]);
 
 
-  return (
-    <>
+  return ( 
       <GlobalContext.Provider
-        value:{{
+        value={{
           infoClientes, setInfoclientes,
         }}
       >
@@ -28,7 +27,7 @@ function App() {
           <TablaCli />
         </ConfigProvider>
       </GlobalContext.Provider>
-    </>
+ 
   );
 }
 

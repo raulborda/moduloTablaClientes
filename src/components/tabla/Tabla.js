@@ -1,8 +1,32 @@
 import { Divider, Table } from "antd";
-import React from "react";
+import React, { useContext } from "react";
 import "./style.css";
+import { GlobalContext } from "../context/GlobalContext";
 
 const TablaCli = () => {
+
+
+
+const {infoClientes, setInfoclientes,} = useContext(GlobalContext);
+
+
+//* EJECUTA LAS FUNCION QUE TRAE LA INFO y TRAE LOS DATOS PARA LLENAR TABLA CLIENTES
+
+function traeClientes() {
+    const data = new FormData();
+    fetch(`${URL}listClientes.php`, {
+      method: "POST",
+      body: data,
+    }).then(function (response) {
+      response.text().then((resp) => {
+        const data = resp;
+        const objetoData = JSON.parse(data);
+        setInfoclientes(objetoData);
+      });
+    });
+  }
+
+
   const columns = [
     {
       title: "CUENTA",
