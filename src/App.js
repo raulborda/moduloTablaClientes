@@ -1,24 +1,33 @@
 import { ConfigProvider } from "antd";
 import "./App.css";
-import GlobalContext from "./components/context/GlobalContext"
-import Tabla from "./components/tabla/Tabla";
+import "./components/context/GlobalContext";
 import esES from "antd/lib/locale/es_ES";
+import TablaCli from "./components/tabla/Tabla";
+import { useState } from "react";
 
 function App() {
+
+  const [infoClientes, setInfoclientes] = useState([]);
+
+
   return (
     <>
-    <GlobalContext.Provider>
-      <ConfigProvider
-        locale={esES}
-        theme={{
-          token: {
-            colorPrimary: "#56b43c",
-          },
+      <GlobalContext.Provider
+        value:{{
+          infoClientes, setInfoclientes,
         }}
       >
-        <Tabla />
-      </ConfigProvider>
-    </GlobalContext.Provider>
+        <ConfigProvider
+          locale={esES}
+          theme={{
+            token: {
+              colorPrimary: "#56b43c",
+            },
+          }}
+        >
+          <TablaCli />
+        </ConfigProvider>
+      </GlobalContext.Provider>
     </>
   );
 }

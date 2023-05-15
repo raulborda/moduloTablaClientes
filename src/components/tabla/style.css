@@ -1,5 +1,14 @@
 .div_wrapper{
     height: 100%;
     width: 100%;
-    border: 1px solid red;
+    padding-left: 10px;
+    padding-right: 10px;
+    /* border: 1px solid red; */
 }
+
+.titulos {
+    font-family: 'Open Sans', sans-serif;
+    font-size: 15px;
+    color: #605d5f !important;
+}
+
