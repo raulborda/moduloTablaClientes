@@ -28,23 +28,9 @@ const TablaCli = () => {
         });
       });
     }
-  }, [idUsu]);
+  }, []);
 
-  console.log(infoClientes);
-
-  //   function traeClientes() {
-  //     const data = new FormData();
-  //     fetch(`${URL}tablaClientes.php`, {
-  //       method: "POST",
-  //       body: data,
-  //     }).then(function (response) {
-  //       response.text().then((resp) => {
-  //         const data = resp;
-  //         const objetoData = JSON.parse(data);
-  //         setInfoclientes(objetoData);
-  //       });
-  //     });
-  //   }
+  //console.log(infoClientes);
 
   const columns = [
     {
@@ -60,7 +46,7 @@ const TablaCli = () => {
       key: "clientes",
       align: "center",
       render: (text, record) => (
-        <span onClick={() => handleCliente(record)}>{text}</span>
+        <span onClick={() => handleCliente(record)} style={{color:"#00b33c"}}>{text}</span>
       ),
     },
     {
@@ -95,57 +81,46 @@ const TablaCli = () => {
     },
   ];
 
-//   const data = infoClientes.map((c, index) => ({
-//     cuenta: c.cli_idsistema,
-//     clientes: c.cli_nombre,
-//     zonas: c.gruuno_desc,
-//     centro: c.grudos_desc,
-//     propietario: c.usu_nombre,
-//     email: c.cli_email1,
-//     telefono: c.cli_telefono1,
-//   }));
-
-  // const data = filterData([
-  //   {
-  //     cuenta: "1",
-  //     clientes: "Mike",
-  //     zonas: "10 Downing Street",
-  //     centro: "Mike",
-  //     propietario: 32,
-  //     email: "10 Downing Street",
-  //     telefono: "10 Downing Street",
-
-  //   },
-  //   {
-  //     cuenta: "2",
-  //     clientes: "John",
-  //     zonas: "10 Downing Street",
-  //     centro: "John",
-  //     propietario: 42,
-  //     email: "10 Downing Street",
-  //     telefono: "10 Downing Street",
-  //   },
-  // ]);
 
   const handleCliente = (record) => {
     console.log("Cliente seleccionado: ", record);
     // Aquí puedes realizar las acciones que necesites con la información del cliente
   };
 
+  // const filterData = (data) => {
+  //   if (searchValue === "" ) {
+  //     return data;
+  //   }
+  //   return data.filter((item) => {
+  //     return (
+  //       item.clientes.toUpperCase().includes(searchValue.toUpperCase()) ||
+  //       item.cuenta.toString().includes(searchValue)
+  //       // item.clientes.includes(searchValue) ||
+  //       // item.cuenta.toString().includes(searchValue)
+  //     );
+  //   });
+  // };
+
   const filterData = (data) => {
-    if (searchValue === "") {
+    if (!infoClientes || searchValue === "") {
       return data;
     }
+    //console.log("dentro de la funcion filter: ",searchValue)
     return data.filter((item) => {
+      //console.log(item)
       return (
-        item.clientes.toLowerCase().includes(searchValue.toLowerCase()) ||
-        item.cuenta.toString().includes(searchValue)
+        item.clientes &&
+        (item.clientes.toUpperCase().includes(searchValue.toUpperCase()) ||
+        item.cuenta?.toString().includes(searchValue))
       );
     });
   };
   
+  
+  
   const data = filterData(
     infoClientes.map((c, index) => ({
+      key:c.cli_id,
       cuenta: c.cli_idsistema,
       clientes: c.cli_nombre,
       zonas: c.gruuno_desc,
