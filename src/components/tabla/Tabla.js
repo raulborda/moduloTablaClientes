@@ -105,7 +105,7 @@ const TablaCli = () => {
           item.cuenta?.toString().includes(searchValue))
       );
     });
-  };  
+  };
 
   const data = filterData(
     infoClientes.map((c, index) => ({
@@ -120,19 +120,26 @@ const TablaCli = () => {
     }))
   );
 
-
   return (
     <>
       <div className="div_wrapper">
         <h1 className="titulos">CLIENTES</h1>
         <Divider style={{ marginBottom: "10px", marginTop: "0px" }} />
-        <Input
-          style={{ width: "200px", marginBottom: "10px" }}
-          type="text"
-          value={searchValue}
-          onChange={(e) => setSearchValue(e.target.value)}
-          placeholder="Buscar por cliente o cuenta"
-        />
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "flex-end",
+            marginBottom: "10px",
+          }}
+        >
+          <Input
+            style={{ width: "200px" }}
+            type="text"
+            value={searchValue}
+            onChange={(e) => setSearchValue(e.target.value)}
+            placeholder="Buscar por cliente o cuenta"
+          />
+        </div>
         {isLoading ? (
           <div
             style={{
@@ -146,7 +153,7 @@ const TablaCli = () => {
             <Spin size="large" />
           </div>
         ) : (
-          <Table dataSource={data} columns={columns} />
+          <Table dataSource={data} columns={columns} size="middle"/>
         )}
       </div>
     </>
