@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Divider, Drawer, Input, Spin, Table } from "antd";
+import { Button, Divider, Drawer, Input, Spin, Table } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import "./style.css";
 import { GlobalContext } from "../context/GlobalContext";
-import { CloseOutlined } from "@ant-design/icons";
+import { CloseOutlined, ControlOutlined } from "@ant-design/icons";
 
 const TablaCli = () => {
   const URL = process.env.REACT_APP_URL;
@@ -52,11 +52,7 @@ const TablaCli = () => {
       key: "clientes",
       align: "center",
       render: (text, record) => (
-        <span
-          style={{ color: "#00b33c" }}
-        >
-          {text}
-        </span>
+        <span style={{ color: "#00b33c" }}>{text}</span>
       ),
     },
     {
@@ -130,10 +126,18 @@ const TablaCli = () => {
         <div
           style={{
             display: "flex",
-            justifyContent: "flex-end",
+            flexDirection: "row",
+            justifyContent: "space-between",
             marginBottom: "10px",
+            width: "100%",
           }}
         >
+          <Button
+            className="btnCambio"
+            icon={
+              <ControlOutlined style={{ color: "#00b33c", fontSize: "20px" }} />
+            }
+          ></Button>
           <Input
             style={{ width: "200px" }}
             type="text"
@@ -141,6 +145,21 @@ const TablaCli = () => {
             onChange={(e) => setSearchValue(e.target.value)}
             placeholder="Buscar por cliente o cuenta"
           />
+          {/*
+          <div
+            style={{
+              display: "flex",
+              justifyContent: "flex-end",
+            }}
+          >
+            <Input
+              style={{ width: "200px" }}
+              type="text"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              placeholder="Buscar por cliente o cuenta"
+            />
+          </div> */}
         </div>
         {isLoading ? (
           <div
@@ -177,7 +196,7 @@ const TablaCli = () => {
             <CloseOutlined
               style={{ position: "absolute", top: "18px", right: "10px" }}
             />
-          } 
+          }
         >
           {/* Agrega iframe */}
           <p>AGREGAR IFRAME MODULO VIEWCLIENT</p>
