@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Divider, Input, Table } from "antd";
+import { Divider, Input, Spin, Table } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import "./style.css";
 import { GlobalContext } from "../context/GlobalContext";
@@ -10,11 +10,13 @@ const TablaCli = () => {
   const { infoClientes, setInfoclientes, idUsu } = useContext(GlobalContext);
 
   const [searchValue, setSearchValue] = useState("");
+  const [isLoading, setIsLoading] = useState(true);
 
   //* EJECUTA LAS FUNCION QUE TRAE LA INFO y TRAE LOS DATOS PARA LLENAR TABLA CLIENTES
 
   useEffect(() => {
     if (idUsu) {
+      setIsLoading(true); // Establecer isLoading en true antes de hacer la solicitud
       const data = new FormData();
       data.append("idU", idUsu);
       fetch(`${URL}tablaClientes.php`, {
@@ -25,6 +27,7 @@ const TablaCli = () => {
           const data = resp;
           const objetoData = JSON.parse(data);
           setInfoclientes(objetoData);
+          setIsLoading(false); // Establecer isLoading en false después de recibir la respuesta
         });
       });
     }
@@ -46,7 +49,12 @@ const TablaCli = () => {
       key: "clientes",
       align: "center",
       render: (text, record) => (
-        <span onClick={() => handleCliente(record)} style={{color:"#00b33c"}}>{text}</span>
+        <span
+          onClick={() => handleCliente(record)}
+          style={{ color: "#00b33c" }}
+        >
+          {text}
+        </span>
       ),
     },
     {
@@ -81,46 +89,27 @@ const TablaCli = () => {
     },
   ];
 
-
   const handleCliente = (record) => {
     console.log("Cliente seleccionado: ", record);
     // Aquí puedes realizar las acciones que necesites con la información del cliente
   };
 
-  // const filterData = (data) => {
-  //   if (searchValue === "" ) {
-  //     return data;
-  //   }
-  //   return data.filter((item) => {
-  //     return (
-  //       item.clientes.toUpperCase().includes(searchValue.toUpperCase()) ||
-  //       item.cuenta.toString().includes(searchValue)
-  //       // item.clientes.includes(searchValue) ||
-  //       // item.cuenta.toString().includes(searchValue)
-  //     );
-  //   });
-  // };
-
   const filterData = (data) => {
     if (!infoClientes || searchValue === "") {
       return data;
     }
-    //console.log("dentro de la funcion filter: ",searchValue)
     return data.filter((item) => {
-      //console.log(item)
       return (
         item.clientes &&
         (item.clientes.toUpperCase().includes(searchValue.toUpperCase()) ||
-        item.cuenta?.toString().includes(searchValue))
+          item.cuenta?.toString().includes(searchValue))
       );
     });
-  };
-  
-  
-  
+  };  
+
   const data = filterData(
     infoClientes.map((c, index) => ({
-      key:c.cli_id,
+      key: c.cli_id,
       cuenta: c.cli_idsistema,
       clientes: c.cli_nombre,
       zonas: c.gruuno_desc,
@@ -130,7 +119,7 @@ const TablaCli = () => {
       telefono: c.cli_telefono1,
     }))
   );
-  
+
 
   return (
     <>
@@ -138,13 +127,27 @@ const TablaCli = () => {
         <h1 className="titulos">CLIENTES</h1>
         <Divider style={{ marginBottom: "10px", marginTop: "0px" }} />
         <Input
-        style={{width:"200px", marginBottom:"10px"}}
+          style={{ width: "200px", marginBottom: "10px" }}
           type="text"
           value={searchValue}
           onChange={(e) => setSearchValue(e.target.value)}
           placeholder="Buscar por cliente o cuenta"
         />
-        <Table dataSource={data} columns={columns} />
+        {isLoading ? (
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+              marginTop: "10%",
+            }}
+          >
+            <Spin size="large" />
+          </div>
+        ) : (
+          <Table dataSource={data} columns={columns} />
+        )}
       </div>
     </>
   );
