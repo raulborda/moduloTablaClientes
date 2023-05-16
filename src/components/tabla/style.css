@@ -11,3 +11,7 @@
     color: #605d5f !important;
 }
 
+
+div.ant-drawer-header-title {
+    margin-left: -25px;
+}

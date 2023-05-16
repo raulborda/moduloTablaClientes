@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Divider, Input, Spin, Table } from "antd";
+import { Divider, Drawer, Input, Spin, Table } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import "./style.css";
 import { GlobalContext } from "../context/GlobalContext";
+import { CloseOutlined } from "@ant-design/icons";
 
 const TablaCli = () => {
   const URL = process.env.REACT_APP_URL;
@@ -11,6 +12,8 @@ const TablaCli = () => {
 
   const [searchValue, setSearchValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedCliente, setSelectedCliente] = useState(null);
+  const [isDrawerVisible, setIsDrawerVisible] = useState(false);
 
   //* EJECUTA LAS FUNCION QUE TRAE LA INFO y TRAE LOS DATOS PARA LLENAR TABLA CLIENTES
 
@@ -50,7 +53,6 @@ const TablaCli = () => {
       align: "center",
       render: (text, record) => (
         <span
-          onClick={() => handleCliente(record)}
           style={{ color: "#00b33c" }}
         >
           {text}
@@ -90,8 +92,8 @@ const TablaCli = () => {
   ];
 
   const handleCliente = (record) => {
-    console.log("Cliente seleccionado: ", record);
-    // Aquí puedes realizar las acciones que necesites con la información del cliente
+    setSelectedCliente(record);
+    setIsDrawerVisible(true);
   };
 
   const filterData = (data) => {
@@ -153,9 +155,34 @@ const TablaCli = () => {
             <Spin size="large" />
           </div>
         ) : (
-          <Table dataSource={data} columns={columns} size="middle"/>
+          <Table
+            dataSource={data}
+            columns={columns}
+            size="middle"
+            onRow={(record) => ({
+              onClick: () => handleCliente(record),
+            })}
+          />
         )}
       </div>
+      {selectedCliente && (
+        <Drawer
+          visible={isDrawerVisible}
+          onClose={() => setIsDrawerVisible(false)}
+          title={selectedCliente.clientes}
+          placement="bottom"
+          height={"95vh"}
+          style={{ whiteSpace: "nowrap" }}
+          closeIcon={
+            <CloseOutlined
+              style={{ position: "absolute", top: "18px", right: "10px" }}
+            />
+          } 
+        >
+          {/* Agrega iframe */}
+          <p>AGREGAR IFRAME MODULO VIEWCLIENT</p>
+        </Drawer>
+      )}
     </>
   );
 };
