@@ -54,7 +54,7 @@ const TablaCli = () => {
       title: "CLIENTES",
       dataIndex: "clientes",
       key: "clientes",
-      align: "center",
+      align: "left",
       render: (text, record) => (
         <span style={{ color: "#00b33c" }}>{text}</span>
       ),
