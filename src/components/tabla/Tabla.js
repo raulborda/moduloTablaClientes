@@ -14,6 +14,7 @@ const TablaCli = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCliente, setSelectedCliente] = useState(null);
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
+  const [isCambioT, setIsCambioT] = useState(false);
 
   //* EJECUTA LAS FUNCION QUE TRAE LA INFO y TRAE LOS DATOS PARA LLENAR TABLA CLIENTES
 
@@ -37,6 +38,9 @@ const TablaCli = () => {
   }, []);
 
   //console.log(infoClientes);
+
+
+  /*COLUMNA, DATOS Y FILTRADO PARA TABLA INICIAL*/
 
   const columns = [
     {
@@ -118,6 +122,70 @@ const TablaCli = () => {
     }))
   );
 
+  /*COLUMNA, DATOS Y FILTRADO PARA TABLA CAMBIO*/
+
+  //console.log(isCambioT)
+  const handleCambio = (isCambioT) => {
+    setIsCambioT(!isCambioT);
+  };
+  
+
+  const columnsCambio = [
+    {
+      title: "CUENTA",
+      dataIndex: "cuenta",
+      key: "cuenta",
+      align: "center",
+      width: "50px",
+    },
+    {
+      title: "CLIENTES",
+      dataIndex: "clientes",
+      key: "clientes",
+      align: "center",
+      render: (text, record) => (
+        <span style={{ color: "#00b33c" }}>{text}</span>
+      ),
+    },
+    {
+      title: "Has. Propias",
+      dataIndex: "propias",
+      key: "propias",
+      align: "center",
+    },
+    {
+      title: "Has. Alquiladas",
+      dataIndex: "alquiladas",
+      key: "alquiladas",
+      align: "center",
+    },
+    {
+      title: "Has. Propias Año Anterior",
+      dataIndex: "propiasAnt",
+      key: "propiasAnt",
+      align: "center",
+    },
+    {
+      title: "Has. Alquiladas Año Anterior",
+      dataIndex: "alquiladasAnt",
+      key: "alquiladasAnt",
+      align: "center",
+    },
+  ];
+
+  const dataCambio = filterData(
+    infoClientes.map((c, index) => ({
+      key: c.cli_id,
+      cuenta: c.cli_idsistema,
+      clientes: c.cli_nombre,
+      propias: typeof c.ahxs_propias_actuales === 'string' ? parseInt(c.ahxs_propias_actuales).toFixed(0) : c.ahxs_propias_actuales,
+      alquiladas: typeof c.ahxs_alquiladas_actuales === 'string' ? parseInt(c.ahxs_alquiladas_actuales).toFixed(0) : c.ahxs_alquiladas_actuales,
+      propiasAnt: typeof c.ahxs_propias_anteriores === 'string' ? parseInt(c.ahxs_propias_anteriores).toFixed(0) : c.ahxs_propias_anteriores,
+      alquiladasAnt: typeof c.ahxs_alquiladas_anteriores === 'string' ? parseInt(c.ahxs_alquiladas_anteriores).toFixed(0) : c.ahxs_alquiladas_anteriores,
+    }))
+  );
+
+
   return (
     <>
       <div className="div_wrapper">
@@ -137,6 +205,7 @@ const TablaCli = () => {
             icon={
               <ControlOutlined style={{ color: "#00b33c", fontSize: "20px" }} />
             }
+            onClick={() => handleCambio(isCambioT)}
           ></Button>
           <Input
             style={{ width: "200px" }}
@@ -174,14 +243,26 @@ const TablaCli = () => {
             <Spin size="large" />
           </div>
         ) : (
-          <Table
-            dataSource={data}
-            columns={columns}
-            size="middle"
-            onRow={(record) => ({
-              onClick: () => handleCliente(record),
-            })}
-          />
+          isCambioT ?(
+            <Table
+              dataSource={dataCambio}
+              columns={columnsCambio}
+              size="middle"
+              onRow={(record) => ({
+                onClick: () => handleCliente(record),
+              })}
+            />
+            
+          ):(
+            <Table
+              dataSource={data}
+              columns={columns}
+              size="middle"
+              onRow={(record) => ({
+                onClick: () => handleCliente(record),
+              })}
+            />
+          )
         )}
       </div>
       {selectedCliente && (
