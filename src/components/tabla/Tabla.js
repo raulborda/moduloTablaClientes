@@ -178,12 +178,13 @@ const TablaCli = () => {
       key: c.cli_id,
       cuenta: c.cli_idsistema,
       clientes: c.cli_nombre,
-      propias: typeof c.ahxs_propias_actuales === 'string' ? parseInt(c.ahxs_propias_actuales).toFixed(0) : c.ahxs_propias_actuales,
-      alquiladas: typeof c.ahxs_alquiladas_actuales === 'string' ? parseInt(c.ahxs_alquiladas_actuales).toFixed(0) : c.ahxs_alquiladas_actuales,
-      propiasAnt: typeof c.ahxs_propias_anteriores === 'string' ? parseInt(c.ahxs_propias_anteriores).toFixed(0) : c.ahxs_propias_anteriores,
-      alquiladasAnt: typeof c.ahxs_alquiladas_anteriores === 'string' ? parseInt(c.ahxs_alquiladas_anteriores).toFixed(0) : c.ahxs_alquiladas_anteriores,
+      propias: c.ahxs_propias_actuales ? (typeof c.ahxs_propias_actuales === 'string' ? parseInt(c.ahxs_propias_actuales).toFixed(0) : c.ahxs_propias_actuales) : "-",
+      alquiladas: c.ahxs_alquiladas_actuales ? (typeof c.ahxs_alquiladas_actuales === 'string' ? parseInt(c.ahxs_alquiladas_actuales).toFixed(0) : c.ahxs_alquiladas_actuales) : "-",
+      propiasAnt: c.ahxs_propias_anteriores ? (typeof c.ahxs_propias_anteriores === 'string' ? parseInt(c.ahxs_propias_anteriores).toFixed(0) : c.ahxs_propias_anteriores) : "-",
+      alquiladasAnt: c.ahxs_alquiladas_anteriores ? (typeof c.ahxs_alquiladas_anteriores === 'string' ? parseInt(c.ahxs_alquiladas_anteriores).toFixed(0) : c.ahxs_alquiladas_anteriores) : "-",
     }))
   );
+  
 
 
   return (
