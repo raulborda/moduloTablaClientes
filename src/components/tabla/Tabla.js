@@ -142,10 +142,16 @@ const TablaCli = () => {
       title: "CLIENTES",
       dataIndex: "clientes",
       key: "clientes",
-      align: "center",
+      align: "left",
       render: (text, record) => (
         <span style={{ color: "#00b33c" }}>{text}</span>
       ),
+    },
+    {
+      title: "Has. Totales",
+      dataIndex: "hasTotales",
+      key: "hasTotales",
+      align: "center",
     },
     {
       title: "Has. Propias",
@@ -160,30 +166,74 @@ const TablaCli = () => {
       align: "center",
     },
     {
-      title: "Has. Propias Año Anterior",
-      dataIndex: "propiasAnt",
-      key: "propiasAnt",
+      title: "Compra USD Insumos",
+      dataIndex: "usdInsumo",
+      key: "usdInsumo",
       align: "center",
     },
     {
-      title: "Has. Alquiladas Año Anterior",
-      dataIndex: "alquiladasAnt",
-      key: "alquiladasAnt",
+      title: "TT Entregadas",
+      dataIndex: "toneladasEntregadas",
+      key: "toneladasEntregadas",
+      align: "center",
+    },
+    {
+      title: "Compra USD Estimado",
+      dataIndex: "estimadoUSDInsumos",
+      key: "estimadoUSD",
+      align: "center",
+    },
+    {
+      title: "TT Estimado",
+      dataIndex: "estimadoToneladas",
+      key: "estimadoToneladas",
+      align: "center",
+    },
+    {
+      title: "Neg. USD Abierto",
+      dataIndex: "negUSDAbierto",
+      key: "negUSDAbierto",
       align: "center",
     },
   ];
 
+  // const dataCambio = filterData(
+  //   infoClientes.map((c, index) => ({
+  //     key: c.cli_id,
+  //     cuenta: c.cli_idsistema,
+  //     clientes: c.cli_nombre,
+  //     hasTotales: c.has_totales ? (typeof c.has_totales === 'string' ? parseInt(c.has_totales).toFixed(0) : c.has_totales) : "-",
+  //     usdInsumo: c.usdEntregados ? (typeof c.usdEntregados === 'string' ? parseInt(c.usdEntregados).toFixed(0) : c.usdEntregados) : "-",
+  //     estimadoUSDInsumos:c.costoEstimado ? (typeof c.costoEstimado === 'string' ? parseInt(c.costoEstimado).toFixed(0) : c.costoEstimado) : "-",
+  //     toneladasEntregadas: c.toneladasEntregadas ? (typeof c.toneladasEntregadas === 'string' ? parseInt(c.toneladasEntregadas).toFixed(0) : c.toneladasEntregadas) : "-",
+  //     estimadoToneladas:c.toneladasEstimadas ? (typeof c.toneladasEstimadas === 'string' ? parseInt(c.toneladasEstimadas).toFixed(0) : c.toneladasEstimadas) : "-",
+  //   }))
+  // );
+
+  const numberFormatOptions = {
+    useGrouping: true,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  };
+  
   const dataCambio = filterData(
     infoClientes.map((c, index) => ({
       key: c.cli_id,
       cuenta: c.cli_idsistema,
       clientes: c.cli_nombre,
-      propias: c.ahxs_propias_actuales ? (typeof c.ahxs_propias_actuales === 'string' ? parseInt(c.ahxs_propias_actuales).toFixed(0) : c.ahxs_propias_actuales) : "-",
-      alquiladas: c.ahxs_alquiladas_actuales ? (typeof c.ahxs_alquiladas_actuales === 'string' ? parseInt(c.ahxs_alquiladas_actuales).toFixed(0) : c.ahxs_alquiladas_actuales) : "-",
-      propiasAnt: c.ahxs_propias_anteriores ? (typeof c.ahxs_propias_anteriores === 'string' ? parseInt(c.ahxs_propias_anteriores).toFixed(0) : c.ahxs_propias_anteriores) : "-",
-      alquiladasAnt: c.ahxs_alquiladas_anteriores ? (typeof c.ahxs_alquiladas_anteriores === 'string' ? parseInt(c.ahxs_alquiladas_anteriores).toFixed(0) : c.ahxs_alquiladas_anteriores) : "-",
+      propias:c.has_totales ? (typeof c.has_propias === 'string' ? parseInt(c.has_propias).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.has_propias) : "-",
+      alquiladas:c.has_totales ? (typeof c.has_alquiladas === 'string' ? parseInt(c.has_alquiladas).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.has_alquiladas) : "-",
+      hasTotales: c.has_totales ? (typeof c.has_totales === 'string' ? parseInt(c.has_totales).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.has_totales) : "-",
+      usdInsumo: c.usdEntregados ? (typeof c.usdEntregados === 'string' ? parseInt(c.usdEntregados).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.usdEntregados) : "-",
+      estimadoUSDInsumos: c.costoEstimado ? (typeof c.costoEstimado === 'string' ? parseInt(c.costoEstimado).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.costoEstimado) : "-",
+      toneladasEntregadas: c.toneladasEntregadas ? (typeof c.toneladasEntregadas === 'string' ? parseInt(c.toneladasEntregadas).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.toneladasEntregadas) : "-",
+      estimadoToneladas: c.toneladasEstimadas ? (typeof c.toneladasEstimadas === 'string' ? parseInt(c.toneladasEstimadas).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.toneladasEstimadas) : "-",
+      negUSDAbierto:c.suma_neg_valor ? (typeof c.suma_neg_valor === 'string' ? parseInt(c.suma_neg_valor).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.suma_neg_valor) : "-",
     }))
   );
+  
+  
+  
   
 
 
