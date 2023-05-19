@@ -6,8 +6,11 @@ import { GlobalContext } from "../context/GlobalContext";
 import { CloseOutlined, ControlOutlined } from "@ant-design/icons";
 
 const TablaCli = () => {
-  const URL = process.env.REACT_APP_URL;
-
+  const URLDOS = process.env.REACT_APP_URL;
+  const PORT = window.location.port ? window.location.port : 80;
+  const PROTOCOL = window.location.protocol;
+  const HOSTNAME = window.location.hostname;
+  const URL = `${PROTOCOL}//${HOSTNAME}:${PORT}`;
   const { infoClientes, setInfoclientes, idUsu } = useContext(GlobalContext);
 
   const [searchValue, setSearchValue] = useState("");
@@ -15,6 +18,7 @@ const TablaCli = () => {
   const [selectedCliente, setSelectedCliente] = useState(null);
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const [isCambioT, setIsCambioT] = useState(false);
+  const [cliSelect, setCliSelect] = useState(null);
 
   //* EJECUTA LAS FUNCION QUE TRAE LA INFO y TRAE LOS DATOS PARA LLENAR TABLA CLIENTES
 
@@ -23,7 +27,7 @@ const TablaCli = () => {
       setIsLoading(true); // Establecer isLoading en true antes de hacer la solicitud
       const data = new FormData();
       data.append("idU", idUsu);
-      fetch(`${URL}tablaClientes.php`, {
+      fetch(`${URLDOS}tablaClientes.php`, {
         method: "POST",
         body: data,
       }).then(function (response) {
@@ -37,7 +41,7 @@ const TablaCli = () => {
     }
   }, []);
 
-  //console.log(infoClientes);
+  // console.log(infoClientes);
 
 
   /*COLUMNA, DATOS Y FILTRADO PARA TABLA INICIAL*/
@@ -94,7 +98,12 @@ const TablaCli = () => {
   const handleCliente = (record) => {
     setSelectedCliente(record);
     setIsDrawerVisible(true);
+    setCliSelect(parseInt(record.key));
   };
+  //console.log(selectedCliente);
+  //console.log(cliSelect);
+
+  localStorage.setItem("cliSelect",cliSelect);
 
   const filterData = (data) => {
     if (!infoClientes || searchValue === "") {
@@ -121,7 +130,6 @@ const TablaCli = () => {
       telefono: c.cli_telefono1,
     }))
   );
-
   /*COLUMNA, DATOS Y FILTRADO PARA TABLA CAMBIO*/
 
   //console.log(isCambioT)
@@ -148,51 +156,57 @@ const TablaCli = () => {
       ),
     },
     {
-      title: "Has. Totales",
+      title: "HAS. TOTALES",
       dataIndex: "hasTotales",
       key: "hasTotales",
       align: "center",
     },
     {
-      title: "Has. Propias",
+      title: "HAS. PROP.",
       dataIndex: "propias",
       key: "propias",
       align: "center",
     },
     {
-      title: "Has. Alquiladas",
+      title: "HAS. ALQ.",
       dataIndex: "alquiladas",
       key: "alquiladas",
       align: "center",
     },
     {
-      title: "Compra USD Insumos",
+      title: "COMPRA USD INS.",
       dataIndex: "usdInsumo",
       key: "usdInsumo",
       align: "center",
     },
     {
-      title: "TT Entregadas",
+      title: "TT ENTREG.",
       dataIndex: "toneladasEntregadas",
       key: "toneladasEntregadas",
       align: "center",
     },
     {
-      title: "Compra USD Estimado",
+      title: "COMPRA USD ESTIM.",
       dataIndex: "estimadoUSDInsumos",
       key: "estimadoUSD",
       align: "center",
     },
     {
-      title: "TT Estimado",
+      title: "TT ESTIM.",
       dataIndex: "estimadoToneladas",
       key: "estimadoToneladas",
       align: "center",
     },
     {
-      title: "Neg. USD Abierto",
+      title: "NEG. USD ABIERTO",
       dataIndex: "negUSDAbierto",
       key: "negUSDAbierto",
+      align: "center",
+    },
+    {
+      title: "TAREAS ABIERTAS",
+      dataIndex: "tareasAbiertas",
+      key: "tareasAbiertas",
       align: "center",
     },
   ];
@@ -221,14 +235,15 @@ const TablaCli = () => {
       key: c.cli_id,
       cuenta: c.cli_idsistema,
       clientes: c.cli_nombre,
-      propias:c.has_totales ? (typeof c.has_propias === 'string' ? parseInt(c.has_propias).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.has_propias) : "-",
-      alquiladas:c.has_totales ? (typeof c.has_alquiladas === 'string' ? parseInt(c.has_alquiladas).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.has_alquiladas) : "-",
+      propias:c.has_propias ? (typeof c.has_propias === 'string' ? parseInt(c.has_propias).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.has_propias) : "-",
+      alquiladas:c.has_alquiladas ? (typeof c.has_alquiladas === 'string' ? parseInt(c.has_alquiladas).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.has_alquiladas) : "-",
       hasTotales: c.has_totales ? (typeof c.has_totales === 'string' ? parseInt(c.has_totales).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.has_totales) : "-",
       usdInsumo: c.usdEntregados ? (typeof c.usdEntregados === 'string' ? parseInt(c.usdEntregados).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.usdEntregados) : "-",
       estimadoUSDInsumos: c.costoEstimado ? (typeof c.costoEstimado === 'string' ? parseInt(c.costoEstimado).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.costoEstimado) : "-",
       toneladasEntregadas: c.toneladasEntregadas ? (typeof c.toneladasEntregadas === 'string' ? parseInt(c.toneladasEntregadas).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.toneladasEntregadas) : "-",
       estimadoToneladas: c.toneladasEstimadas ? (typeof c.toneladasEstimadas === 'string' ? parseInt(c.toneladasEstimadas).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.toneladasEstimadas) : "-",
       negUSDAbierto:c.suma_neg_valor ? (typeof c.suma_neg_valor === 'string' ? parseInt(c.suma_neg_valor).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.suma_neg_valor) : "-",
+      tareasAbiertas: c.cantidad_tareas_pendientes ? (typeof c.cantidad_tareas_pendientes === 'string' ? parseInt(c.cantidad_tareas_pendientes).toFixed(0) : c.cantidad_tareas_pendientes) : "-",
     }))
   );
   
@@ -322,7 +337,7 @@ const TablaCli = () => {
           onClose={() => setIsDrawerVisible(false)}
           title={selectedCliente.clientes}
           placement="bottom"
-          height={"95vh"}
+          height={"98vh"}
           style={{ whiteSpace: "nowrap" }}
           closeIcon={
             <CloseOutlined
@@ -330,8 +345,15 @@ const TablaCli = () => {
             />
           }
         >
-          {/* Agrega iframe */}
-          <p>AGREGAR IFRAME MODULO VIEWCLIENT</p>
+          <iframe
+            loading="lazy"
+            src={`${URL}/tati/modulos/vista_cliente/?idC=${cliSelect}`}
+            width={"100%"}
+            // height={"600"}
+            height={"550"}
+            style={{ border: "none" }}
+            title="drawer"
+          ></iframe>
         </Drawer>
       )}
     </>
