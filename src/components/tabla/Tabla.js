@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Divider, Drawer, Input, Spin, Table } from "antd";
+import { Button, Divider, Drawer, Input, Spin, Table, Tabs } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import "./style.css";
 import { GlobalContext } from "../context/GlobalContext";
@@ -13,12 +13,15 @@ const TablaCli = () => {
   const URL = `${PROTOCOL}//${HOSTNAME}:${PORT}`;
   const { infoClientes, setInfoclientes, idUsu } = useContext(GlobalContext);
 
+  const { TabPane } = Tabs;
+
   const [searchValue, setSearchValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCliente, setSelectedCliente] = useState(null);
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
-  const [isCambioT, setIsCambioT] = useState(false);
+  //const [isCambioT, setIsCambioT] = useState(false);
   const [cliSelect, setCliSelect] = useState(null);
+  const [activeTab, setActiveTab] = useState("1");
 
   //* EJECUTA LAS FUNCION QUE TRAE LA INFO y TRAE LOS DATOS PARA LLENAR TABLA CLIENTES
 
@@ -42,7 +45,6 @@ const TablaCli = () => {
   }, []);
 
   // console.log(infoClientes);
-
 
   /*COLUMNA, DATOS Y FILTRADO PARA TABLA INICIAL*/
 
@@ -103,7 +105,7 @@ const TablaCli = () => {
   //console.log(selectedCliente);
   //console.log(cliSelect);
 
-  localStorage.setItem("cliSelect",cliSelect);
+  localStorage.setItem("cliSelect", cliSelect);
 
   const filterData = (data) => {
     if (!infoClientes || searchValue === "") {
@@ -130,15 +132,14 @@ const TablaCli = () => {
       telefono: c.cli_telefono1,
     }))
   );
-  /*COLUMNA, DATOS Y FILTRADO PARA TABLA CAMBIO*/
+  /*COLUMNA, DATOS Y FILTRADO PARA TABLA PRODUCTIVO*/
 
   //console.log(isCambioT)
-  const handleCambio = (isCambioT) => {
-    setIsCambioT(!isCambioT);
+  const handleCambio = (tabKey) => {
+    setActiveTab(tabKey);
   };
-  
 
-  const columnsCambio = [
+  const columnsProductivo = [
     {
       title: "CUENTA",
       dataIndex: "cuenta",
@@ -211,7 +212,7 @@ const TablaCli = () => {
     },
   ];
 
-  // const dataCambio = filterData(
+  // const dataProductivo = filterData(
   //   infoClientes.map((c, index) => ({
   //     key: c.cli_id,
   //     cuenta: c.cli_idsistema,
@@ -229,28 +230,172 @@ const TablaCli = () => {
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
   };
-  
-  const dataCambio = filterData(
+
+  const dataProductivo = filterData(
     infoClientes.map((c, index) => ({
       key: c.cli_id,
       cuenta: c.cli_idsistema,
       clientes: c.cli_nombre,
-      propias:c.has_propias ? (typeof c.has_propias === 'string' ? parseInt(c.has_propias).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.has_propias) : "-",
-      alquiladas:c.has_alquiladas ? (typeof c.has_alquiladas === 'string' ? parseInt(c.has_alquiladas).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.has_alquiladas) : "-",
-      hasTotales: c.has_totales ? (typeof c.has_totales === 'string' ? parseInt(c.has_totales).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.has_totales) : "-",
-      usdInsumo: c.usdEntregados ? (typeof c.usdEntregados === 'string' ? parseInt(c.usdEntregados).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.usdEntregados) : "-",
-      estimadoUSDInsumos: c.costoEstimado ? (typeof c.costoEstimado === 'string' ? parseInt(c.costoEstimado).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.costoEstimado) : "-",
-      toneladasEntregadas: c.toneladasEntregadas ? (typeof c.toneladasEntregadas === 'string' ? parseInt(c.toneladasEntregadas).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.toneladasEntregadas) : "-",
-      estimadoToneladas: c.toneladasEstimadas ? (typeof c.toneladasEstimadas === 'string' ? parseInt(c.toneladasEstimadas).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.toneladasEstimadas) : "-",
-      negUSDAbierto:c.suma_neg_valor ? (typeof c.suma_neg_valor === 'string' ? parseInt(c.suma_neg_valor).toLocaleString(undefined, numberFormatOptions).replace(/,/g, '.') : c.suma_neg_valor) : "-",
-      tareasAbiertas: c.cantidad_tareas_pendientes ? (typeof c.cantidad_tareas_pendientes === 'string' ? parseInt(c.cantidad_tareas_pendientes).toFixed(0) : c.cantidad_tareas_pendientes) : "-",
+      propias: c.has_propias
+        ? typeof c.has_propias === "string"
+          ? parseInt(c.has_propias)
+              .toLocaleString(undefined, numberFormatOptions)
+              .replace(/,/g, ".")
+          : c.has_propias
+        : "-",
+      alquiladas: c.has_alquiladas
+        ? typeof c.has_alquiladas === "string"
+          ? parseInt(c.has_alquiladas)
+              .toLocaleString(undefined, numberFormatOptions)
+              .replace(/,/g, ".")
+          : c.has_alquiladas
+        : "-",
+      hasTotales: c.has_totales
+        ? typeof c.has_totales === "string"
+          ? parseInt(c.has_totales)
+              .toLocaleString(undefined, numberFormatOptions)
+              .replace(/,/g, ".")
+          : c.has_totales
+        : "-",
+      usdInsumo: c.usdEntregados
+        ? typeof c.usdEntregados === "string"
+          ? parseInt(c.usdEntregados)
+              .toLocaleString(undefined, numberFormatOptions)
+              .replace(/,/g, ".")
+          : c.usdEntregados
+        : "-",
+      estimadoUSDInsumos: c.costoEstimado
+        ? typeof c.costoEstimado === "string"
+          ? parseInt(c.costoEstimado)
+              .toLocaleString(undefined, numberFormatOptions)
+              .replace(/,/g, ".")
+          : c.costoEstimado
+        : "-",
+      toneladasEntregadas: c.toneladasEntregadas
+        ? typeof c.toneladasEntregadas === "string"
+          ? parseInt(c.toneladasEntregadas)
+              .toLocaleString(undefined, numberFormatOptions)
+              .replace(/,/g, ".")
+          : c.toneladasEntregadas
+        : "-",
+      estimadoToneladas: c.toneladasEstimadas
+        ? typeof c.toneladasEstimadas === "string"
+          ? parseInt(c.toneladasEstimadas)
+              .toLocaleString(undefined, numberFormatOptions)
+              .replace(/,/g, ".")
+          : c.toneladasEstimadas
+        : "-",
+      negUSDAbierto: c.suma_neg_valor
+        ? typeof c.suma_neg_valor === "string"
+          ? parseInt(c.suma_neg_valor)
+              .toLocaleString(undefined, numberFormatOptions)
+              .replace(/,/g, ".")
+          : c.suma_neg_valor
+        : "-",
+      tareasAbiertas: c.cantidad_tareas_pendientes
+        ? typeof c.cantidad_tareas_pendientes === "string"
+          ? parseInt(c.cantidad_tareas_pendientes).toFixed(0)
+          : c.cantidad_tareas_pendientes
+        : "-",
     }))
   );
-  
-  
-  
-  
 
+
+
+  /*COLUMNA, DATOS Y FILTRADO PARA TABLA RUBROS*/
+
+  const columnsRubros = [
+    {
+      title: "CUENTA",
+      dataIndex: "cuenta",
+      key: "cuenta",
+      align: "center",
+      width: "50px",
+    },
+    {
+      title: "CLIENTES",
+      dataIndex: "clientes",
+      key: "clientes",
+      align: "left",
+      render: (text, record) => (
+        <span style={{ color: "#00b33c" }}>{text}</span>
+      ),
+    },
+    {
+      title: "HAS. TOTALES",
+      dataIndex: "hasTotales",
+      key: "hasTotales",
+      align: "center",
+    },
+    {
+      title: "AGRICULTURA",
+      dataIndex: "agricultura",
+      key: "agricultura",
+      align: "center",
+    },
+    {
+      title: "GANADERIA",
+      dataIndex: "ganaderia",
+      key: "ganaderia",
+      align: "center",
+    },
+    {
+      title: "TAMBO",
+      dataIndex: "tambo",
+      key: "tambo",
+      align: "center",
+    },
+    {
+      title: "MIXTO",
+      dataIndex: "mixto",
+      key: "mixto",
+      align: "center",
+    }
+  ];
+
+
+  const dataRubros = filterData(
+    infoClientes.map((c, index) => ({
+      key: c.cli_id,
+      cuenta: c.cli_idsistema,
+      clientes: c.cli_nombre,
+      hasTotales: c.has_totales
+        ? typeof c.has_totales === "string"
+          ? parseInt(c.has_totales)
+              .toLocaleString(undefined, numberFormatOptions)
+              .replace(/,/g, ".")
+          : c.has_totales
+        : "-",
+        agricultura: c.Agricultura
+        ? typeof c.Agricultura === "string"
+          ? parseInt(c.Agricultura)
+              .toLocaleString(undefined, numberFormatOptions)
+              .replace(/,/g, ".")
+          : c.Agricultura
+        : "-",
+        ganaderia: c.Ganaderia
+        ? typeof c.Ganaderia === "string"
+          ? parseInt(c.Ganaderia)
+              .toLocaleString(undefined, numberFormatOptions)
+              .replace(/,/g, ".")
+          : c.Ganaderia
+        : "-",
+        tambo: c.Tambo
+        ? typeof c.Tambo === "string"
+          ? parseInt(c.Tambo)
+              .toLocaleString(undefined, numberFormatOptions)
+              .replace(/,/g, ".")
+          : c.Tambo
+        : "-",
+        mixto: c.Mixto
+        ? typeof c.Mixto === "string"
+          ? parseInt(c.Mixto)
+              .toLocaleString(undefined, numberFormatOptions)
+              .replace(/,/g, ".")
+          : c.Mixto
+        : "-",
+    }))
+  );
 
   return (
     <>
@@ -261,18 +406,10 @@ const TablaCli = () => {
           style={{
             display: "flex",
             flexDirection: "row",
-            justifyContent: "space-between",
-            marginBottom: "10px",
+            justifyContent: "flex-end",
             width: "100%",
           }}
         >
-          <Button
-            className="btnCambio"
-            icon={
-              <ControlOutlined style={{ color: "#00b33c", fontSize: "20px" }} />
-            }
-            onClick={() => handleCambio(isCambioT)}
-          ></Button>
           <Input
             style={{ width: "200px" }}
             type="text"
@@ -280,21 +417,6 @@ const TablaCli = () => {
             onChange={(e) => setSearchValue(e.target.value)}
             placeholder="Buscar por cliente o cuenta"
           />
-          {/*
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "flex-end",
-            }}
-          >
-            <Input
-              style={{ width: "200px" }}
-              type="text"
-              value={searchValue}
-              onChange={(e) => setSearchValue(e.target.value)}
-              placeholder="Buscar por cliente o cuenta"
-            />
-          </div> */}
         </div>
         {isLoading ? (
           <div
@@ -309,26 +431,40 @@ const TablaCli = () => {
             <Spin size="large" />
           </div>
         ) : (
-          isCambioT ?(
-            <Table
-              dataSource={dataCambio}
-              columns={columnsCambio}
-              size="middle"
-              onRow={(record) => ({
-                onClick: () => handleCliente(record),
-              })}
-            />
-            
-          ):(
-            <Table
-              dataSource={data}
-              columns={columns}
-              size="middle"
-              onRow={(record) => ({
-                onClick: () => handleCliente(record),
-              })}
-            />
-          )
+          <Tabs activeKey={activeTab} onChange={handleCambio}>
+            <>
+              <Tabs.Tab key="1" tab="INFORMACIÓN">
+                <Table
+                  dataSource={data}
+                  columns={columns}
+                  size="middle"
+                  onRow={(record) => ({
+                    onClick: () => handleCliente(record),
+                  })}
+                />
+              </Tabs.Tab>
+              <Tabs.Tab key="2" tab="PRODUCTIVO">
+                <Table
+                  dataSource={dataProductivo}
+                  columns={columnsProductivo}
+                  size="middle"
+                  onRow={(record) => ({
+                    onClick: () => handleCliente(record),
+                  })}
+                />
+              </Tabs.Tab>
+              <Tabs.Tab key="3" tab="RUBROS">
+                <Table
+                  dataSource={dataRubros}
+                  columns={columnsRubros}
+                  size="middle"
+                  onRow={(record) => ({
+                    onClick: () => handleCliente(record),
+                  })}
+                />
+              </Tabs.Tab>
+            </>
+          </Tabs>
         )}
       </div>
       {selectedCliente && (
