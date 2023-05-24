@@ -468,13 +468,13 @@ const TablaCli = () => {
         <Drawer
           visible={isDrawerVisible}
           onClose={() => setIsDrawerVisible(false)}
-          //title={selectedCliente.clientes}
+          title={selectedCliente.clientes}
           placement="bottom"
           height={"100vh"}
-          style={{ whiteSpace: "nowrap" }}
+          style={{ whiteSpace: "nowrap", marginTop:"-10px" }}
           closeIcon={
             <CloseOutlined
-              style={{ position: "absolute", top: "18px", right: "10px" }}
+              style={{ position: "absolute", top:"10px", right: "10px" }}
             />
           }
         >
@@ -483,7 +483,7 @@ const TablaCli = () => {
             src={`${URL}/tati/modulos/vista_cliente/?idC=${cliSelect}`}
             width={"100%"}
             // height={"600"}
-            height={"6000"}
+            height={"1000"}
             style={{ border: "none" }}
             title="drawer"
           ></iframe>
