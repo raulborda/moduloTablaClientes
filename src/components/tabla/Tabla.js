@@ -54,7 +54,7 @@ const TablaCli = () => {
       width: "50px",
     },
     {
-      title: "CLIENTES",
+      title: "CLIENTE",
       dataIndex: "clientes",
       key: "clientes",
       align: "left",
@@ -63,7 +63,7 @@ const TablaCli = () => {
       ),
     },
     {
-      title: "ZONAS",
+      title: "ZONA",
       dataIndex: "zonas",
       key: "zonas",
       align: "center",
@@ -145,7 +145,7 @@ const TablaCli = () => {
       width: "50px",
     },
     {
-      title: "CLIENTES",
+      title: "CLIENTE",
       dataIndex: "clientes",
       key: "clientes",
       align: "left",
@@ -310,7 +310,7 @@ const TablaCli = () => {
       width: "50px",
     },
     {
-      title: "CLIENTES",
+      title: "CLIENTE",
       dataIndex: "clientes",
       key: "clientes",
       align: "left",
