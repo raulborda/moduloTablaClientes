@@ -1,9 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Divider, Drawer, Input, Spin, Table, Tabs } from "antd";
+import {Divider, Drawer, Input, Spin, Table, Tabs } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import "./style.css";
 import { GlobalContext } from "../context/GlobalContext";
-import { CloseOutlined, ControlOutlined } from "@ant-design/icons";
+import { CloseOutlined } from "@ant-design/icons";
 
 const TablaCli = () => {
   const URLDOS = process.env.REACT_APP_URL;
@@ -13,13 +13,10 @@ const TablaCli = () => {
   const URL = `${PROTOCOL}//${HOSTNAME}:${PORT}`;
   const { infoClientes, setInfoclientes, idUsu } = useContext(GlobalContext);
 
-  const { TabPane } = Tabs;
-
   const [searchValue, setSearchValue] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [selectedCliente, setSelectedCliente] = useState(null);
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
-  //const [isCambioT, setIsCambioT] = useState(false);
   const [cliSelect, setCliSelect] = useState(null);
   const [activeTab, setActiveTab] = useState("1");
 
@@ -471,9 +468,9 @@ const TablaCli = () => {
         <Drawer
           visible={isDrawerVisible}
           onClose={() => setIsDrawerVisible(false)}
-          title={selectedCliente.clientes}
+          //title={selectedCliente.clientes}
           placement="bottom"
-          height={"98vh"}
+          height={"100vh"}
           style={{ whiteSpace: "nowrap" }}
           closeIcon={
             <CloseOutlined
@@ -486,7 +483,7 @@ const TablaCli = () => {
             src={`${URL}/tati/modulos/vista_cliente/?idC=${cliSelect}`}
             width={"100%"}
             // height={"600"}
-            height={"550"}
+            height={"6000"}
             style={{ border: "none" }}
             title="drawer"
           ></iframe>
