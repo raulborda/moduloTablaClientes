@@ -34,10 +34,18 @@ const TablasCli = () => {
     setActiveTab,
   } = useContext(GlobalContext);
 
-  const [isModalVisible, setIsModalVisible] = useState(false);
-  const [formValues, setFormValues] = useState({});
+  const [isDrawerVisibleForm, setIsDrawerVisibleForm] = useState(false);
+
+  const showDrawer = () => {
+    setIsDrawerVisibleForm(true);
+  };
+
+  const closeDrawer = () => {
+    setIsDrawerVisibleForm(false);
+  };
 
   localStorage.setItem("cliSelect", cliSelect);
+
   const handleCambio = (tabKey) => {
     setActiveTab(tabKey);
     cargarTabla(tabKey);
@@ -68,16 +76,9 @@ const TablasCli = () => {
     cargarTabla(activeTab);
   }, []);
 
-  const handleNuevoCliente = () => {
-    setIsModalVisible(true);
-  };
-
-  const handleCrearCliente = () => {
-    // Realiza las operaciones necesarias para crear un nuevo cliente
-    // Guarda los datos del formulario en el estado o realiza las llamadas API correspondientes
-
-    // Cierra el modal
-    setIsModalVisible(false);
+  const handleCrearCliente = (values) => {
+    console.log("Formulario enviado:", values);
+    setIsDrawerVisibleForm(false);
   };
 
   return (
@@ -103,103 +104,89 @@ const TablasCli = () => {
             <Button
               type="primary"
               style={{ width: "100px", padding: "0px", marginLeft: "10px" }}
-              onClick={handleNuevoCliente}
+              onClick={showDrawer}
             >
               Nuevo Lead
             </Button>
           </div>
         </div>
 
-        <Modal
+        <Drawer
           title="Nuevo Cliente"
-          visible={isModalVisible}
-          onCancel={() => setIsModalVisible(false)}
-          footer={null}
-          style={{ marginTop: "-50px" }}
-          width={800}
+          visible={isDrawerVisibleForm}
+          onClose={closeDrawer}
+          width={600}
         >
-          <Divider style={{marginTop:"-5px", width:"800px", marginLeft:"-23px"}}/>
-          <>
-            <div>
-              <div>
-                <Form
-                  labelCol={{
-                    span: 8,
-                  }}
-                  wrapperCol={{
-                    span: 20,
-                  }}
-                  layout="vertical"
-                >
-                  <div style={{ display: "flex", marginLeft:"10px", marginTop:"10px"  }}>
-                    <div style={{ flex: 1 }}>
-                      <Form.Item label="Razón Social">
-                        <Input />
-                      </Form.Item>
-                      <Form.Item label="Descripción">
-                        <TextArea />
-                      </Form.Item>
-                      <Form.Item label="Telefono">
-                        <Input style={{ width: "150px" }} />
-                      </Form.Item>
-                      <Form.Item label="Celular">
-                        <Input style={{ width: "150px" }} />
-                      </Form.Item>
-                     
-                    </div>
-                    <div style={{ flex: 1, marginLeft:"10px", }}>
-                      <Form.Item label="CUIT">
-                        <Input style={{ width: "150px" }} />
-                      </Form.Item>
-                      <Form.Item label="Sector">
-                        <Select style={{ width: "150px" }}>
-                          <Select.Option value="demo">AGRICULTURA</Select.Option>
-                        </Select>
-                      </Form.Item>
-                      <Form.Item label="Tipo Clientes">
-                        <Select style={{ width: "150px" }}>
-                          <Select.Option value="demo">NO SOCIO</Select.Option>
-                        </Select>
-                      </Form.Item>
-                      <Form.Item label="Email">
-                        <Input />
-                      </Form.Item>
-                    </div>
-                    <div style={{ flex: 1, marginLeft:"-25px" }}>
-                    <Form.Item label="Tamaño">
-                        <Select style={{ width: "150px" }}>
-                          <Select.Option value="demo">MEDIANO</Select.Option>
-                        </Select>
-                      </Form.Item>
-                      <Form.Item label="Zona">
-                        <Select style={{ width: "150px" }}>
-                          <Select.Option value="demo">SANTA ROSA</Select.Option>
-                        </Select>
-                      </Form.Item>
-                      <Form.Item label="Centro">
-                        <Select style={{ width: "150px" }}>
-                          <Select.Option value="demo">TERCEROS</Select.Option>
-                        </Select>
-                      </Form.Item>
-                    </div>
-                  </div>
-                </Form>
+          <Form
+            labelCol={{ span: 8 }}
+            wrapperCol={{ span: 20 }}
+            layout="vertical"
+            onFinish={handleCrearCliente}
+            style={{ marginLeft:"35px" }}
+          >
+            <div style={{ display: "flex" }}>
+              <div style={{ flex: 1, marginRight: "20px" }}>
+                <Form.Item label="Razón Social" name="razonSocial">
+                  <Input />
+                </Form.Item>
+                <Form.Item label="Descripción" name="descripcion">
+                  <TextArea />
+                </Form.Item>
+                <Form.Item label="Teléfono" name="telefono">
+                  <Input style={{ width: "150px" }} />
+                </Form.Item>
+                <Form.Item label="Celular" name="celular">
+                  <Input style={{ width: "150px" }} />
+                </Form.Item>
+                <Form.Item label="CUIT" name="cuit">
+                  <Input style={{ width: "150px" }} />
+                </Form.Item>
+                <Form.Item label="Email" name="email">
+                  <Input />
+                </Form.Item>
               </div>
-              <Divider style={{width:"800px", marginLeft:"-23px"}}/>
-              <div
-                style={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "flex-end",
-                }}
-              >
-                <Button type="primary" onClick={handleCrearCliente}>
-                  Crear
-                </Button>
+              <div style={{ flex: 1 }}>
+                <Form.Item label="Sector" name="sector">
+                  <Select style={{ width: "150px" }}>
+                    <Select.Option value="demo">AGRICULTURA</Select.Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item label="Tipo Clientes" name="tipoClientes">
+                  <Select style={{ width: "150px" }}>
+                    <Select.Option value="demo">NO SOCIO</Select.Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item label="Tamaño" name="tamano">
+                  <Select style={{ width: "150px" }}>
+                    <Select.Option value="demo">MEDIANO</Select.Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item label="Zona" name="zona">
+                  <Select style={{ width: "150px" }}>
+                    <Select.Option value="demo">SANTA ROSA</Select.Option>
+                  </Select>
+                </Form.Item>
+                <Form.Item label="Centro" name="centro">
+                  <Select style={{ width: "150px" }}>
+                    <Select.Option value="demo">TERCEROS</Select.Option>
+                  </Select>
+                </Form.Item>
               </div>
             </div>
-          </>
-        </Modal>
+            <Divider style={{ marginTop: "20px" }} />
+            <div
+              style={{
+                display: "flex",
+                justifyContent: "center",
+                marginTop: "20px",
+              }}
+            >
+              <Button type="primary" htmlType="submit" style={{width:"300px"}}>
+                CREAR
+              </Button>
+            </div>
+          </Form>
+        </Drawer>
 
         <Tabs activeKey={activeTab} onChange={handleCambio}>
           <>
