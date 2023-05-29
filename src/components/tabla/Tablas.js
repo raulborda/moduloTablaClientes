@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Drawer, Input, Tabs } from "antd";
+import { Button, Drawer, Input, Tabs } from "antd";
 import React, { useContext, useEffect } from "react";
 import "./style.css";
 import { GlobalContext } from "../context/GlobalContext";
@@ -69,13 +69,21 @@ const TablasCli = () => {
           }}
         >
           <h1 className="titulos">CLIENTES</h1>
-          <Input
-            style={{ width: "200px" }}
-            type="text"
-            value={searchValue}
-            onChange={(e) => setSearchValue(e.target.value)}
-            placeholder="Buscar por cliente o cuenta"
-          />
+          <div>
+            <Input
+              style={{ width: "200px" }}
+              type="text"
+              value={searchValue}
+              onChange={(e) => setSearchValue(e.target.value)}
+              placeholder="Buscar por cliente o cuenta"
+            />
+            <Button
+              type="primary"
+              style={{ width: "100px", padding:"0px", marginLeft:"10px" }}
+            >
+              Nuevo Lead
+            </Button>
+          </div>
         </div>
 
         <Tabs activeKey={activeTab} onChange={handleCambio}>

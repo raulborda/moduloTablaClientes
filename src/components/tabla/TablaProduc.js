@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from "react";
 import { GlobalContext } from "../context/GlobalContext";
 import { Spin, Table } from "antd";
@@ -46,26 +47,6 @@ const TablaProduc = () => {
     }
   }, [activeTab, idUsu]);
 
-//   useEffect(() => {
-//     if (idUsu) {
-//       setIsLoadingTP(true); // Establecer isLoadingTP en true antes de hacer la solicitud
-//       const data = new FormData();
-//       data.append("idU", idUsu);
-//       fetch(`${URLDOS}tablaProduct.php`, {
-//         method: "POST",
-//         body: data,
-//       }).then(function (response) {
-//         response.text().then((resp) => {
-//           const data = resp;
-//           const objetoData = JSON.parse(data);
-//           setInfoclientes(objetoData);
-//           setIsLoadingTP(false); // Establecer isLoadingTP en false después de recibir la respuesta
-//           setIsLoadingTI(true); // Establecer isLoadingTI en false el spin de tabla informacion
-//           setIsLoadingTR(true); // Establecer isLoadingTP en false el spin de tabla rubro
-//         });
-//       });
-//     }
-//   }, []);
 
   const columnsProductivo = [
     {

@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { Spin, Table } from "antd";
 import React, { useContext, useEffect } from "react";
 import { GlobalContext } from "../context/GlobalContext";
@@ -46,26 +47,6 @@ const TablaRubros = () => {
     }
   }, [activeTab, idUsu]);
 
-//   useEffect(() => {
-//     if (idUsu) {
-//       setIsLoadingTR(true); // Establecer isLoadingTR en true antes de hacer la solicitud
-//       const data = new FormData();
-//       data.append("idU", idUsu);
-//       fetch(`${URLDOS}tablaRubro.php`, {
-//         method: "POST",
-//         body: data,
-//       }).then(function (response) {
-//         response.text().then((resp) => {
-//           const data = resp;
-//           const objetoData = JSON.parse(data);
-//           setInfoclientes(objetoData);
-//           setIsLoadingTR(false); // Establecer isLoadingTR en false después de recibir la respuesta
-//           setIsLoadingTI(true); // Establecer isLoadingTI en false el spin de tabla informacion
-//           setIsLoadingTP(true); // Establecer isLoadingTP en false el spin de tabla productivo
-//         });
-//       });
-//     }
-//   }, []);
 
   const columnsRubros = [
     {
