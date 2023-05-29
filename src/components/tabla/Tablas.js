@@ -1,12 +1,22 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Drawer, Input, Tabs } from "antd";
-import React, { useContext, useEffect } from "react";
+import {
+  Button,
+  Drawer,
+  Input,
+  Tabs,
+  Modal,
+  Form,
+  Select,
+  Divider,
+} from "antd";
+import React, { useContext, useEffect, useState } from "react";
 import "./style.css";
 import { GlobalContext } from "../context/GlobalContext";
 import { CloseOutlined } from "@ant-design/icons";
 import TablaInfo from "./TablaInfo";
 import TablaProduc from "./TablaProduc";
 import TablaRubros from "./TablaRubros";
+import TextArea from "antd/es/input/TextArea";
 
 const TablasCli = () => {
   const PORT = window.location.port ? window.location.port : 80;
@@ -23,6 +33,9 @@ const TablasCli = () => {
     activeTab,
     setActiveTab,
   } = useContext(GlobalContext);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [formValues, setFormValues] = useState({});
 
   localStorage.setItem("cliSelect", cliSelect);
   const handleCambio = (tabKey) => {
@@ -55,11 +68,21 @@ const TablasCli = () => {
     cargarTabla(activeTab);
   }, []);
 
+  const handleNuevoCliente = () => {
+    setIsModalVisible(true);
+  };
+
+  const handleCrearCliente = () => {
+    // Realiza las operaciones necesarias para crear un nuevo cliente
+    // Guarda los datos del formulario en el estado o realiza las llamadas API correspondientes
+
+    // Cierra el modal
+    setIsModalVisible(false);
+  };
+
   return (
     <>
       <div className="div_wrapper">
-        {/* <h1 className="titulos">CLIENTES</h1> */}
-        {/* <Divider style={{ marginBottom: "10px", marginTop: "0px" }} /> */}
         <div
           style={{
             display: "flex",
@@ -79,12 +102,104 @@ const TablasCli = () => {
             />
             <Button
               type="primary"
-              style={{ width: "100px", padding:"0px", marginLeft:"10px" }}
+              style={{ width: "100px", padding: "0px", marginLeft: "10px" }}
+              onClick={handleNuevoCliente}
             >
               Nuevo Lead
             </Button>
           </div>
         </div>
+
+        <Modal
+          title="Nuevo Cliente"
+          visible={isModalVisible}
+          onCancel={() => setIsModalVisible(false)}
+          footer={null}
+          style={{ marginTop: "-50px" }}
+          width={800}
+        >
+          <Divider style={{marginTop:"-5px", width:"800px", marginLeft:"-23px"}}/>
+          <>
+            <div>
+              <div>
+                <Form
+                  labelCol={{
+                    span: 8,
+                  }}
+                  wrapperCol={{
+                    span: 20,
+                  }}
+                  layout="vertical"
+                >
+                  <div style={{ display: "flex", marginLeft:"10px", marginTop:"10px"  }}>
+                    <div style={{ flex: 1 }}>
+                      <Form.Item label="Razón Social">
+                        <Input />
+                      </Form.Item>
+                      <Form.Item label="Descripción">
+                        <TextArea />
+                      </Form.Item>
+                      <Form.Item label="Telefono">
+                        <Input style={{ width: "150px" }} />
+                      </Form.Item>
+                      <Form.Item label="Celular">
+                        <Input style={{ width: "150px" }} />
+                      </Form.Item>
+                     
+                    </div>
+                    <div style={{ flex: 1, marginLeft:"10px", }}>
+                      <Form.Item label="CUIT">
+                        <Input style={{ width: "150px" }} />
+                      </Form.Item>
+                      <Form.Item label="Sector">
+                        <Select style={{ width: "150px" }}>
+                          <Select.Option value="demo">AGRICULTURA</Select.Option>
+                        </Select>
+                      </Form.Item>
+                      <Form.Item label="Tipo Clientes">
+                        <Select style={{ width: "150px" }}>
+                          <Select.Option value="demo">NO SOCIO</Select.Option>
+                        </Select>
+                      </Form.Item>
+                      <Form.Item label="Email">
+                        <Input />
+                      </Form.Item>
+                    </div>
+                    <div style={{ flex: 1, marginLeft:"-25px" }}>
+                    <Form.Item label="Tamaño">
+                        <Select style={{ width: "150px" }}>
+                          <Select.Option value="demo">MEDIANO</Select.Option>
+                        </Select>
+                      </Form.Item>
+                      <Form.Item label="Zona">
+                        <Select style={{ width: "150px" }}>
+                          <Select.Option value="demo">SANTA ROSA</Select.Option>
+                        </Select>
+                      </Form.Item>
+                      <Form.Item label="Centro">
+                        <Select style={{ width: "150px" }}>
+                          <Select.Option value="demo">TERCEROS</Select.Option>
+                        </Select>
+                      </Form.Item>
+                    </div>
+                  </div>
+                </Form>
+              </div>
+              <Divider style={{width:"800px", marginLeft:"-23px"}}/>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "row",
+                  justifyContent: "flex-end",
+                }}
+              >
+                <Button type="primary" onClick={handleCrearCliente}>
+                  Crear
+                </Button>
+              </div>
+            </div>
+          </>
+        </Modal>
 
         <Tabs activeKey={activeTab} onChange={handleCambio}>
           <>
