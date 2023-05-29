@@ -14,7 +14,9 @@ function App() {
   const [idUsu, setUsu] = useState(1);
 
   const [searchValue, setSearchValue] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoadingTI,setIsLoadingTI] = useState(true);
+  const [isLoadingTP, setIsLoadingTP] = useState(true);
+  const [isLoadingTR, setIsLoadingTR] = useState(true);
   const [selectedCliente, setSelectedCliente] = useState(null);
   const [isDrawerVisible, setIsDrawerVisible] = useState(false);
   const [cliSelect, setCliSelect] = useState(null);
@@ -27,7 +29,9 @@ function App() {
           infoClientes, setInfoclientes,
           idUsu, setUsu,
           searchValue, setSearchValue,
-          isLoading, setIsLoading,
+          isLoadingTR, setIsLoadingTR,
+          isLoadingTP, setIsLoadingTP,
+          isLoadingTI,setIsLoadingTI,
           selectedCliente, setSelectedCliente,
           isDrawerVisible, setIsDrawerVisible,
           cliSelect, setCliSelect,

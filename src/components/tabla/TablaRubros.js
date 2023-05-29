@@ -3,8 +3,7 @@ import React, { useContext, useEffect } from "react";
 import { GlobalContext } from "../context/GlobalContext";
 
 const TablaRubros = () => {
-
-    const URLDOS = process.env.REACT_APP_URL;
+  const URLDOS = process.env.REACT_APP_URL;
 
   const {
     idUsu,
@@ -15,14 +14,15 @@ const TablaRubros = () => {
     setIsDrawerVisible,
     cliSelect,
     setCliSelect,
-    isLoading,
-    setIsLoading,
-    activeTab
+    isLoadingTR,
+    setIsLoadingTR,
+    setIsLoadingTP,
+    setIsLoadingTI,
+    activeTab,
   } = useContext(GlobalContext);
 
-  useEffect(() => {
-    if (idUsu) {
-      setIsLoading(true); // Establecer isLoading en true antes de hacer la solicitud
+  const cargarTablaInfo = () => {
+    setIsLoadingTR(true); // Establecer isLoadingTR en true antes de hacer la solicitud
       const data = new FormData();
       data.append("idU", idUsu);
       fetch(`${URLDOS}tablaRubro.php`, {
@@ -33,11 +33,39 @@ const TablaRubros = () => {
           const data = resp;
           const objetoData = JSON.parse(data);
           setInfoclientes(objetoData);
-          setIsLoading(false); // Establecer isLoading en false después de recibir la respuesta
+          setIsLoadingTR(false); // Establecer isLoadingTR en false después de recibir la respuesta
+          setIsLoadingTI(true); // Establecer isLoadingTI en false el spin de tabla informacion
+          setIsLoadingTP(true); // Establecer isLoadingTP en false el spin de tabla productivo
         });
       });
+  };
+
+  useEffect(() => {
+    if (activeTab === "3" && idUsu) {
+      cargarTablaInfo();
     }
-  }, [activeTab]);
+  }, [activeTab, idUsu]);
+
+//   useEffect(() => {
+//     if (idUsu) {
+//       setIsLoadingTR(true); // Establecer isLoadingTR en true antes de hacer la solicitud
+//       const data = new FormData();
+//       data.append("idU", idUsu);
+//       fetch(`${URLDOS}tablaRubro.php`, {
+//         method: "POST",
+//         body: data,
+//       }).then(function (response) {
+//         response.text().then((resp) => {
+//           const data = resp;
+//           const objetoData = JSON.parse(data);
+//           setInfoclientes(objetoData);
+//           setIsLoadingTR(false); // Establecer isLoadingTR en false después de recibir la respuesta
+//           setIsLoadingTI(true); // Establecer isLoadingTI en false el spin de tabla informacion
+//           setIsLoadingTP(true); // Establecer isLoadingTP en false el spin de tabla productivo
+//         });
+//       });
+//     }
+//   }, []);
 
   const columnsRubros = [
     {
@@ -158,12 +186,9 @@ const TablaRubros = () => {
     }))
   );
 
-
-
-
   return (
     <>
-      {isLoading ? (
+      {isLoadingTR ? (
         <div
           style={{
             display: "flex",

@@ -14,29 +14,37 @@ const TablaInfo = () => {
     setIsDrawerVisible,
     cliSelect,
     setCliSelect,
-    isLoading,
-    setIsLoading,
-    activeTab
+    setIsLoadingTR,
+    setIsLoadingTP,
+    isLoadingTI,
+    setIsLoadingTI,
+    activeTab,
   } = useContext(GlobalContext);
 
-  useEffect(() => {
-    if (idUsu) {
-      setIsLoading(true); // Establecer isLoading en true antes de hacer la solicitud
-      const data = new FormData();
-      data.append("idU", idUsu);
-      fetch(`${URLDOS}tablaInfo.php`, {
-        method: "POST",
-        body: data,
-      }).then(function (response) {
-        response.text().then((resp) => {
-          const data = resp;
-          const objetoData = JSON.parse(data);
-          setInfoclientes(objetoData);
-          setIsLoading(false); // Establecer isLoading en false después de recibir la respuesta
-        });
+  const cargarTablaInfo = () => {
+    setIsLoadingTI(true); // Establecer isLoadingTI en true antes de hacer la solicitud
+    const data = new FormData();
+    data.append("idU", idUsu);
+    fetch(`${URLDOS}tablaInfo.php`, {
+      method: "POST",
+      body: data,
+    }).then(function (response) {
+      response.text().then((resp) => {
+        const data = resp;
+        const objetoData = JSON.parse(data);
+        setInfoclientes(objetoData);
+        setIsLoadingTI(false); // Establecer isLoadingTI en false después de recibir la respuesta
+          setIsLoadingTP(true); // Establecer isLoadingTI en false el spin de tabla productivo
+          setIsLoadingTR(true); // Establecer isLoadingTP en false el spin de tabla rubro
       });
-    }
-  }, [activeTab]);
+    });
+  };
+
+  useEffect(() => {
+    if (activeTab === "1" && idUsu) {
+        cargarTablaInfo();
+      }
+  }, [activeTab, idUsu]);
 
   const columns = [
     {
@@ -123,7 +131,7 @@ const TablaInfo = () => {
 
   return (
     <>
-      {isLoading ? (
+      {isLoadingTI ? (
         <div
           style={{
             display: "flex",

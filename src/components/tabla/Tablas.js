@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Drawer, Input, Tabs } from "antd";
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import "./style.css";
 import { GlobalContext } from "../context/GlobalContext";
 import { CloseOutlined } from "@ant-design/icons";
@@ -24,12 +24,36 @@ const TablasCli = () => {
     setActiveTab,
   } = useContext(GlobalContext);
 
-
   localStorage.setItem("cliSelect", cliSelect);
   const handleCambio = (tabKey) => {
     setActiveTab(tabKey);
+    cargarTabla(tabKey);
   };
 
+  const cargarTabla = (tabKey) => {
+    let tablaComponente;
+
+    switch (tabKey) {
+      case "1":
+        tablaComponente = <TablaInfo />;
+        break;
+      case "2":
+        tablaComponente = <TablaProduc />;
+        break;
+      case "3":
+        tablaComponente = <TablaRubros />;
+        break;
+      default:
+        tablaComponente = null;
+        break;
+    }
+
+    return tablaComponente;
+  };
+
+  useEffect(() => {
+    cargarTabla(activeTab);
+  }, []);
 
   return (
     <>
@@ -57,13 +81,13 @@ const TablasCli = () => {
         <Tabs activeKey={activeTab} onChange={handleCambio}>
           <>
             <Tabs.Tab key="1" tab="INFORMACIÓN">
-              <TablaInfo />
+              {cargarTabla(activeTab)}
             </Tabs.Tab>
             <Tabs.Tab key="2" tab="PRODUCTIVO">
-              <TablaProduc/>
+              {cargarTabla(activeTab)}
             </Tabs.Tab>
             <Tabs.Tab key="3" tab="RUBROS">
-              <TablaRubros/>
+              {cargarTabla(activeTab)}
             </Tabs.Tab>
           </>
         </Tabs>

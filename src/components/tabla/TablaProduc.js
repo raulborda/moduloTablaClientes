@@ -14,32 +14,58 @@ const TablaProduc = () => {
     setIsDrawerVisible,
     cliSelect,
     setCliSelect,
-    isLoading,
-    setIsLoading,
+    setIsLoadingTR,
+    isLoadingTP,
+    setIsLoadingTP,
+    setIsLoadingTI,
     activeTab,
   } = useContext(GlobalContext);
 
+  const cargarTablaInfo = () => {
+    setIsLoadingTP(true); // Establecer isLoadingTP en true antes de hacer la solicitud
+    const data = new FormData();
+    data.append("idU", idUsu);
+    fetch(`${URLDOS}tablaProduct.php`, {
+      method: "POST",
+      body: data,
+    }).then(function (response) {
+      response.text().then((resp) => {
+        const data = resp;
+        const objetoData = JSON.parse(data);
+        setInfoclientes(objetoData);
+        setIsLoadingTP(false); // Establecer isLoadingTP en false después de recibir la respuesta
+        setIsLoadingTI(true); // Establecer isLoadingTI en false el spin de tabla informacion
+        setIsLoadingTR(true); // Establecer isLoadingTP en false el spin de tabla rubro
+      });
+    });
+  };
 
   useEffect(() => {
-    if (idUsu) {
-      setIsLoading(true); // Establecer isLoading en true antes de hacer la solicitud
-      const data = new FormData();
-      data.append("idU", idUsu);
-      fetch(`${URLDOS}tablaProduct.php`, {
-        method: "POST",
-        body: data,
-      }).then(function (response) {
-        response.text().then((resp) => {
-          const data = resp;
-          const objetoData = JSON.parse(data);
-          setInfoclientes(objetoData);
-          setIsLoading(false); // Establecer isLoading en false después de recibir la respuesta
-        });
-      });
+    if (activeTab === "2" && idUsu) {
+      cargarTablaInfo();
     }
-  }, [activeTab]);
+  }, [activeTab, idUsu]);
 
-
+//   useEffect(() => {
+//     if (idUsu) {
+//       setIsLoadingTP(true); // Establecer isLoadingTP en true antes de hacer la solicitud
+//       const data = new FormData();
+//       data.append("idU", idUsu);
+//       fetch(`${URLDOS}tablaProduct.php`, {
+//         method: "POST",
+//         body: data,
+//       }).then(function (response) {
+//         response.text().then((resp) => {
+//           const data = resp;
+//           const objetoData = JSON.parse(data);
+//           setInfoclientes(objetoData);
+//           setIsLoadingTP(false); // Establecer isLoadingTP en false después de recibir la respuesta
+//           setIsLoadingTI(true); // Establecer isLoadingTI en false el spin de tabla informacion
+//           setIsLoadingTR(true); // Establecer isLoadingTP en false el spin de tabla rubro
+//         });
+//       });
+//     }
+//   }, []);
 
   const columnsProductivo = [
     {
@@ -212,7 +238,7 @@ const TablaProduc = () => {
 
   return (
     <>
-      {isLoading ? (
+      {isLoadingTP ? (
         <div
           style={{
             display: "flex",
