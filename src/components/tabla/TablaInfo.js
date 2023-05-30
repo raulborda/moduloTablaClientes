@@ -20,6 +20,7 @@ const TablaInfo = () => {
     isLoadingTI,
     setIsLoadingTI,
     activeTab,
+    actualizarData, 
   } = useContext(GlobalContext);
 
   const cargarTablaInfo = () => {
@@ -45,7 +46,7 @@ const TablaInfo = () => {
     if (activeTab === "1" && idUsu) {
         cargarTablaInfo();
       }
-  }, [activeTab, idUsu]);
+  }, [activeTab, idUsu, actualizarData]);
 
   const columns = [
     {

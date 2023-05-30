@@ -3,13 +3,15 @@ import { Button, Divider, Form, Input, Select } from "antd";
 import TextArea from "antd/es/input/TextArea";
 import React, { useContext, useEffect, useState, useRef } from "react";
 import { GlobalContext } from "../context/GlobalContext";
+import "./style.css";
 
 const NuevoCliente = () => {
   const URLDOS = process.env.REACT_APP_URL;
 
   const formRef = useRef(null);
 
-  const { idUsu, setIsDrawerVisibleForm } = useContext(GlobalContext);
+  const { idUsu, setIsDrawerVisibleForm, actualizarData, setActualizarData } =
+    useContext(GlobalContext);
 
   const initialValues = {
     razonSocial: "",
@@ -24,7 +26,6 @@ const NuevoCliente = () => {
     zona: undefined,
     centro: undefined,
   };
-
 
   const [sector, setSector] = useState(null);
   const [tamaño, setTamaño] = useState(null);
@@ -119,16 +120,14 @@ const NuevoCliente = () => {
     cargarGruDos();
   }, []);
 
-
   //* FUNCION QUE CARGA LOS DATOS DE UN NUEVO CLIENTE
   function nuevoCli(values) {
-
     const data = new FormData();
     data.append("idUsu", idUsu);
     data.append("razonSocial", values.razonSocial);
     data.append("descripcion", values.descripcion);
     data.append("telefono", values.telefono);
-    data.append("celular",  values.celular);
+    data.append("celular", values.celular);
     data.append("cuit", values.cuit);
     data.append("email", values.email);
     data.append("sector", values.sector);
@@ -150,6 +149,7 @@ const NuevoCliente = () => {
     formRef.current.setFieldsValue(initialValues);
 
     setIsDrawerVisibleForm(false);
+    setActualizarData(!actualizarData);
   }
 
   return (
@@ -157,7 +157,7 @@ const NuevoCliente = () => {
       <Form
         ref={formRef}
         initialValues={initialValues}
-        labelCol={{ span: 9 }}
+        labelCol={{ span: 10 }}
         wrapperCol={{ span: 20 }}
         layout="vertical"
         onFinish={nuevoCli}
@@ -165,27 +165,87 @@ const NuevoCliente = () => {
       >
         <div style={{ display: "flex" }}>
           <div style={{ flex: 1, marginRight: "20px" }}>
-            <Form.Item label="Razón Social" name="razonSocial">
+            <Form.Item
+              label="Razón Social"
+              name="razonSocial"
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor ingresa la razón social",
+                },
+              ]}
+              className="hidden-asterisk"
+            >
               <Input />
             </Form.Item>
             <Form.Item label="Descripción" name="descripcion">
               <TextArea />
             </Form.Item>
-            <Form.Item label="Teléfono" name="telefono">
+            <Form.Item
+              label="Teléfono"
+              name="telefono"
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor ingresa el teléfono",
+                },
+              ]}
+              className="hidden-asterisk"
+            >
               <Input style={{ width: "150px" }} />
             </Form.Item>
-            <Form.Item label="Celular" name="celular">
+            <Form.Item
+              label="Celular"
+              name="celular"
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor ingresa el celular",
+                },
+              ]}
+              className="hidden-asterisk"
+            >
               <Input style={{ width: "150px" }} />
             </Form.Item>
-            <Form.Item label="CUIT" name="cuit">
+            <Form.Item
+              label="CUIT"
+              name="cuit"
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor ingresa el cuit",
+                },
+              ]}
+              className="hidden-asterisk"
+            >
               <Input style={{ width: "150px" }} />
             </Form.Item>
-            <Form.Item label="Email" name="email">
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor ingresa el email",
+                },
+              ]}
+              className="hidden-asterisk"
+            >
               <Input style={{ width: "220px" }} />
             </Form.Item>
           </div>
           <div style={{ flex: 1 }}>
-            <Form.Item label="Act. Comercial" name="sector">
+            <Form.Item
+              label="Act. Comercial"
+              name="sector"
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor seleccione la act. Comercial",
+                },
+              ]}
+              className="hidden-asterisk"
+            >
               {sector ? (
                 <Select style={{ width: "170px" }}>
                   {sector.map((sec) => (
@@ -200,7 +260,17 @@ const NuevoCliente = () => {
                 </Select.Option>
               )}
             </Form.Item>
-            <Form.Item label="Tipo Clientes" name="tipoClientes">
+            <Form.Item
+              label="Tipo Clientes"
+              name="tipoClientes"
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor seleccione el tipo de Cliente",
+                },
+              ]}
+              className="hidden-asterisk"
+            >
               {tiposCliente ? (
                 <Select style={{ width: "170px" }}>
                   {tiposCliente.map((tip) => (
@@ -215,7 +285,17 @@ const NuevoCliente = () => {
                 </Select.Option>
               )}
             </Form.Item>
-            <Form.Item label="Tamaño" name="tamano">
+            <Form.Item
+              label="Tamaño"
+              name="tamano"
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor seleccione el tamaño",
+                },
+              ]}
+              className="hidden-asterisk"
+            >
               {tamaño ? (
                 <Select style={{ width: "170px" }}>
                   {tamaño.map((tam) => (
@@ -230,7 +310,17 @@ const NuevoCliente = () => {
                 </Select.Option>
               )}
             </Form.Item>
-            <Form.Item label="Zona" name="zona">
+            <Form.Item
+              label="Zona"
+              name="zona"
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor seleccione la zona",
+                },
+              ]}
+              className="hidden-asterisk"
+            >
               {grupoUno ? (
                 <Select style={{ width: "170px" }}>
                   {grupoUno.map((uno) => (
@@ -245,7 +335,17 @@ const NuevoCliente = () => {
                 </Select.Option>
               )}
             </Form.Item>
-            <Form.Item label="Centro" name="centro">
+            <Form.Item
+              label="Centro"
+              name="centro"
+              rules={[
+                {
+                  required: true,
+                  message: "Por favor seleccione el centro",
+                },
+              ]}
+              className="hidden-asterisk"
+            >
               {grupoDos ? (
                 <Select style={{ width: "180px" }}>
                   {grupoDos.map((dos) => (

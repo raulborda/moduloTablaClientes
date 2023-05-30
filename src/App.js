@@ -22,6 +22,7 @@ function App() {
   const [cliSelect, setCliSelect] = useState(null);
   const [activeTab, setActiveTab] = useState("1");
   const [isDrawerVisibleForm, setIsDrawerVisibleForm] = useState(false);
+  const [actualizarData, setActualizarData] = useState(false);
 
 
   return ( 
@@ -38,6 +39,7 @@ function App() {
           cliSelect, setCliSelect,
           activeTab, setActiveTab,
           isDrawerVisibleForm, setIsDrawerVisibleForm,
+          actualizarData, setActualizarData,
         }}
       >
         <ConfigProvider
