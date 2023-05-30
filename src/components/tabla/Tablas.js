@@ -1,21 +1,13 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import {
-  Button,
-  Drawer,
-  Input,
-  Tabs,
-  Form,
-  Select,
-  Divider,
-} from "antd";
-import React, { useContext, useEffect, useState } from "react";
+import { Button, Drawer, Input, Tabs } from "antd";
+import React, { useContext, useEffect } from "react";
 import "./style.css";
 import { GlobalContext } from "../context/GlobalContext";
 import { CloseOutlined } from "@ant-design/icons";
 import TablaInfo from "./TablaInfo";
 import TablaProduc from "./TablaProduc";
 import TablaRubros from "./TablaRubros";
-import TextArea from "antd/es/input/TextArea";
+import NuevoCliente from "../nuevoCliente/NuevoCliente";
 
 const TablasCli = () => {
   const PORT = window.location.port ? window.location.port : 80;
@@ -31,9 +23,9 @@ const TablasCli = () => {
     cliSelect,
     activeTab,
     setActiveTab,
+    isDrawerVisibleForm,
+    setIsDrawerVisibleForm,
   } = useContext(GlobalContext);
-
-  const [isDrawerVisibleForm, setIsDrawerVisibleForm] = useState(false);
 
   const showDrawer = () => {
     setIsDrawerVisibleForm(true);
@@ -75,11 +67,6 @@ const TablasCli = () => {
     cargarTabla(activeTab);
   }, []);
 
-  const handleCrearCliente = (values) => {
-    console.log("Formulario enviado:", values);
-    setIsDrawerVisibleForm(false);
-  };
-
   return (
     <>
       <div className="div_wrapper">
@@ -116,75 +103,7 @@ const TablasCli = () => {
           onClose={closeDrawer}
           width={600}
         >
-          <Form
-            labelCol={{ span: 8 }}
-            wrapperCol={{ span: 20 }}
-            layout="vertical"
-            onFinish={handleCrearCliente}
-            style={{ marginLeft:"35px" }}
-          >
-            <div style={{ display: "flex" }}>
-              <div style={{ flex: 1, marginRight: "20px" }}>
-                <Form.Item label="Razón Social" name="razonSocial">
-                  <Input />
-                </Form.Item>
-                <Form.Item label="Descripción" name="descripcion">
-                  <TextArea />
-                </Form.Item>
-                <Form.Item label="Teléfono" name="telefono">
-                  <Input style={{ width: "150px" }} />
-                </Form.Item>
-                <Form.Item label="Celular" name="celular">
-                  <Input style={{ width: "150px" }} />
-                </Form.Item>
-                <Form.Item label="CUIT" name="cuit">
-                  <Input style={{ width: "150px" }} />
-                </Form.Item>
-                <Form.Item label="Email" name="email">
-                  <Input />
-                </Form.Item>
-              </div>
-              <div style={{ flex: 1 }}>
-                <Form.Item label="Sector" name="sector">
-                  <Select style={{ width: "150px" }}>
-                    <Select.Option value="demo">AGRICULTURA</Select.Option>
-                  </Select>
-                </Form.Item>
-                <Form.Item label="Tipo Clientes" name="tipoClientes">
-                  <Select style={{ width: "150px" }}>
-                    <Select.Option value="demo">NO SOCIO</Select.Option>
-                  </Select>
-                </Form.Item>
-                <Form.Item label="Tamaño" name="tamano">
-                  <Select style={{ width: "150px" }}>
-                    <Select.Option value="demo">MEDIANO</Select.Option>
-                  </Select>
-                </Form.Item>
-                <Form.Item label="Zona" name="zona">
-                  <Select style={{ width: "150px" }}>
-                    <Select.Option value="demo">SANTA ROSA</Select.Option>
-                  </Select>
-                </Form.Item>
-                <Form.Item label="Centro" name="centro">
-                  <Select style={{ width: "150px" }}>
-                    <Select.Option value="demo">TERCEROS</Select.Option>
-                  </Select>
-                </Form.Item>
-              </div>
-            </div>
-            <Divider style={{ marginTop: "20px" }} />
-            <div
-              style={{
-                display: "flex",
-                justifyContent: "center",
-                marginTop: "20px",
-              }}
-            >
-              <Button type="primary" htmlType="submit" style={{width:"300px"}}>
-                CREAR
-              </Button>
-            </div>
-          </Form>
+          <NuevoCliente />
         </Drawer>
 
         <Tabs activeKey={activeTab} onChange={handleCambio}>
