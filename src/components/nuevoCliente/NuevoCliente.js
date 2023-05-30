@@ -371,7 +371,7 @@ const NuevoCliente = () => {
           }}
         >
           <Button type="primary" htmlType="submit" style={{ width: "100%" }}>
-            CREAR NUEVO CLIENTE
+            GUARDAR NUEVO LEAD
           </Button>
         </div>
       </Form>
