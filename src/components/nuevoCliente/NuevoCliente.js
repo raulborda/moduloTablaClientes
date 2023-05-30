@@ -221,6 +221,7 @@ const NuevoCliente = () => {
               <Input style={{ width: "150px" }} />
             </Form.Item>
             <Form.Item
+              
               label="Email"
               name="email"
               rules={[
@@ -362,12 +363,12 @@ const NuevoCliente = () => {
             </Form.Item>
           </div>
         </div>
-        <Divider style={{ marginTop: "20px" }} />
+        <Divider style={{ marginTop: "0px" }} />
         <div
           style={{
             display: "flex",
             justifyContent: "center",
-            marginTop: "20px",
+            marginTop: "-10px",
             bottom: "0",
             width: "100%",
           }}
