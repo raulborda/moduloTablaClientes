@@ -368,6 +368,8 @@ const NuevoCliente = () => {
             display: "flex",
             justifyContent: "center",
             marginTop: "20px",
+            bottom: "0",
+            width: "100%",
           }}
         >
           <Button type="primary" htmlType="submit" style={{ width: "100%" }}>

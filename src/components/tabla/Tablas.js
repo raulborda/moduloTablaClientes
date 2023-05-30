@@ -31,9 +31,23 @@ const TablasCli = () => {
     setIsDrawerVisibleForm(true);
   };
 
+  const closeIconStyle = {
+    position: 'absolute',
+    top: '18px',
+    right: '20px',
+  };
+  
+  const CustomCloseIcon = ({ onClick }) => (
+    <div style={closeIconStyle} onClick={onClick}>
+      {/* Coloca aquí tu icono de cierre personalizado */}
+      X
+    </div>
+  );
+
   const closeDrawer = () => {
     setIsDrawerVisibleForm(false);
   };
+
 
   localStorage.setItem("cliSelect", cliSelect);
 
@@ -102,6 +116,7 @@ const TablasCli = () => {
           visible={isDrawerVisibleForm}
           onClose={closeDrawer}
           width={600}
+          closeIcon={<CustomCloseIcon />}
         >
           <NuevoCliente />
         </Drawer>

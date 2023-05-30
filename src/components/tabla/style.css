@@ -16,3 +16,6 @@ div.ant-drawer-header-title {
     margin-left: -25px;
 }
 
+div.ant-drawer-body{
+    padding-top: 10px !important;
+}
