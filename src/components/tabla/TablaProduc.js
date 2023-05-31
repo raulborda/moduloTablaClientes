@@ -75,7 +75,7 @@ const TablaProduc = () => {
         <div
           style={{
             color: "#00b33c",
-            maxWidth: "190px", // Ajusta el valor según el ancho deseado
+            maxWidth: "150px", // Ajusta el valor según el ancho deseado
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
@@ -84,7 +84,7 @@ const TablaProduc = () => {
           {text}
         </div>
       ),
-      width: "200px",
+      width: "160px",
     },
     {
       title: "HAS. TOTALES",
