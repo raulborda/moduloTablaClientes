@@ -267,6 +267,39 @@ const TablaProduc = () => {
     }))
   );
 
+  const sumColumns = (dataProductivo, columnIndex) => {
+    let sum = 0;
+    for (let i = 0; i < dataProductivo.length; i++) {
+      const value = parseInt(dataProductivo[i][columnIndex].replace(/\./g, "").replace(/,/g, "."), 10);
+      if (!isNaN(value)) {
+        sum += value;
+      }
+    }
+    return sum.toLocaleString(undefined, {
+      useGrouping: true,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).replace(/,/g, ".");
+  };
+  
+  
+
+  const totalRow = {
+    cuenta: "",
+    clientes: "TOTALES",
+    propias: sumColumns(dataProductivo, "propias"),
+    alquiladas: sumColumns(dataProductivo, "alquiladas"),
+    hasTotales: sumColumns(dataProductivo, "hasTotales"),
+    usdInsumo: sumColumns(dataProductivo, "usdInsumo"),
+    toneladasEntregadas: sumColumns(dataProductivo, "toneladasEntregadas"),
+    estimadoUSDInsumos: sumColumns(dataProductivo, "estimadoUSDInsumos"),
+    estimadoToneladas: sumColumns(dataProductivo, "estimadoToneladas"),
+    negUSDAbierto: sumColumns(dataProductivo, "negUSDAbierto"),
+    tareasAbiertas: sumColumns(dataProductivo, "tareasAbiertas"),
+  };
+
+  dataProductivo.unshift(totalRow);
+
   return (
     <>
       {isLoadingTP ? (
