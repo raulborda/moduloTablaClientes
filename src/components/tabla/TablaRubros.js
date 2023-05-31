@@ -23,7 +23,7 @@ const TablaRubros = () => {
     activeTab,
   } = useContext(GlobalContext);
 
-  const [isTotalRow, setIsTotalRow] = useState(false);
+  //const [isTotalRow, setIsTotalRow] = useState(false);
 
   const cargarTablaInfo = () => {
     setIsLoadingTR(true); // Establecer isLoadingTR en true antes de hacer la solicitud
@@ -68,12 +68,12 @@ const TablaRubros = () => {
     }
   }, [activeTab, idUsu]);
 
-  const rowClassName = (record, index) => {
-    if (isTotalRow && index === 0) {
-      return "total-row"; // Agrega una clase CSS para la fila totalRow
-    }
-    return "";
-  };
+  // const rowClassName = (record, index) => {
+  //   if (isTotalRow && index === 0) {
+  //     return "total-row"; // Agrega una clase CSS para la fila totalRow
+  //   }
+  //   return "";
+  // };
 
 
   const columnsRubros = [
@@ -243,11 +243,11 @@ const TablaRubros = () => {
     mixto: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataRubros, "mixto")}</span>,
   };
   
-  dataRubros.unshift(totalRow);
+  // dataRubros.unshift(totalRow);
 
-  useEffect(() => {
-    setIsTotalRow(true);
-  }, [dataRubros]);
+  // useEffect(() => {
+  //   setIsTotalRow(true);
+  // }, [dataRubros]);
 
   return (
     <>
@@ -268,10 +268,33 @@ const TablaRubros = () => {
           dataSource={dataRubros}
           columns={columnsRubros}
           size="middle"
-          rowClassName={rowClassName}
+          // rowClassName={rowClassName}
           onRow={(record) => ({
             onClick: () => handleCliente(record),
           })}
+          summary={() => (
+            <Table.Summary fixed>
+              <Table.Summary.Row style={{backgroundColor: "#f5fef5"}}>
+                <Table.Summary.Cell index={0} />
+                <Table.Summary.Cell index={1}>{(totalRow.clientes)}</Table.Summary.Cell>
+                <Table.Summary.Cell index={2} className="totalCell">
+                 {(totalRow.hasTotales)}
+                </Table.Summary.Cell>
+                <Table.Summary.Cell index={3} className="totalCell">
+                  {(totalRow.agricultura)}
+                </Table.Summary.Cell>
+                <Table.Summary.Cell index={4} className="totalCell">
+                  {(totalRow.ganaderia)}
+                </Table.Summary.Cell>
+                <Table.Summary.Cell index={5} className="totalCell">
+                  {(totalRow.tambo)}
+                </Table.Summary.Cell>
+                <Table.Summary.Cell index={6} className="totalCell">
+                  {(totalRow.mixto)}
+                </Table.Summary.Cell>
+              </Table.Summary.Row>
+            </Table.Summary>
+          )}
         />
       )}
     </>

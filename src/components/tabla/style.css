@@ -23,4 +23,8 @@ div.ant-drawer-body{
 .total-row {
     background-color: #f5fef5; /* Cambia este valor al color verde pastel deseado */
   }
+
+.totalCell{
+    text-align: right !important;
+}
   

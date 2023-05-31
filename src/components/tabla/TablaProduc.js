@@ -23,7 +23,7 @@ const TablaProduc = () => {
     activeTab,
   } = useContext(GlobalContext);
 
-  const [isTotalRow, setIsTotalRow] = useState(false);
+  //const [isTotalRow, setIsTotalRow] = useState(false);
 
   const cargarTablaInfo = () => {
     setIsLoadingTP(true); // Establecer isLoadingTP en true antes de hacer la solicitud
@@ -70,12 +70,12 @@ const TablaProduc = () => {
     }
   }, [activeTab, idUsu]);
 
-  const rowClassName = (record, index) => {
-    if (isTotalRow && index === 0) {
-      return "total-row"; // Agrega una clase CSS para la fila totalRow
-    }
-    return "";
-  };
+  // const rowClassName = (record, index) => {
+  //   if (isTotalRow && index === 0) {
+  //     return "total-row"; // Agrega una clase CSS para la fila totalRow
+  //   }
+  //   return "";
+  // };
 
   const columnsProductivo = [
     {
@@ -316,11 +316,11 @@ const TablaProduc = () => {
     tareasAbiertas: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataProductivo, "tareasAbiertas")}</span>,
   };
   
-  dataProductivo.unshift(totalRow);
+  //dataProductivo.unshift(totalRow);
 
-  useEffect(() => {
-    setIsTotalRow(true);
-  }, [dataProductivo]);
+  // useEffect(() => {
+  //   setIsTotalRow(true);
+  // }, [dataProductivo]);
 
   return (
     <>
@@ -341,10 +341,45 @@ const TablaProduc = () => {
           dataSource={dataProductivo}
           columns={columnsProductivo}
           size="middle"
-          rowClassName={rowClassName}
+          // rowClassName={rowClassName}
           onRow={(record) => ({
             onClick: () => handleCliente(record),
           })}
+          summary={() => (
+            <Table.Summary fixed>
+              <Table.Summary.Row style={{backgroundColor: "#f5fef5"}}>
+                <Table.Summary.Cell index={0} />
+                <Table.Summary.Cell index={1}>{(totalRow.clientes)}</Table.Summary.Cell>
+                <Table.Summary.Cell index={2} className="totalCell">
+                 {(totalRow.hasTotales)}
+                </Table.Summary.Cell>
+                <Table.Summary.Cell index={3} className="totalCell">
+                  {(totalRow.propias)}
+                </Table.Summary.Cell>
+                <Table.Summary.Cell index={4} className="totalCell">
+                  {(totalRow.alquiladas)}
+                </Table.Summary.Cell>
+                <Table.Summary.Cell index={5} className="totalCell">
+                  {(totalRow.usdInsumo)}
+                </Table.Summary.Cell>
+                <Table.Summary.Cell index={6} className="totalCell">
+                  {(totalRow.toneladasEntregadas)}
+                </Table.Summary.Cell>
+                <Table.Summary.Cell index={7} className="totalCell">
+                  {(totalRow.estimadoUSDInsumos)}
+                </Table.Summary.Cell>
+                <Table.Summary.Cell index={8} className="totalCell">
+                  {(totalRow.estimadoToneladas)}
+                </Table.Summary.Cell>
+                <Table.Summary.Cell index={9} className="totalCell">
+                  {(totalRow.negUSDAbierto)}
+                </Table.Summary.Cell>
+                <Table.Summary.Cell index={10} className="totalCell">
+                  {(totalRow.tareasAbiertas)}
+                </Table.Summary.Cell>
+              </Table.Summary.Row>
+            </Table.Summary>
+          )}
         />
       )}
     </>
