@@ -52,6 +52,15 @@ const TablaProduc = () => {
       : parseFloat(cleanedString);
   };
 
+  const sorterWithTotalRow = (a, b, dataIndex) => {
+    if (a === totalRow || b === totalRow) {
+      return 0; // Si uno de los registros es totalRow, se mantiene en su posición original
+    }
+    const valueA = convertToNumber(a[dataIndex]);
+    const valueB = convertToNumber(b[dataIndex]);
+    return valueA - valueB;
+  };
+
   useEffect(() => {
     if (activeTab === "2" && idUsu) {
       cargarTablaInfo();
@@ -81,7 +90,8 @@ const TablaProduc = () => {
             whiteSpace: "nowrap",
           }}
         >
-          <Popover content={text}>{text}</Popover>
+          {/* <Popover content={text}>{text}</Popover> */}
+          {text}
         </div>
       ),
       width: "130px",
@@ -92,7 +102,7 @@ const TablaProduc = () => {
       key: "hasTotales",
       align: "right",
       sorter: (a, b) =>
-        convertToNumber(a.hasTotales) - convertToNumber(b.hasTotales),
+         sorterWithTotalRow(a, b, "hasTotales"),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -100,7 +110,7 @@ const TablaProduc = () => {
       dataIndex: "propias",
       key: "propias",
       align: "right",
-      sorter: (a, b) => convertToNumber(a.propias) - convertToNumber(b.propias),
+      sorter: (a, b) =>  sorterWithTotalRow(a, b, "propias"),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -109,7 +119,7 @@ const TablaProduc = () => {
       key: "alquiladas",
       align: "right",
       sorter: (a, b) =>
-        convertToNumber(a.alquiladas) - convertToNumber(b.alquiladas),
+      sorterWithTotalRow(a, b, "alquiladas"),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -118,7 +128,7 @@ const TablaProduc = () => {
       key: "usdInsumo",
       align: "right",
       sorter: (a, b) =>
-        convertToNumber(a.usdInsumo) - convertToNumber(b.usdInsumo),
+      sorterWithTotalRow(a, b, "usdInsumo"),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -127,8 +137,7 @@ const TablaProduc = () => {
       key: "toneladasEntregadas",
       align: "right",
       sorter: (a, b) =>
-        convertToNumber(a.toneladasEntregadas) -
-        convertToNumber(b.toneladasEntregadas),
+      sorterWithTotalRow(a, b, "toneladasEntregadas"),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -137,8 +146,7 @@ const TablaProduc = () => {
       key: "estimadoUSD",
       align: "right",
       sorter: (a, b) =>
-        convertToNumber(a.estimadoUSDInsumos) -
-        convertToNumber(b.estimadoUSDInsumos),
+      sorterWithTotalRow(a, b, "estimadoUSDInsumos"),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -147,8 +155,7 @@ const TablaProduc = () => {
       key: "estimadoToneladas",
       align: "right",
       sorter: (a, b) =>
-        convertToNumber(a.estimadoToneladas) -
-        convertToNumber(b.estimadoToneladas),
+      sorterWithTotalRow(a, b, "estimadoToneladas"),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -157,7 +164,7 @@ const TablaProduc = () => {
       key: "negUSDAbierto",
       align: "right",
       sorter: (a, b) =>
-        convertToNumber(a.negUSDAbierto) - convertToNumber(b.negUSDAbierto),
+      sorterWithTotalRow(a, b, "negUSDAbierto"),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -166,7 +173,7 @@ const TablaProduc = () => {
       key: "tareasAbiertas",
       align: "right",
       sorter: (a, b) =>
-        convertToNumber(a.tareasAbiertas) - convertToNumber(b.tareasAbiertas),
+      sorterWithTotalRow(a, b, "tareasAbiertas"),
       sortDirections: ["ascend", "descend"],
     },
   ];
@@ -286,18 +293,18 @@ const TablaProduc = () => {
 
   const totalRow = {
     cuenta: "",
-    clientes: "TOTALES",
-    propias: sumColumns(dataProductivo, "propias"),
-    alquiladas: sumColumns(dataProductivo, "alquiladas"),
-    hasTotales: sumColumns(dataProductivo, "hasTotales"),
-    usdInsumo: sumColumns(dataProductivo, "usdInsumo"),
-    toneladasEntregadas: sumColumns(dataProductivo, "toneladasEntregadas"),
-    estimadoUSDInsumos: sumColumns(dataProductivo, "estimadoUSDInsumos"),
-    estimadoToneladas: sumColumns(dataProductivo, "estimadoToneladas"),
-    negUSDAbierto: sumColumns(dataProductivo, "negUSDAbierto"),
-    tareasAbiertas: sumColumns(dataProductivo, "tareasAbiertas"),
+    clientes: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>TOTALES</span>,
+    propias: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataProductivo, "propias")}</span>,
+    alquiladas: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataProductivo, "alquiladas")}</span>,
+    hasTotales: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataProductivo, "hasTotales")}</span>,
+    usdInsumo: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataProductivo, "usdInsumo")}</span>,
+    toneladasEntregadas: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataProductivo, "toneladasEntregadas")}</span>,
+    estimadoUSDInsumos: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataProductivo, "estimadoUSDInsumos")}</span>,
+    estimadoToneladas: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataProductivo, "estimadoToneladas")}</span>,
+    negUSDAbierto: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataProductivo, "negUSDAbierto")}</span>,
+    tareasAbiertas: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataProductivo, "tareasAbiertas")}</span>,
   };
-
+  
   dataProductivo.unshift(totalRow);
 
   return (
