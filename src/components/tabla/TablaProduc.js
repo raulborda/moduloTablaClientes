@@ -2,7 +2,6 @@
 import React, { useContext, useEffect } from "react";
 import { GlobalContext } from "../context/GlobalContext";
 import { Spin, Table } from "antd";
-import CompareNumericValues from "../../helpers/CompareNumericValues";
 
 const TablaProduc = () => {
   const URLDOS = process.env.REACT_APP_URL;
