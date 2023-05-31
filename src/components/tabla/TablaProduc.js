@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../context/GlobalContext";
-import { Popover, Spin, Table } from "antd";
+import { Spin, Table } from "antd";
+import "./style.css";
 
 const TablaProduc = () => {
   const URLDOS = process.env.REACT_APP_URL;
@@ -21,6 +22,8 @@ const TablaProduc = () => {
     setIsLoadingTI,
     activeTab,
   } = useContext(GlobalContext);
+
+  const [isTotalRow, setIsTotalRow] = useState(false);
 
   const cargarTablaInfo = () => {
     setIsLoadingTP(true); // Establecer isLoadingTP en true antes de hacer la solicitud
@@ -66,6 +69,13 @@ const TablaProduc = () => {
       cargarTablaInfo();
     }
   }, [activeTab, idUsu]);
+
+  const rowClassName = (record, index) => {
+    if (isTotalRow && index === 0) {
+      return "total-row"; // Agrega una clase CSS para la fila totalRow
+    }
+    return "";
+  };
 
   const columnsProductivo = [
     {
@@ -308,6 +318,10 @@ const TablaProduc = () => {
   
   dataProductivo.unshift(totalRow);
 
+  useEffect(() => {
+    setIsTotalRow(true);
+  }, [dataProductivo]);
+
   return (
     <>
       {isLoadingTP ? (
@@ -327,6 +341,7 @@ const TablaProduc = () => {
           dataSource={dataProductivo}
           columns={columnsProductivo}
           size="middle"
+          rowClassName={rowClassName}
           onRow={(record) => ({
             onClick: () => handleCliente(record),
           })}

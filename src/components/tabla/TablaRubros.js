@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Spin, Table } from "antd";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../context/GlobalContext";
+import "./style.css";
 
 const TablaRubros = () => {
   const URLDOS = process.env.REACT_APP_URL;
@@ -21,6 +22,8 @@ const TablaRubros = () => {
     setIsLoadingTI,
     activeTab,
   } = useContext(GlobalContext);
+
+  const [isTotalRow, setIsTotalRow] = useState(false);
 
   const cargarTablaInfo = () => {
     setIsLoadingTR(true); // Establecer isLoadingTR en true antes de hacer la solicitud
@@ -47,11 +50,30 @@ const TablaRubros = () => {
       return cleanedString === "S/D" ? Number.MIN_SAFE_INTEGER : parseFloat(cleanedString);
     };
 
+
+    const sorterWithTotalRow = (a, b, dataIndex) => {
+      if (a === totalRow || b === totalRow) {
+        return 0; // Si uno de los registros es totalRow, se mantiene en su posición original
+      }
+      const valueA = convertToNumber(a[dataIndex]);
+      const valueB = convertToNumber(b[dataIndex]);
+      return valueA - valueB;
+    };
+
+
+
   useEffect(() => {
     if (activeTab === "3" && idUsu) {
       cargarTablaInfo();
     }
   }, [activeTab, idUsu]);
+
+  const rowClassName = (record, index) => {
+    if (isTotalRow && index === 0) {
+      return "total-row"; // Agrega una clase CSS para la fila totalRow
+    }
+    return "";
+  };
 
 
   const columnsRubros = [
@@ -87,7 +109,7 @@ const TablaRubros = () => {
       dataIndex: "hasTotales",
       key: "hasTotales",
       align: "right",
-      sorter: (a, b) => convertToNumber(a.hasTotales) - convertToNumber(b.hasTotales),
+      sorter: (a, b) => sorterWithTotalRow(a, b, "hasTotales"),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -95,7 +117,7 @@ const TablaRubros = () => {
       dataIndex: "agricultura",
       key: "agricultura",
       align: "right",
-      sorter: (a, b) => convertToNumber(a.agricultura) - convertToNumber(b.agricultura),
+      sorter: (a, b) => sorterWithTotalRow(a, b, "agricultura"),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -103,7 +125,7 @@ const TablaRubros = () => {
       dataIndex: "ganaderia",
       key: "ganaderia",
       align: "right",
-      sorter: (a, b) => convertToNumber(a.ganaderia) - convertToNumber(b.ganaderia),
+      sorter: (a, b) => sorterWithTotalRow(a, b, "ganaderia"),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -111,7 +133,7 @@ const TablaRubros = () => {
       dataIndex: "tambo",
       key: "tambo",
       align: "right",
-      sorter: (a, b) => convertToNumber(a.tambo) - convertToNumber(b.tambo),
+      sorter: (a, b) => sorterWithTotalRow(a, b, "tambo"),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -119,7 +141,7 @@ const TablaRubros = () => {
       dataIndex: "mixto",
       key: "mixto",
       align: "right",
-      sorter: (a, b) => convertToNumber(a.mixto) - convertToNumber(b.mixto),
+      sorter: (a, b) => sorterWithTotalRow(a, b, "mixto"),
       sortDirections: ["ascend", "descend"],
     },
   ];
@@ -194,6 +216,39 @@ const TablaRubros = () => {
     }))
   );
 
+  const sumColumns = (dataRubros, columnIndex) => {
+    let sum = 0;
+    for (let i = 0; i < dataRubros.length; i++) {
+      const value = parseInt(dataRubros[i][columnIndex].replace(/\./g, "").replace(/,/g, "."), 10);
+      if (!isNaN(value)) {
+        sum += value;
+      }
+    }
+    return sum.toLocaleString(undefined, {
+      useGrouping: true,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 0,
+    }).replace(/,/g, ".");
+  };
+  
+  
+
+  const totalRow = {
+    cuenta: "",
+    clientes: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>TOTALES</span>,
+    hasTotales: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataRubros, "hasTotales")}</span>,
+    agricultura: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataRubros, "agricultura")}</span>,
+    ganaderia: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataRubros, "ganaderia")}</span>,
+    tambo: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataRubros, "tambo")}</span>,
+    mixto: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataRubros, "mixto")}</span>,
+  };
+  
+  dataRubros.unshift(totalRow);
+
+  useEffect(() => {
+    setIsTotalRow(true);
+  }, [dataRubros]);
+
   return (
     <>
       {isLoadingTR ? (
@@ -213,6 +268,7 @@ const TablaRubros = () => {
           dataSource={dataRubros}
           columns={columnsRubros}
           size="middle"
+          rowClassName={rowClassName}
           onRow={(record) => ({
             onClick: () => handleCliente(record),
           })}

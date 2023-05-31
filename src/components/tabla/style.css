@@ -19,3 +19,8 @@ div.ant-drawer-header-title {
 div.ant-drawer-body{
     padding-top: 10px !important;
 }
+
+.total-row {
+    background-color: #f5fef5; /* Cambia este valor al color verde pastel deseado */
+  }
+  
