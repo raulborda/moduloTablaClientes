@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect } from "react";
 import { GlobalContext } from "../context/GlobalContext";
-import { Spin, Table } from "antd";
+import { Popover, Spin, Table } from "antd";
 
 const TablaProduc = () => {
   const URLDOS = process.env.REACT_APP_URL;
@@ -81,7 +81,7 @@ const TablaProduc = () => {
             whiteSpace: "nowrap",
           }}
         >
-          {text}
+          <Popover content={text}>{text}</Popover>
         </div>
       ),
       width: "130px",
@@ -91,7 +91,8 @@ const TablaProduc = () => {
       dataIndex: "hasTotales",
       key: "hasTotales",
       align: "right",
-      sorter: (a, b) => convertToNumber(a.hasTotales) - convertToNumber(b.hasTotales),
+      sorter: (a, b) =>
+        convertToNumber(a.hasTotales) - convertToNumber(b.hasTotales),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -99,7 +100,7 @@ const TablaProduc = () => {
       dataIndex: "propias",
       key: "propias",
       align: "right",
-      sorter: (a, b) => convertToNumber(a.propias) - convertToNumber(b.propias),      
+      sorter: (a, b) => convertToNumber(a.propias) - convertToNumber(b.propias),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -107,7 +108,8 @@ const TablaProduc = () => {
       dataIndex: "alquiladas",
       key: "alquiladas",
       align: "right",
-      sorter: (a, b) => convertToNumber(a.alquiladas) - convertToNumber(b.alquiladas),
+      sorter: (a, b) =>
+        convertToNumber(a.alquiladas) - convertToNumber(b.alquiladas),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -115,7 +117,8 @@ const TablaProduc = () => {
       dataIndex: "usdInsumo",
       key: "usdInsumo",
       align: "right",
-      sorter: (a, b) => convertToNumber(a.usdInsumo) - convertToNumber(b.usdInsumo),
+      sorter: (a, b) =>
+        convertToNumber(a.usdInsumo) - convertToNumber(b.usdInsumo),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -123,7 +126,9 @@ const TablaProduc = () => {
       dataIndex: "toneladasEntregadas",
       key: "toneladasEntregadas",
       align: "right",
-      sorter: (a, b) => convertToNumber(a.toneladasEntregadas) - convertToNumber(b.toneladasEntregadas),
+      sorter: (a, b) =>
+        convertToNumber(a.toneladasEntregadas) -
+        convertToNumber(b.toneladasEntregadas),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -131,7 +136,9 @@ const TablaProduc = () => {
       dataIndex: "estimadoUSDInsumos",
       key: "estimadoUSD",
       align: "right",
-      sorter: (a, b) => convertToNumber(a.estimadoUSDInsumos) - convertToNumber(b.estimadoUSDInsumos),
+      sorter: (a, b) =>
+        convertToNumber(a.estimadoUSDInsumos) -
+        convertToNumber(b.estimadoUSDInsumos),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -139,7 +146,9 @@ const TablaProduc = () => {
       dataIndex: "estimadoToneladas",
       key: "estimadoToneladas",
       align: "right",
-      sorter: (a, b) => convertToNumber(a.estimadoToneladas) - convertToNumber(b.estimadoToneladas),
+      sorter: (a, b) =>
+        convertToNumber(a.estimadoToneladas) -
+        convertToNumber(b.estimadoToneladas),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -147,7 +156,8 @@ const TablaProduc = () => {
       dataIndex: "negUSDAbierto",
       key: "negUSDAbierto",
       align: "right",
-      sorter: (a, b) => convertToNumber(a.negUSDAbierto) - convertToNumber(b.negUSDAbierto),
+      sorter: (a, b) =>
+        convertToNumber(a.negUSDAbierto) - convertToNumber(b.negUSDAbierto),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -155,7 +165,8 @@ const TablaProduc = () => {
       dataIndex: "tareasAbiertas",
       key: "tareasAbiertas",
       align: "right",
-      sorter: (a, b) => convertToNumber(a.tareasAbiertas) - convertToNumber(b.tareasAbiertas),
+      sorter: (a, b) =>
+        convertToNumber(a.tareasAbiertas) - convertToNumber(b.tareasAbiertas),
       sortDirections: ["ascend", "descend"],
     },
   ];
