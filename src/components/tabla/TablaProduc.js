@@ -2,6 +2,7 @@
 import React, { useContext, useEffect } from "react";
 import { GlobalContext } from "../context/GlobalContext";
 import { Spin, Table } from "antd";
+import CompareNumericValues from "../../helpers/CompareNumericValues";
 
 const TablaProduc = () => {
   const URLDOS = process.env.REACT_APP_URL;
@@ -41,6 +42,11 @@ const TablaProduc = () => {
     });
   };
 
+  const convertToNumber = (value) => {
+    const cleanedString = value.replace(/[^0-9.,S/D]+/g, "").replace(/\./g, "").replace(/,/g, ".");
+    return cleanedString === "S/D" ? Number.MIN_SAFE_INTEGER : parseFloat(cleanedString);
+  };
+
   useEffect(() => {
     if (activeTab === "2" && idUsu) {
       cargarTablaInfo();
@@ -70,54 +76,81 @@ const TablaProduc = () => {
       dataIndex: "hasTotales",
       key: "hasTotales",
       align: "right",
+      sorter: (a, b) => convertToNumber(a.hasTotales) - convertToNumber(b.hasTotales),
+      //sorter: (a, b) => CompareNumericValues(a.hasTotales, b.hasTotales), // Ordena numéricamente
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "HAS. PROP.",
       dataIndex: "propias",
       key: "propias",
       align: "right",
+      sorter: (a, b) => convertToNumber(a.propias) - convertToNumber(b.propias),
+      //sorter: (a, b) => CompareNumericValues(a.hasTotales, b.hasTotales), // Ordena numéricamente
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "HAS. ALQ.",
       dataIndex: "alquiladas",
       key: "alquiladas",
       align: "right",
+      sorter: (a, b) => convertToNumber(a.alquiladas) - convertToNumber(b.alquiladas),
+      //sorter: (a, b) => CompareNumericValues(a.hasTotales, b.hasTotales), // Ordena numéricamente
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "COMPRA USD INS.",
       dataIndex: "usdInsumo",
       key: "usdInsumo",
       align: "right",
+      sorter: (a, b) => convertToNumber(a.usdInsumo) - convertToNumber(b.usdInsumo),
+      //sorter: (a, b) => CompareNumericValues(a.hasTotales, b.hasTotales), // Ordena numéricamente
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "TT ENTREG.",
       dataIndex: "toneladasEntregadas",
       key: "toneladasEntregadas",
       align: "right",
+      sorter: (a, b) => convertToNumber(a.toneladasEntregadas) - convertToNumber(b.toneladasEntregadas),
+      //sorter: (a, b) => CompareNumericValues(a.hasTotales, b.hasTotales), // Ordena numéricamente
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "COMPRA USD ESTIM.",
       dataIndex: "estimadoUSDInsumos",
       key: "estimadoUSD",
       align: "right",
+      sorter: (a, b) => convertToNumber(a.estimadoUSDInsumos) - convertToNumber(b.estimadoUSDInsumos),
+      //sorter: (a, b) => CompareNumericValues(a.hasTotales, b.hasTotales), // Ordena numéricamente
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "TT ESTIM.",
       dataIndex: "estimadoToneladas",
       key: "estimadoToneladas",
       align: "right",
+      sorter: (a, b) => convertToNumber(a.estimadoToneladas) - convertToNumber(b.estimadoToneladas),
+      //sorter: (a, b) => CompareNumericValues(a.hasTotales, b.hasTotales), // Ordena numéricamente
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "NEG. USD ABIERTO",
       dataIndex: "negUSDAbierto",
       key: "negUSDAbierto",
       align: "right",
+      sorter: (a, b) => convertToNumber(a.negUSDAbierto) - convertToNumber(b.negUSDAbierto),
+      //sorter: (a, b) => CompareNumericValues(a.hasTotales, b.hasTotales), // Ordena numéricamente
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "TAREAS ABIERTAS",
       dataIndex: "tareasAbiertas",
       key: "tareasAbiertas",
       align: "right",
+      sorter: (a, b) => convertToNumber(a.tareasAbiertas) - convertToNumber(b.tareasAbiertas),
+      //sorter: (a, b) => CompareNumericValues(a.hasTotales, b.hasTotales), // Ordena numéricamente
+      sortDirections: ["ascend", "descend"],
     },
   ];
 
@@ -159,61 +192,61 @@ const TablaProduc = () => {
               .toLocaleString(undefined, numberFormatOptions)
               .replace(/,/g, ".")
           : c.has_propias
-        : "-",
+        : "S/D",
       alquiladas: c.has_alquiladas
         ? typeof c.has_alquiladas === "string"
           ? parseInt(c.has_alquiladas)
               .toLocaleString(undefined, numberFormatOptions)
               .replace(/,/g, ".")
           : c.has_alquiladas
-        : "-",
+        : "S/D",
       hasTotales: c.has_totales
         ? typeof c.has_totales === "string"
           ? parseInt(c.has_totales)
               .toLocaleString(undefined, numberFormatOptions)
               .replace(/,/g, ".")
           : c.has_totales
-        : "-",
+        : "S/D",
       usdInsumo: c.usdEntregados
         ? typeof c.usdEntregados === "string"
           ? parseInt(c.usdEntregados)
               .toLocaleString(undefined, numberFormatOptions)
               .replace(/,/g, ".")
           : c.usdEntregados
-        : "-",
+        : "S/D",
       estimadoUSDInsumos: c.costoEstimado
         ? typeof c.costoEstimado === "string"
           ? parseInt(c.costoEstimado)
               .toLocaleString(undefined, numberFormatOptions)
               .replace(/,/g, ".")
           : c.costoEstimado
-        : "-",
+        : "S/D",
       toneladasEntregadas: c.toneladasEntregadas
         ? typeof c.toneladasEntregadas === "string"
           ? parseInt(c.toneladasEntregadas)
               .toLocaleString(undefined, numberFormatOptions)
               .replace(/,/g, ".")
           : c.toneladasEntregadas
-        : "-",
+        : "S/D",
       estimadoToneladas: c.toneladasEstimadas
         ? typeof c.toneladasEstimadas === "string"
           ? parseInt(c.toneladasEstimadas)
               .toLocaleString(undefined, numberFormatOptions)
               .replace(/,/g, ".")
           : c.toneladasEstimadas
-        : "-",
+        : "S/D",
       negUSDAbierto: c.suma_neg_valor
         ? typeof c.suma_neg_valor === "string"
           ? parseInt(c.suma_neg_valor)
               .toLocaleString(undefined, numberFormatOptions)
               .replace(/,/g, ".")
           : c.suma_neg_valor
-        : "-",
+        : "S/D",
       tareasAbiertas: c.cantidad_tareas_pendientes
         ? typeof c.cantidad_tareas_pendientes === "string"
           ? parseInt(c.cantidad_tareas_pendientes).toFixed(0)
           : c.cantidad_tareas_pendientes
-        : "-",
+        : "S/D",
     }))
   );
 
