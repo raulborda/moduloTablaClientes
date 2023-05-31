@@ -20,7 +20,7 @@ const TablaInfo = () => {
     isLoadingTI,
     setIsLoadingTI,
     activeTab,
-    actualizarData, 
+    actualizarData,
   } = useContext(GlobalContext);
 
   const cargarTablaInfo = () => {
@@ -36,17 +36,24 @@ const TablaInfo = () => {
         const objetoData = JSON.parse(data);
         setInfoclientes(objetoData);
         setIsLoadingTI(false); // Establecer isLoadingTI en false después de recibir la respuesta
-          setIsLoadingTP(true); // Establecer isLoadingTI en false el spin de tabla productivo
-          setIsLoadingTR(true); // Establecer isLoadingTP en false el spin de tabla rubro
+        setIsLoadingTP(true); // Establecer isLoadingTI en false el spin de tabla productivo
+        setIsLoadingTR(true); // Establecer isLoadingTP en false el spin de tabla rubro
       });
     });
   };
 
   useEffect(() => {
     if (activeTab === "1" && idUsu) {
-        cargarTablaInfo();
-      }
+      cargarTablaInfo();
+    }
   }, [activeTab, idUsu, actualizarData]);
+
+  const zonasUnicas = [...new Set(infoClientes.map((c) => c.gruuno_desc))];
+  const centrosUnicos = [...new Set(infoClientes.map((c) => c.grudos_desc))];
+
+  const zonaFilters = zonasUnicas.map((zona) => ({ text: zona, value: zona }));
+  const centroFilters = centrosUnicos.map((centro) => ({ text: centro, value: centro }));
+
 
   const columns = [
     {
@@ -70,12 +77,16 @@ const TablaInfo = () => {
       dataIndex: "zonas",
       key: "zonas",
       align: "center",
+      filters: zonaFilters,
+      onFilter: (value, record) => record.zonas === value,
     },
     {
       title: "CENTRO",
       dataIndex: "centro",
       key: "centro",
       align: "center",
+      filters: centroFilters,
+      onFilter: (value, record) => record.centro === value,
     },
     {
       title: "PROPIETARIO",
