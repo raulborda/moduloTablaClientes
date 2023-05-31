@@ -41,6 +41,12 @@ const TablaRubros = () => {
       });
   };
 
+    //* PARA ORDENAR LOS VALORES EN LA TABLA, TENIENDO EN CUENTA LOS CARACTERES ESPECIALES Y LETRAS
+    const convertToNumber = (value) => {
+      const cleanedString = value.replace(/[^0-9.,S/D]+/g, "").replace(/\./g, "").replace(/,/g, ".");
+      return cleanedString === "S/D" ? Number.MIN_SAFE_INTEGER : parseFloat(cleanedString);
+    };
+
   useEffect(() => {
     if (activeTab === "3" && idUsu) {
       cargarTablaInfo();
@@ -62,38 +68,59 @@ const TablaRubros = () => {
       key: "clientes",
       align: "left",
       render: (text, record) => (
-        <span style={{ color: "#00b33c" }}>{text}</span>
+        <div
+          style={{
+            color: "#00b33c",
+            maxWidth: "250px", // Ajusta el valor según el ancho deseado
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {text}
+        </div>
       ),
+      width: "300px",
     },
     {
       title: "HAS. TOTALES",
       dataIndex: "hasTotales",
       key: "hasTotales",
       align: "right",
+      sorter: (a, b) => convertToNumber(a.hasTotales) - convertToNumber(b.hasTotales),
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "AGRICULTURA",
       dataIndex: "agricultura",
       key: "agricultura",
       align: "right",
+      sorter: (a, b) => convertToNumber(a.agricultura) - convertToNumber(b.agricultura),
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "GANADERIA",
       dataIndex: "ganaderia",
       key: "ganaderia",
       align: "right",
+      sorter: (a, b) => convertToNumber(a.ganaderia) - convertToNumber(b.ganaderia),
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "TAMBO",
       dataIndex: "tambo",
       key: "tambo",
       align: "right",
+      sorter: (a, b) => convertToNumber(a.tambo) - convertToNumber(b.tambo),
+      sortDirections: ["ascend", "descend"],
     },
     {
       title: "MIXTO",
       dataIndex: "mixto",
       key: "mixto",
       align: "right",
+      sorter: (a, b) => convertToNumber(a.mixto) - convertToNumber(b.mixto),
+      sortDirections: ["ascend", "descend"],
     },
   ];
 
@@ -135,35 +162,35 @@ const TablaRubros = () => {
               .toLocaleString(undefined, numberFormatOptions)
               .replace(/,/g, ".")
           : c.has_totales
-        : "-",
+        : "S/D",
       agricultura: c.Agricultura
         ? typeof c.Agricultura === "string"
           ? parseInt(c.Agricultura)
               .toLocaleString(undefined, numberFormatOptions)
               .replace(/,/g, ".")
           : c.Agricultura
-        : "-",
+        : "S/D",
       ganaderia: c.Ganaderia
         ? typeof c.Ganaderia === "string"
           ? parseInt(c.Ganaderia)
               .toLocaleString(undefined, numberFormatOptions)
               .replace(/,/g, ".")
           : c.Ganaderia
-        : "-",
+        : "S/D",
       tambo: c.Tambo
         ? typeof c.Tambo === "string"
           ? parseInt(c.Tambo)
               .toLocaleString(undefined, numberFormatOptions)
               .replace(/,/g, ".")
           : c.Tambo
-        : "-",
+        : "S/D",
       mixto: c.Mixto
         ? typeof c.Mixto === "string"
           ? parseInt(c.Mixto)
               .toLocaleString(undefined, numberFormatOptions)
               .replace(/,/g, ".")
           : c.Mixto
-        : "-",
+        : "S/D",
     }))
   );
 

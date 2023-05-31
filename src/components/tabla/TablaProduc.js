@@ -41,9 +41,15 @@ const TablaProduc = () => {
     });
   };
 
+  //* PARA ORDENAR LOS VALORES EN LA TABLA, TENIENDO EN CUENTA LOS CARACTERES ESPECIALES Y LETRAS
   const convertToNumber = (value) => {
-    const cleanedString = value.replace(/[^0-9.,S/D]+/g, "").replace(/\./g, "").replace(/,/g, ".");
-    return cleanedString === "S/D" ? Number.MIN_SAFE_INTEGER : parseFloat(cleanedString);
+    const cleanedString = value
+      .replace(/[^0-9.,S/D]+/g, "")
+      .replace(/\./g, "")
+      .replace(/,/g, ".");
+    return cleanedString === "S/D"
+      ? Number.MIN_SAFE_INTEGER
+      : parseFloat(cleanedString);
   };
 
   useEffect(() => {
@@ -51,7 +57,6 @@ const TablaProduc = () => {
       cargarTablaInfo();
     }
   }, [activeTab, idUsu]);
-
 
   const columnsProductivo = [
     {
@@ -67,8 +72,19 @@ const TablaProduc = () => {
       key: "clientes",
       align: "left",
       render: (text, record) => (
-        <span style={{ color: "#00b33c" }}>{text}</span>
+        <div
+          style={{
+            color: "#00b33c",
+            maxWidth: "190px", // Ajusta el valor según el ancho deseado
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+          }}
+        >
+          {text}
+        </div>
       ),
+      width: "200px",
     },
     {
       title: "HAS. TOTALES",
@@ -76,7 +92,6 @@ const TablaProduc = () => {
       key: "hasTotales",
       align: "right",
       sorter: (a, b) => convertToNumber(a.hasTotales) - convertToNumber(b.hasTotales),
-      //sorter: (a, b) => CompareNumericValues(a.hasTotales, b.hasTotales), // Ordena numéricamente
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -84,8 +99,7 @@ const TablaProduc = () => {
       dataIndex: "propias",
       key: "propias",
       align: "right",
-      sorter: (a, b) => convertToNumber(a.propias) - convertToNumber(b.propias),
-      //sorter: (a, b) => CompareNumericValues(a.hasTotales, b.hasTotales), // Ordena numéricamente
+      sorter: (a, b) => convertToNumber(a.propias) - convertToNumber(b.propias),      
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -94,7 +108,6 @@ const TablaProduc = () => {
       key: "alquiladas",
       align: "right",
       sorter: (a, b) => convertToNumber(a.alquiladas) - convertToNumber(b.alquiladas),
-      //sorter: (a, b) => CompareNumericValues(a.hasTotales, b.hasTotales), // Ordena numéricamente
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -103,7 +116,6 @@ const TablaProduc = () => {
       key: "usdInsumo",
       align: "right",
       sorter: (a, b) => convertToNumber(a.usdInsumo) - convertToNumber(b.usdInsumo),
-      //sorter: (a, b) => CompareNumericValues(a.hasTotales, b.hasTotales), // Ordena numéricamente
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -112,7 +124,6 @@ const TablaProduc = () => {
       key: "toneladasEntregadas",
       align: "right",
       sorter: (a, b) => convertToNumber(a.toneladasEntregadas) - convertToNumber(b.toneladasEntregadas),
-      //sorter: (a, b) => CompareNumericValues(a.hasTotales, b.hasTotales), // Ordena numéricamente
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -121,7 +132,6 @@ const TablaProduc = () => {
       key: "estimadoUSD",
       align: "right",
       sorter: (a, b) => convertToNumber(a.estimadoUSDInsumos) - convertToNumber(b.estimadoUSDInsumos),
-      //sorter: (a, b) => CompareNumericValues(a.hasTotales, b.hasTotales), // Ordena numéricamente
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -130,7 +140,6 @@ const TablaProduc = () => {
       key: "estimadoToneladas",
       align: "right",
       sorter: (a, b) => convertToNumber(a.estimadoToneladas) - convertToNumber(b.estimadoToneladas),
-      //sorter: (a, b) => CompareNumericValues(a.hasTotales, b.hasTotales), // Ordena numéricamente
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -139,7 +148,6 @@ const TablaProduc = () => {
       key: "negUSDAbierto",
       align: "right",
       sorter: (a, b) => convertToNumber(a.negUSDAbierto) - convertToNumber(b.negUSDAbierto),
-      //sorter: (a, b) => CompareNumericValues(a.hasTotales, b.hasTotales), // Ordena numéricamente
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -148,7 +156,6 @@ const TablaProduc = () => {
       key: "tareasAbiertas",
       align: "right",
       sorter: (a, b) => convertToNumber(a.tareasAbiertas) - convertToNumber(b.tareasAbiertas),
-      //sorter: (a, b) => CompareNumericValues(a.hasTotales, b.hasTotales), // Ordena numéricamente
       sortDirections: ["ascend", "descend"],
     },
   ];
