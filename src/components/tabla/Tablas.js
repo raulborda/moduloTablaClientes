@@ -135,7 +135,7 @@ const TablasCli = () => {
           </>
         </Tabs>
       </div>
-      {selectedCliente && (
+      {selectedCliente && selectedCliente.cuenta!=="" &&(        
         <Drawer
           visible={isDrawerVisible}
           onClose={() => setIsDrawerVisible(false)}

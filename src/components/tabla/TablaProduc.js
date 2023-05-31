@@ -179,6 +179,7 @@ const TablaProduc = () => {
   ];
 
   const handleCliente = (record) => {
+    console.log("handleCliente: ",record);
     setSelectedCliente(record);
     setIsDrawerVisible(true);
     setCliSelect(parseInt(record.key));
