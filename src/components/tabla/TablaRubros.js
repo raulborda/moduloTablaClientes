@@ -267,7 +267,7 @@ const TablaRubros = () => {
         <Table
           dataSource={dataRubros}
           columns={columnsRubros}
-          size="middle"
+          size="small"
           // rowClassName={rowClassName}
           onRow={(record) => ({
             onClick: () => handleCliente(record),

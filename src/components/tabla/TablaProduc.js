@@ -340,7 +340,7 @@ const TablaProduc = () => {
         <Table
           dataSource={dataProductivo}
           columns={columnsProductivo}
-          size="middle"
+          size="small"
           // rowClassName={rowClassName}
           onRow={(record) => ({
             onClick: () => handleCliente(record),
