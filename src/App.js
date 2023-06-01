@@ -9,9 +9,9 @@ function App() {
 
   const [infoClientes, setInfoclientes] = useState([]);
 
-   //const idU = localStorage.getItem("usuario");
+   const idU = localStorage.getItem("usuario");
   //const idU = 8;
-  const [idUsu, setUsu] = useState(1);
+  const [idUsu, setUsu] = useState(idU);
 
   const [searchValue, setSearchValue] = useState("");
   const [isLoadingTI,setIsLoadingTI] = useState(true);
