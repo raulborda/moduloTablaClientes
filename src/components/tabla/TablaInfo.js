@@ -160,7 +160,7 @@ const TablaInfo = () => {
         <Table
           dataSource={data}
           columns={columns}
-          size="middle"
+          size="small"
           onRow={(record) => ({
             onClick: () => handleCliente(record),
           })}
