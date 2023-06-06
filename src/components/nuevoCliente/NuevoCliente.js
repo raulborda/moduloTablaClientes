@@ -136,7 +136,7 @@ const NuevoCliente = () => {
     data.append("tamano", values.tamano);
     data.append("zona", values.zona);
     data.append("centro", values.centro);
-    fetch(`${URLDOS}nuevoCliente`, {
+    fetch(`${URLDOS}nuevoCliente.php`, {
       method: "POST",
       body: data,
     }).then(function (response) {
