@@ -14,7 +14,7 @@ const TablasCli = () => {
   const PROTOCOL = window.location.protocol;
   const HOSTNAME = window.location.hostname;
   const URL = `${PROTOCOL}//${HOSTNAME}:${PORT}`;
-  
+  console.log("url: ", URL)
   const {
     searchValue,
     setSearchValue,

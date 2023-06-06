@@ -27,7 +27,7 @@ const TablaInfo = () => {
     setIsLoadingTI(true); // Establecer isLoadingTI en true antes de hacer la solicitud
     const data = new FormData();
     data.append("idU", idUsu);
-    fetch(`${URLDOS}tablaInfo`, {
+    fetch(`${URLDOS}tablaInfo.php`, {
       method: "POST",
       body: data,
     }).then(function (response) {
