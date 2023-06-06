@@ -8,6 +8,7 @@ import "./style.css";
 const NuevoCliente = () => {
   const URLDOS = process.env.REACT_APP_URL;
 
+
   const formRef = useRef(null);
 
   const { idUsu, setIsDrawerVisibleForm, actualizarData, setActualizarData } =
@@ -135,7 +136,7 @@ const NuevoCliente = () => {
     data.append("tamano", values.tamano);
     data.append("zona", values.zona);
     data.append("centro", values.centro);
-    fetch(`${URLDOS}nuevoCliente.php`, {
+    fetch(`${URLDOS}nuevoCliente`, {
       method: "POST",
       body: data,
     }).then(function (response) {
@@ -221,7 +222,6 @@ const NuevoCliente = () => {
               <Input style={{ width: "150px" }} />
             </Form.Item>
             <Form.Item
-              
               label="Email"
               name="email"
               rules={[

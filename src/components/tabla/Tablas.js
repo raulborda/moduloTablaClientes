@@ -14,6 +14,7 @@ const TablasCli = () => {
   const PROTOCOL = window.location.protocol;
   const HOSTNAME = window.location.hostname;
   const URL = `${PROTOCOL}//${HOSTNAME}:${PORT}`;
+  
   const {
     searchValue,
     setSearchValue,
@@ -151,7 +152,7 @@ const TablasCli = () => {
         >
           <iframe
             loading="lazy"
-            src={`${URL}/tati/modulos/vista_cliente/?idC=${cliSelect}`}
+            src={`${URL}/duoc/modulos/vista_cliente/?idC=${cliSelect}`}
             width={"100%"}
             // height={"600"}
             height={"1000"}

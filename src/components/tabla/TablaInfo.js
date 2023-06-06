@@ -27,7 +27,7 @@ const TablaInfo = () => {
     setIsLoadingTI(true); // Establecer isLoadingTI en true antes de hacer la solicitud
     const data = new FormData();
     data.append("idU", idUsu);
-    fetch(`${URLDOS}tablaInfo.php`, {
+    fetch(`${URLDOS}tablaInfo`, {
       method: "POST",
       body: data,
     }).then(function (response) {
@@ -52,8 +52,10 @@ const TablaInfo = () => {
   const centrosUnicos = [...new Set(infoClientes.map((c) => c.grudos_desc))];
 
   const zonaFilters = zonasUnicas.map((zona) => ({ text: zona, value: zona }));
-  const centroFilters = centrosUnicos.map((centro) => ({ text: centro, value: centro }));
-
+  const centroFilters = centrosUnicos.map((centro) => ({
+    text: centro,
+    value: centro,
+  }));
 
   const columns = [
     {
