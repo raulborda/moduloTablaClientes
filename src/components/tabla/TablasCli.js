@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Drawer, Input, Tabs } from "antd";
-import React, { useContext, useEffect } from "react";
+import { Button, Drawer, Input, Select, Tabs } from "antd";
+import React, { useContext, useEffect, useState } from "react";
 import "./style.css";
 import { GlobalContext } from "../context/GlobalContext";
 import { CloseOutlined } from "@ant-design/icons";
@@ -9,12 +9,13 @@ import TablaProduc from "./TablaProduc";
 import TablaRubros from "./TablaRubros";
 import NuevoCliente from "../nuevoCliente/NuevoCliente";
 
-const TablasCli = () => {
+const TablasCli = () => { 
+  const URLDOS = process.env.REACT_APP_URL;
   const PORT = window.location.port ? window.location.port : 80;
   const PROTOCOL = window.location.protocol;
   const HOSTNAME = window.location.hostname;
   const URL = `${PROTOCOL}//${HOSTNAME}:${PORT}`;
-  console.log("url: ", URL)
+  console.log("url: ", URL);
   const {
     searchValue,
     setSearchValue,
@@ -26,29 +27,35 @@ const TablasCli = () => {
     setActiveTab,
     isDrawerVisibleForm,
     setIsDrawerVisibleForm,
+    etiquetasSistema, 
+    setEtiquetasSistema,
+    etiquetasSelec, 
+    setEtiquetasSelec,
   } = useContext(GlobalContext);
+
+  const { Option } = Select;
+
+  //const [etiquetasSelec, setEtiquetasSelec] = useState([]);
 
   const showDrawer = () => {
     setIsDrawerVisibleForm(true);
   };
 
   const closeIconStyle = {
-    position: 'absolute',
-    top: '18px',
-    right: '20px',
+    position: "absolute",
+    top: "18px",
+    right: "20px",
   };
-  
+
   const CustomCloseIcon = ({ onClick }) => (
     <div style={closeIconStyle} onClick={onClick}>
-      {/* Coloca aquí tu icono de cierre personalizado */}
-      X
+      {/* Coloca aquí tu icono de cierre personalizado */}X
     </div>
   );
 
   const closeDrawer = () => {
     setIsDrawerVisibleForm(false);
   };
-
 
   localStorage.setItem("cliSelect", cliSelect);
 
@@ -62,13 +69,13 @@ const TablasCli = () => {
 
     switch (tabKey) {
       case "1":
-        tablaComponente = <TablaInfo />;
+        tablaComponente = <TablaInfo/>;
         break;
       case "2":
-        tablaComponente = <TablaProduc />;
+        tablaComponente = <TablaProduc/>;
         break;
       case "3":
-        tablaComponente = <TablaRubros />;
+        tablaComponente = <TablaRubros/>;
         break;
       default:
         tablaComponente = null;
@@ -81,6 +88,22 @@ const TablasCli = () => {
   useEffect(() => {
     cargarTabla(activeTab);
   }, []);
+
+  useEffect(() => {
+    const data = new FormData();
+    fetch(`${URLDOS}etiquetaVistaCliente.php`, {
+      method: "POST",
+      body: data,
+    }).then(function (response) {
+      response.text().then((resp) => {
+        const data = resp;
+        const objetoData = JSON.parse(data);
+        setEtiquetasSelec(objetoData);
+      });
+    });
+  }, []);
+
+  //console.log(etiquetasSelec);
 
   return (
     <>
@@ -95,6 +118,19 @@ const TablasCli = () => {
         >
           <h1 className="titulos">CLIENTES</h1>
           <div>
+            <Select
+              mode="multiple"
+              placeholder="Filtrar por etiquetas"
+              style={{ width: "230px", marginRight:"12px"}}
+              value={etiquetasSistema}
+              onChange={setEtiquetasSistema}
+            >
+              {etiquetasSelec?.map((etiquet) => (
+                  <Option key={etiquet?.tag_id} value={etiquet?.tag_id}>
+                    {etiquet?.tag_desc}
+                  </Option>
+                ))}
+            </Select>
             <Input
               style={{ width: "200px" }}
               type="text"
@@ -114,7 +150,7 @@ const TablasCli = () => {
 
         <Drawer
           title="Nuevo Cliente"
-          visible={isDrawerVisibleForm}
+          open={isDrawerVisibleForm}
           onClose={closeDrawer}
           width={600}
           closeIcon={<CustomCloseIcon />}
@@ -136,9 +172,9 @@ const TablasCli = () => {
           </>
         </Tabs>
       </div>
-      {selectedCliente && selectedCliente.cuenta!=="" &&(        
+      {selectedCliente && selectedCliente.cuenta !== "" && (
         <Drawer
-          visible={isDrawerVisible}
+          open={isDrawerVisible}
           onClose={() => setIsDrawerVisible(false)}
           title={selectedCliente.clientes}
           placement="bottom"
