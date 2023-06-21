@@ -162,13 +162,13 @@ const TablasCli = () => {
 
         <Tabs activeKey={activeTab} onChange={handleCambio}>
           <>
-            <Tabs.Tab key="1" tab="INFORMACIÓN">
+            <Tabs.Tab key="1" tab="INFORMATIVA">
               {cargarTabla(activeTab)}
             </Tabs.Tab>
-            <Tabs.Tab key="2" tab="PRODUCTIVO">
+            <Tabs.Tab key="2" tab="PRODUCTIVA COMERCIAL">
               {cargarTabla(activeTab)}
             </Tabs.Tab>
-            <Tabs.Tab key="3" tab="RUBROS">
+            <Tabs.Tab key="3" tab="PRODUCTIVA POR RUBRO">
               {cargarTabla(activeTab)}
             </Tabs.Tab>
           </>
