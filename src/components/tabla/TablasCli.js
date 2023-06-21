@@ -9,13 +9,14 @@ import TablaProduc from "./TablaProduc";
 import TablaRubros from "./TablaRubros";
 import NuevoCliente from "../nuevoCliente/NuevoCliente";
 
-const TablasCli = () => { 
+const TablasCli = () => {
   const URLDOS = process.env.REACT_APP_URL;
   const PORT = window.location.port ? window.location.port : 80;
   const PROTOCOL = window.location.protocol;
   const HOSTNAME = window.location.hostname;
   const URL = `${PROTOCOL}//${HOSTNAME}:${PORT}`;
-  console.log("url: ", URL);
+  //console.log("url: ", URL);
+
   const {
     searchValue,
     setSearchValue,
@@ -27,9 +28,9 @@ const TablasCli = () => {
     setActiveTab,
     isDrawerVisibleForm,
     setIsDrawerVisibleForm,
-    etiquetasSistema, 
+    etiquetasSistema,
     setEtiquetasSistema,
-    etiquetasSelec, 
+    etiquetasSelec,
     setEtiquetasSelec,
   } = useContext(GlobalContext);
 
@@ -49,7 +50,7 @@ const TablasCli = () => {
 
   const CustomCloseIcon = ({ onClick }) => (
     <div style={closeIconStyle} onClick={onClick}>
-      {/* Coloca aquí tu icono de cierre personalizado */}X
+      X
     </div>
   );
 
@@ -69,13 +70,13 @@ const TablasCli = () => {
 
     switch (tabKey) {
       case "1":
-        tablaComponente = <TablaInfo/>;
+        tablaComponente = <TablaInfo />;
         break;
       case "2":
-        tablaComponente = <TablaProduc/>;
+        tablaComponente = <TablaProduc />;
         break;
       case "3":
-        tablaComponente = <TablaRubros/>;
+        tablaComponente = <TablaRubros />;
         break;
       default:
         tablaComponente = null;
@@ -98,12 +99,12 @@ const TablasCli = () => {
       response.text().then((resp) => {
         const data = resp;
         const objetoData = JSON.parse(data);
-        setEtiquetasSelec(objetoData);
+        setEtiquetasSistema(objetoData);
       });
     });
   }, []);
 
-  //console.log(etiquetasSelec);
+  console.log(etiquetasSelec);
 
   return (
     <>
@@ -117,22 +118,23 @@ const TablasCli = () => {
           }}
         >
           <h1 className="titulos">CLIENTES</h1>
-          <div>
+          <div style={{ display: "flex", flexDirection: "row" }}>
             <Select
               mode="multiple"
               placeholder="Filtrar por etiquetas"
-              style={{ width: "230px", marginRight:"12px"}}
-              value={etiquetasSistema}
-              onChange={setEtiquetasSistema}
+              style={{ width: "230px", marginRight: "12px" }}
+              value={etiquetasSelec}
+              onChange={setEtiquetasSelec}
             >
-              {etiquetasSelec?.map((etiquet) => (
-                  <Option key={etiquet?.tag_id} value={etiquet?.tag_id}>
-                    {etiquet?.tag_desc}
-                  </Option>
-                ))}
+              {etiquetasSistema?.map((etiquet) => (
+                <Option key={etiquet?.tag_id} value={etiquet?.tag_desc}>
+                  {etiquet?.tag_desc}
+                </Option>
+              ))}
             </Select>
+
             <Input
-              style={{ width: "200px" }}
+              style={{ width: "200px", height: "33px" }}
               type="text"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}

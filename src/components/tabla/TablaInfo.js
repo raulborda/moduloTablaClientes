@@ -21,8 +21,8 @@ const TablaInfo = () => {
     setIsLoadingTI,
     activeTab,
     actualizarData,
-    etiquetasSistema, 
-    setEtiquetasSistema,
+    etiquetasSelec, 
+    setEtiquetasSelec,
   } = useContext(GlobalContext);
 
   const cargarTablaInfo = () => {
@@ -40,7 +40,7 @@ const TablaInfo = () => {
         setIsLoadingTI(false); // Establecer isLoadingTI en false después de recibir la respuesta
         setIsLoadingTP(true); // Establecer isLoadingTI en false el spin de tabla productivo
         setIsLoadingTR(true); // Establecer isLoadingTP en false el spin de tabla rubro
-        //console.log(objetoData)
+        //console.log(infoClientes)
       });
     });
   };
@@ -134,24 +134,26 @@ const TablaInfo = () => {
     });
   };
 
-  // const filtrarClientes = () => {
-  //   return infoClientes.filter((cliente) => {
-  //     if (etiquetasSistema.length > 0){
-  //       const etiquetaCliente = cliente.tags ? cliente.tags.split(",") : [];
-  //       const intersec = etiquetaCliente.filter((etq) => 
-  //         etiquetasSistema.includes(etq)
-  //       );
-  //       if (intersec.length===0){
-  //         return false;
-  //       }
-  //     }
-  //     return true;
-  //   })
-  // }
+  const filtrarClientes = () => {
+    return infoClientes.filter((cliente) => {
+      if (etiquetasSelec.length > 0){
+        const etiquetaCliente = cliente.tags ? cliente.tags.split(",") : [];
+        const intersec = etiquetaCliente.filter((etq) => 
+          etiquetasSelec.includes(etq)
+        );
+
+        if (intersec.length===0){
+          return false;
+        }
+      }
+      return true;
+    })
+  }
 
 
   const data = filterData(
-    infoClientes.map((c, index) => ({
+    //infoClientes.map((c, index) => ({
+    filtrarClientes().map((c, index) => ({
       key: c.cli_id,
       cuenta: c.cli_idsistema,
       clientes: c.cli_nombre,
