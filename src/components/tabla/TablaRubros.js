@@ -21,6 +21,7 @@ const TablaRubros = () => {
     setIsLoadingTP,
     setIsLoadingTI,
     activeTab,
+    etiquetasSelec,
   } = useContext(GlobalContext);
 
   //const [isTotalRow, setIsTotalRow] = useState(false);
@@ -167,6 +168,22 @@ const TablaRubros = () => {
     });
   };
 
+  const filtrarClientes = () => {
+    return infoClientes.filter((cliente) => {
+      if (etiquetasSelec.length > 0){
+        const etiquetaCliente = cliente.tags ? cliente.tags.split(",") : [];
+        const intersec = etiquetaCliente.filter((etq) => 
+          etiquetasSelec.includes(etq)
+        );
+
+        if (intersec.length===0){
+          return false;
+        }
+      }
+      return true;
+    })
+  }
+
   const numberFormatOptions = {
     useGrouping: true,
     minimumFractionDigits: 0,
@@ -174,7 +191,8 @@ const TablaRubros = () => {
   };
 
   const dataRubros = filterData(
-    infoClientes.map((c, index) => ({
+    //infoClientes.map((c, index) => ({
+      filtrarClientes().map((c, index) => ({
       key: c.cli_id,
       cuenta: c.cli_idsistema,
       clientes: c.cli_nombre,

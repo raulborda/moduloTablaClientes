@@ -22,7 +22,6 @@ const TablaInfo = () => {
     activeTab,
     actualizarData,
     etiquetasSelec, 
-    setEtiquetasSelec,
   } = useContext(GlobalContext);
 
   const cargarTablaInfo = () => {
