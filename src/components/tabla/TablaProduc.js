@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect} from "react";
+import React, { useContext, useEffect } from "react";
 import { GlobalContext } from "../context/GlobalContext";
 import { Spin, Table } from "antd";
 import "./style.css";
@@ -112,8 +112,7 @@ const TablaProduc = () => {
       dataIndex: "hasTotales",
       key: "hasTotales",
       align: "right",
-      sorter: (a, b) =>
-         sorterWithTotalRow(a, b, "hasTotales"),
+      sorter: (a, b) => sorterWithTotalRow(a, b, "hasTotales"),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -121,7 +120,7 @@ const TablaProduc = () => {
       dataIndex: "propias",
       key: "propias",
       align: "right",
-      sorter: (a, b) =>  sorterWithTotalRow(a, b, "propias"),
+      sorter: (a, b) => sorterWithTotalRow(a, b, "propias"),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -129,8 +128,7 @@ const TablaProduc = () => {
       dataIndex: "alquiladas",
       key: "alquiladas",
       align: "right",
-      sorter: (a, b) =>
-      sorterWithTotalRow(a, b, "alquiladas"),
+      sorter: (a, b) => sorterWithTotalRow(a, b, "alquiladas"),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -138,8 +136,7 @@ const TablaProduc = () => {
       dataIndex: "usdInsumo",
       key: "usdInsumo",
       align: "right",
-      sorter: (a, b) =>
-      sorterWithTotalRow(a, b, "usdInsumo"),
+      sorter: (a, b) => sorterWithTotalRow(a, b, "usdInsumo"),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -147,8 +144,7 @@ const TablaProduc = () => {
       dataIndex: "toneladasEntregadas",
       key: "toneladasEntregadas",
       align: "right",
-      sorter: (a, b) =>
-      sorterWithTotalRow(a, b, "toneladasEntregadas"),
+      sorter: (a, b) => sorterWithTotalRow(a, b, "toneladasEntregadas"),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -156,8 +152,7 @@ const TablaProduc = () => {
       dataIndex: "estimadoUSDInsumos",
       key: "estimadoUSD",
       align: "right",
-      sorter: (a, b) =>
-      sorterWithTotalRow(a, b, "estimadoUSDInsumos"),
+      sorter: (a, b) => sorterWithTotalRow(a, b, "estimadoUSDInsumos"),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -165,8 +160,7 @@ const TablaProduc = () => {
       dataIndex: "estimadoToneladas",
       key: "estimadoToneladas",
       align: "right",
-      sorter: (a, b) =>
-      sorterWithTotalRow(a, b, "estimadoToneladas"),
+      sorter: (a, b) => sorterWithTotalRow(a, b, "estimadoToneladas"),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -174,8 +168,7 @@ const TablaProduc = () => {
       dataIndex: "negUSDAbierto",
       key: "negUSDAbierto",
       align: "right",
-      sorter: (a, b) =>
-      sorterWithTotalRow(a, b, "negUSDAbierto"),
+      sorter: (a, b) => sorterWithTotalRow(a, b, "negUSDAbierto"),
       sortDirections: ["ascend", "descend"],
     },
     {
@@ -183,14 +176,13 @@ const TablaProduc = () => {
       dataIndex: "tareasAbiertas",
       key: "tareasAbiertas",
       align: "right",
-      sorter: (a, b) =>
-      sorterWithTotalRow(a, b, "tareasAbiertas"),
+      sorter: (a, b) => sorterWithTotalRow(a, b, "tareasAbiertas"),
       sortDirections: ["ascend", "descend"],
     },
   ];
 
   const handleCliente = (record) => {
-    console.log("handleCliente: ",record);
+    console.log("handleCliente: ", record);
     setSelectedCliente(record);
     setIsDrawerVisible(true);
     setCliSelect(parseInt(record.key));
@@ -213,19 +205,21 @@ const TablaProduc = () => {
 
   const filtrarClientes = () => {
     return infoClientes.filter((cliente) => {
-      if (etiquetasSelec.length > 0){
-        const etiquetaCliente = cliente.etiqueta ? cliente.etiqueta.split(",") : [];
-        const intersec = etiquetaCliente.filter((etq) => 
+      if (etiquetasSelec.length > 0) {
+        const etiquetaCliente = cliente.etiqueta
+          ? cliente.etiqueta.split(",")
+          : [];
+        const intersec = etiquetaCliente.filter((etq) =>
           etiquetasSelec.includes(etq)
         );
 
-        if (intersec.length===0){
+        if (intersec.length === 0) {
           return false;
         }
       }
       return true;
-    })
-  }
+    });
+  };
 
   const numberFormatOptions = {
     useGrouping: true,
@@ -237,7 +231,19 @@ const TablaProduc = () => {
     //infoClientes.map((c, index) => ({
     filtrarClientes().map((c, index) => ({
       key: c.cli_id,
-      cuenta: c.cli_idsistema,
+      cuenta:
+        c.cli_idsistema === "0" ? (
+          <>
+            <div
+              className="selected_tag"
+              style={{ background: "#56b43c", display: "inline-block" }}
+            >
+              <span className="etq_name">{"LEAD".toUpperCase()}</span>
+            </div>
+          </>
+        ) : (
+          c.cli_idsistema
+        ),
       clientes: c.cli_nombre,
       propias: c.has_propias
         ? typeof c.has_propias === "string"
@@ -306,34 +312,75 @@ const TablaProduc = () => {
   const sumColumns = (dataProductivo, columnIndex) => {
     let sum = 0;
     for (let i = 0; i < dataProductivo.length; i++) {
-      const value = parseInt(dataProductivo[i][columnIndex].replace(/\./g, "").replace(/,/g, "."), 10);
+      const value = parseInt(
+        dataProductivo[i][columnIndex].replace(/\./g, "").replace(/,/g, "."),
+        10
+      );
       if (!isNaN(value)) {
         sum += value;
       }
     }
-    return sum.toLocaleString(undefined, {
-      useGrouping: true,
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).replace(/,/g, ".");
+    return sum
+      .toLocaleString(undefined, {
+        useGrouping: true,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
+      .replace(/,/g, ".");
   };
-  
-  
 
   const totalRow = {
     cuenta: "",
-    clientes: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>TOTALES</span>,
-    propias: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataProductivo, "propias")}</span>,
-    alquiladas: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataProductivo, "alquiladas")}</span>,
-    hasTotales: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataProductivo, "hasTotales")}</span>,
-    usdInsumo: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataProductivo, "usdInsumo")}</span>,
-    toneladasEntregadas: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataProductivo, "toneladasEntregadas")}</span>,
-    estimadoUSDInsumos: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataProductivo, "estimadoUSDInsumos")}</span>,
-    estimadoToneladas: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataProductivo, "estimadoToneladas")}</span>,
-    negUSDAbierto: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataProductivo, "negUSDAbierto")}</span>,
-    tareasAbiertas: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataProductivo, "tareasAbiertas")}</span>,
+    clientes: (
+      <span style={{ color: "#00b33c", fontWeight: "bold" }}>TOTALES</span>
+    ),
+    propias: (
+      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+        {sumColumns(dataProductivo, "propias")}
+      </span>
+    ),
+    alquiladas: (
+      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+        {sumColumns(dataProductivo, "alquiladas")}
+      </span>
+    ),
+    hasTotales: (
+      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+        {sumColumns(dataProductivo, "hasTotales")}
+      </span>
+    ),
+    usdInsumo: (
+      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+        {sumColumns(dataProductivo, "usdInsumo")}
+      </span>
+    ),
+    toneladasEntregadas: (
+      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+        {sumColumns(dataProductivo, "toneladasEntregadas")}
+      </span>
+    ),
+    estimadoUSDInsumos: (
+      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+        {sumColumns(dataProductivo, "estimadoUSDInsumos")}
+      </span>
+    ),
+    estimadoToneladas: (
+      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+        {sumColumns(dataProductivo, "estimadoToneladas")}
+      </span>
+    ),
+    negUSDAbierto: (
+      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+        {sumColumns(dataProductivo, "negUSDAbierto")}
+      </span>
+    ),
+    tareasAbiertas: (
+      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+        {sumColumns(dataProductivo, "tareasAbiertas")}
+      </span>
+    ),
   };
-  
+
   //dataProductivo.unshift(totalRow);
 
   // useEffect(() => {
@@ -365,35 +412,37 @@ const TablaProduc = () => {
           })}
           summary={() => (
             <Table.Summary fixed>
-              <Table.Summary.Row style={{backgroundColor: "#f5fef5"}}>
+              <Table.Summary.Row style={{ backgroundColor: "#f5fef5" }}>
                 <Table.Summary.Cell index={0} />
-                <Table.Summary.Cell index={1}>{(totalRow.clientes)}</Table.Summary.Cell>
+                <Table.Summary.Cell index={1}>
+                  {totalRow.clientes}
+                </Table.Summary.Cell>
                 <Table.Summary.Cell index={2} className="totalCell">
-                 {(totalRow.hasTotales)}
+                  {totalRow.hasTotales}
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={3} className="totalCell">
-                  {(totalRow.propias)}
+                  {totalRow.propias}
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={4} className="totalCell">
-                  {(totalRow.alquiladas)}
+                  {totalRow.alquiladas}
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={5} className="totalCell">
-                  {(totalRow.usdInsumo)}
+                  {totalRow.usdInsumo}
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={6} className="totalCell">
-                  {(totalRow.toneladasEntregadas)}
+                  {totalRow.toneladasEntregadas}
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={7} className="totalCell">
-                  {(totalRow.estimadoUSDInsumos)}
+                  {totalRow.estimadoUSDInsumos}
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={8} className="totalCell">
-                  {(totalRow.estimadoToneladas)}
+                  {totalRow.estimadoToneladas}
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={9} className="totalCell">
-                  {(totalRow.negUSDAbierto)}
+                  {totalRow.negUSDAbierto}
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={10} className="totalCell">
-                  {(totalRow.tareasAbiertas)}
+                  {totalRow.tareasAbiertas}
                 </Table.Summary.Cell>
               </Table.Summary.Row>
             </Table.Summary>

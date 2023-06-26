@@ -27,4 +27,25 @@ div.ant-drawer-body{
 .totalCell{
     text-align: right !important;
 }
+
+
+.selected_tags{
+    display: flex;
+    flex-direction: row;
+}
+
+.selected_tag{
+    margin-left: 2px;
+    margin-right: 4px;
+    height: 20px;
+    /*width: 110px;*/
+    border-radius: 3px;
+    text-align: center;    
+}
+
+.etq_name{
+    color:white;
+   
+    padding: 10px;
+}
   

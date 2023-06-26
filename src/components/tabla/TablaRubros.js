@@ -28,40 +28,42 @@ const TablaRubros = () => {
 
   const cargarTablaInfo = () => {
     setIsLoadingTR(true); // Establecer isLoadingTR en true antes de hacer la solicitud
-      const data = new FormData();
-      data.append("idU", idUsu);
-      fetch(`${URLDOS}tablaRubro.php`, {
-        method: "POST",
-        body: data,
-      }).then(function (response) {
-        response.text().then((resp) => {
-          const data = resp;
-          const objetoData = JSON.parse(data);
-          setInfoclientes(objetoData);
-          setIsLoadingTR(false); // Establecer isLoadingTR en false después de recibir la respuesta
-          setIsLoadingTI(true); // Establecer isLoadingTI en false el spin de tabla informacion
-          setIsLoadingTP(true); // Establecer isLoadingTP en false el spin de tabla productivo
-        });
+    const data = new FormData();
+    data.append("idU", idUsu);
+    fetch(`${URLDOS}tablaRubro.php`, {
+      method: "POST",
+      body: data,
+    }).then(function (response) {
+      response.text().then((resp) => {
+        const data = resp;
+        const objetoData = JSON.parse(data);
+        setInfoclientes(objetoData);
+        setIsLoadingTR(false); // Establecer isLoadingTR en false después de recibir la respuesta
+        setIsLoadingTI(true); // Establecer isLoadingTI en false el spin de tabla informacion
+        setIsLoadingTP(true); // Establecer isLoadingTP en false el spin de tabla productivo
       });
+    });
   };
 
-    //* PARA ORDENAR LOS VALORES EN LA TABLA, TENIENDO EN CUENTA LOS CARACTERES ESPECIALES Y LETRAS
-    const convertToNumber = (value) => {
-      const cleanedString = value.replace(/[^0-9.,S/D]+/g, "").replace(/\./g, "").replace(/,/g, ".");
-      return cleanedString === "S/D" ? Number.MIN_SAFE_INTEGER : parseFloat(cleanedString);
-    };
+  //* PARA ORDENAR LOS VALORES EN LA TABLA, TENIENDO EN CUENTA LOS CARACTERES ESPECIALES Y LETRAS
+  const convertToNumber = (value) => {
+    const cleanedString = value
+      .replace(/[^0-9.,S/D]+/g, "")
+      .replace(/\./g, "")
+      .replace(/,/g, ".");
+    return cleanedString === "S/D"
+      ? Number.MIN_SAFE_INTEGER
+      : parseFloat(cleanedString);
+  };
 
-
-    const sorterWithTotalRow = (a, b, dataIndex) => {
-      if (a === totalRow || b === totalRow) {
-        return 0; // Si uno de los registros es totalRow, se mantiene en su posición original
-      }
-      const valueA = convertToNumber(a[dataIndex]);
-      const valueB = convertToNumber(b[dataIndex]);
-      return valueA - valueB;
-    };
-
-
+  const sorterWithTotalRow = (a, b, dataIndex) => {
+    if (a === totalRow || b === totalRow) {
+      return 0; // Si uno de los registros es totalRow, se mantiene en su posición original
+    }
+    const valueA = convertToNumber(a[dataIndex]);
+    const valueB = convertToNumber(b[dataIndex]);
+    return valueA - valueB;
+  };
 
   useEffect(() => {
     if (activeTab === "3" && idUsu) {
@@ -75,7 +77,6 @@ const TablaRubros = () => {
   //   }
   //   return "";
   // };
-
 
   const columnsRubros = [
     {
@@ -170,19 +171,21 @@ const TablaRubros = () => {
 
   const filtrarClientes = () => {
     return infoClientes.filter((cliente) => {
-      if (etiquetasSelec.length > 0){
-        const etiquetaCliente = cliente.etiqueta ? cliente.etiqueta.split(",") : [];
-        const intersec = etiquetaCliente.filter((etq) => 
+      if (etiquetasSelec.length > 0) {
+        const etiquetaCliente = cliente.etiqueta
+          ? cliente.etiqueta.split(",")
+          : [];
+        const intersec = etiquetaCliente.filter((etq) =>
           etiquetasSelec.includes(etq)
         );
 
-        if (intersec.length===0){
+        if (intersec.length === 0) {
           return false;
         }
       }
       return true;
-    })
-  }
+    });
+  };
 
   const numberFormatOptions = {
     useGrouping: true,
@@ -192,9 +195,21 @@ const TablaRubros = () => {
 
   const dataRubros = filterData(
     //infoClientes.map((c, index) => ({
-      filtrarClientes().map((c, index) => ({
+    filtrarClientes().map((c, index) => ({
       key: c.cli_id,
-      cuenta: c.cli_idsistema,
+      cuenta:
+        c.cli_idsistema === "0" ? (
+          <>
+            <div
+              className="selected_tag"
+              style={{ background: "#56b43c", display: "inline-block" }}
+            >
+              <span className="etq_name">{"LEAD".toUpperCase()}</span>
+            </div>
+          </>
+        ) : (
+          c.cli_idsistema
+        ),
       clientes: c.cli_nombre,
       hasTotales: c.has_totales
         ? typeof c.has_totales === "string"
@@ -237,30 +252,55 @@ const TablaRubros = () => {
   const sumColumns = (dataRubros, columnIndex) => {
     let sum = 0;
     for (let i = 0; i < dataRubros.length; i++) {
-      const value = parseInt(dataRubros[i][columnIndex].replace(/\./g, "").replace(/,/g, "."), 10);
+      const value = parseInt(
+        dataRubros[i][columnIndex].replace(/\./g, "").replace(/,/g, "."),
+        10
+      );
       if (!isNaN(value)) {
         sum += value;
       }
     }
-    return sum.toLocaleString(undefined, {
-      useGrouping: true,
-      minimumFractionDigits: 0,
-      maximumFractionDigits: 0,
-    }).replace(/,/g, ".");
+    return sum
+      .toLocaleString(undefined, {
+        useGrouping: true,
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0,
+      })
+      .replace(/,/g, ".");
   };
-  
-  
 
   const totalRow = {
     cuenta: "",
-    clientes: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>TOTALES</span>,
-    hasTotales: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataRubros, "hasTotales")}</span>,
-    agricultura: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataRubros, "agricultura")}</span>,
-    ganaderia: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataRubros, "ganaderia")}</span>,
-    tambo: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataRubros, "tambo")}</span>,
-    mixto: <span style={{ color: '#00b33c', fontWeight: 'bold' }}>{sumColumns(dataRubros, "mixto")}</span>,
+    clientes: (
+      <span style={{ color: "#00b33c", fontWeight: "bold" }}>TOTALES</span>
+    ),
+    hasTotales: (
+      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+        {sumColumns(dataRubros, "hasTotales")}
+      </span>
+    ),
+    agricultura: (
+      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+        {sumColumns(dataRubros, "agricultura")}
+      </span>
+    ),
+    ganaderia: (
+      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+        {sumColumns(dataRubros, "ganaderia")}
+      </span>
+    ),
+    tambo: (
+      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+        {sumColumns(dataRubros, "tambo")}
+      </span>
+    ),
+    mixto: (
+      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+        {sumColumns(dataRubros, "mixto")}
+      </span>
+    ),
   };
-  
+
   // dataRubros.unshift(totalRow);
 
   // useEffect(() => {
@@ -292,23 +332,25 @@ const TablaRubros = () => {
           })}
           summary={() => (
             <Table.Summary fixed>
-              <Table.Summary.Row style={{backgroundColor: "#f5fef5"}}>
+              <Table.Summary.Row style={{ backgroundColor: "#f5fef5" }}>
                 <Table.Summary.Cell index={0} />
-                <Table.Summary.Cell index={1}>{(totalRow.clientes)}</Table.Summary.Cell>
+                <Table.Summary.Cell index={1}>
+                  {totalRow.clientes}
+                </Table.Summary.Cell>
                 <Table.Summary.Cell index={2} className="totalCell">
-                 {(totalRow.hasTotales)}
+                  {totalRow.hasTotales}
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={3} className="totalCell">
-                  {(totalRow.agricultura)}
+                  {totalRow.agricultura}
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={4} className="totalCell">
-                  {(totalRow.ganaderia)}
+                  {totalRow.ganaderia}
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={5} className="totalCell">
-                  {(totalRow.tambo)}
+                  {totalRow.tambo}
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={6} className="totalCell">
-                  {(totalRow.mixto)}
+                  {totalRow.mixto}
                 </Table.Summary.Cell>
               </Table.Summary.Row>
             </Table.Summary>
