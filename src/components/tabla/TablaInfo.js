@@ -24,6 +24,8 @@ const TablaInfo = () => {
     etiquetasSelec, 
   } = useContext(GlobalContext);
 
+  //console.log(etiquetasSelec)
+
   const cargarTablaInfo = () => {
     setIsLoadingTI(true); // Establecer isLoadingTI en true antes de hacer la solicitud
     const data = new FormData();
@@ -39,7 +41,7 @@ const TablaInfo = () => {
         setIsLoadingTI(false); // Establecer isLoadingTI en false después de recibir la respuesta
         setIsLoadingTP(true); // Establecer isLoadingTI en false el spin de tabla productivo
         setIsLoadingTR(true); // Establecer isLoadingTP en false el spin de tabla rubro
-        //console.log(infoClientes)
+        console.log(infoClientes)
       });
     });
   };
@@ -136,9 +138,9 @@ const TablaInfo = () => {
   const filtrarClientes = () => {
     return infoClientes.filter((cliente) => {
       if (etiquetasSelec.length > 0){
-        const etiquetaCliente = cliente.tags ? cliente.tags.split(",") : [];
+        const etiquetaCliente = cliente.etiqueta ? cliente.etiqueta.split(",") : [];
         const intersec = etiquetaCliente.filter((etq) => 
-          etiquetasSelec.includes(etq)
+          etiquetasSelec.includes(etq.trim())
         );
 
         if (intersec.length===0){

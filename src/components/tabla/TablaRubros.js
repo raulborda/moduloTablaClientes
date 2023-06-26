@@ -171,7 +171,7 @@ const TablaRubros = () => {
   const filtrarClientes = () => {
     return infoClientes.filter((cliente) => {
       if (etiquetasSelec.length > 0){
-        const etiquetaCliente = cliente.tags ? cliente.tags.split(",") : [];
+        const etiquetaCliente = cliente.etiqueta ? cliente.etiqueta.split(",") : [];
         const intersec = etiquetaCliente.filter((etq) => 
           etiquetasSelec.includes(etq)
         );

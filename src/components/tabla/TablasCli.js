@@ -127,8 +127,8 @@ const TablasCli = () => {
               onChange={setEtiquetasSelec}
             >
               {etiquetasSistema?.map((etiquet) => (
-                <Option key={etiquet?.tag_id} value={etiquet?.tag_desc}>
-                  {etiquet?.tag_desc}
+                <Option key={etiquet?.etq_id} value={etiquet?.etq_nombre}>
+                  {etiquet?.etq_nombre.toUpperCase()}
                 </Option>
               ))}
             </Select>
