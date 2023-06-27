@@ -41,7 +41,7 @@ const TablaInfo = () => {
         setIsLoadingTI(false); // Establecer isLoadingTI en false después de recibir la respuesta
         setIsLoadingTP(true); // Establecer isLoadingTI en false el spin de tabla productivo
         setIsLoadingTR(true); // Establecer isLoadingTP en false el spin de tabla rubro
-        console.log(infoClientes);
+        //console.log(infoClientes);
       });
     });
   };

@@ -104,7 +104,7 @@ const TablasCli = () => {
     });
   }, []);
 
-  console.log(etiquetasSelec);
+  //console.log(etiquetasSelec);
 
   return (
     <>
