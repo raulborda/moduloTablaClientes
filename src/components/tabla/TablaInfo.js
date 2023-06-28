@@ -27,7 +27,8 @@ const TablaInfo = () => {
   } = useContext(GlobalContext);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const [cliAct, setCliAct] = useState("");
+  const [cliLead, setCliLead] = useState("");
+  const [cliAct, setCliAct] = useState({});
 
   const cargarTablaInfo = () => {
     setIsLoadingTI(true); // Establecer isLoadingTI en true antes de hacer la solicitud
@@ -123,10 +124,9 @@ const TablaInfo = () => {
     setCliSelect(parseInt(record.key));
   };
 
-  console.log(infoClientes);
-
-  const handleActualizarLead = (value) => {
-    console.log(value);
+  const handleActualizarLead = (value, option) => {
+    console.log(cliLead);
+    console.log(cliAct);
     setIsModalVisible(false);
   };
 
@@ -185,7 +185,7 @@ const TablaInfo = () => {
                   marginLeft: "5px",
                 }}
                 onClick={() => (
-                  setIsModalVisible(true), setCliAct(c.cli_nombre)
+                  setIsModalVisible(true), setCliLead(c.cli_nombre)
                 )}
               />
             </div>
@@ -253,7 +253,7 @@ const TablaInfo = () => {
             <Button
               key="submit"
               type="primary"
-              onClick={() => handleActualizarLead(cliAct)}
+              onClick={() => handleActualizarLead()}
             >
               Actualizar
             </Button>,
@@ -276,7 +276,7 @@ const TablaInfo = () => {
               </span>
             </div>
 
-            <span style={{ marginLeft: "5px" }}>{cliAct}</span>
+            <span style={{ marginLeft: "5px" }}>{cliLead}</span>
           </div>
           <div
             style={{
@@ -300,6 +300,7 @@ const TablaInfo = () => {
               filterOption={(input, option) =>
                 option && option.children && option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
+              onChange={(option) => setCliAct(option)}
             >
               {clientesOptions}
             </Select>
