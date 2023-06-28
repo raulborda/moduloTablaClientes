@@ -1,7 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Spin, Table } from "antd";
-import React, { useContext, useEffect } from "react";
+import { Button, Modal, Spin, Table } from "antd";
+import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../context/GlobalContext";
+import { ReloadOutlined } from "@ant-design/icons";
 
 const TablaInfo = () => {
   const URLDOS = process.env.REACT_APP_URL;
@@ -25,6 +26,8 @@ const TablaInfo = () => {
   } = useContext(GlobalContext);
 
   //console.log(etiquetasSelec)
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   const cargarTablaInfo = () => {
     setIsLoadingTI(true); // Establecer isLoadingTI en true antes de hacer la solicitud
@@ -160,11 +163,20 @@ const TablaInfo = () => {
       cuenta:
         c.cli_idsistema === "0" ? (
           <>
-            <div
-              className="selected_tag"
-              style={{ background: "#56b43c", display: "inline-block" }}
-            >
-              <span className="etq_name">{"LEAD".toUpperCase()}</span>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <div
+                className="selected_tag"
+                style={{ background: "#56b43c", display: "inline-block" }}
+              >
+                <span className="etq_name">{"LEAD".toUpperCase()}</span>
+              </div>
+              <Button
+              style={{width:"23px", height:"23px", paddingTop:"0px", marginTop:"-1px"}}
+                icon={<ReloadOutlined
+                  style={{ color: "#56b43c", fontSize:"small", padding:"0px"}}
+                  onClick={() => setIsModalVisible(true)}
+                />}
+              />
             </div>
           </>
         ) : (
@@ -199,10 +211,38 @@ const TablaInfo = () => {
           columns={columns}
           size="small"
           onRow={(record) => ({
-            onClick: () => handleCliente(record),
+            onClick: (event) => {
+              if (event.target.tagName !== "SPAN") {
+                // Verificar si el clic no se hizo en el elemento <span> del nombre del cliente
+                return;
+              }
+              handleCliente(record);
+            },
           })}
         />
       )}
+
+      {isModalVisible ? (
+        <Modal
+          title="Actualizar cliente"
+          open={isModalVisible}
+          onCancel={() => setIsModalVisible(false)}
+          footer={[
+            <Button key="cancel" onClick={() => setIsModalVisible(false)}>
+              Cancelar
+            </Button>,
+            <Button
+              key="submit"
+              type="primary"
+              onClick={() => setIsModalVisible(false)}
+            >
+              Actualizar
+            </Button>
+          ]}
+        >
+          <p>Aquí puedes agregar el contenido del modal.</p>
+        </Modal>
+      ) : (null)}
     </>
   );
 };
