@@ -1,8 +1,9 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Modal, Spin, Table } from "antd";
+import { Button, Modal, Select, Spin, Table } from "antd";
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../context/GlobalContext";
 import { ReloadOutlined } from "@ant-design/icons";
+import { Option } from "antd/es/mentions";
 
 const TablaInfo = () => {
   const URLDOS = process.env.REACT_APP_URL;
@@ -28,6 +29,7 @@ const TablaInfo = () => {
   //console.log(etiquetasSelec)
 
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [cliAct, setCliAct] = useState("");
 
   const cargarTablaInfo = () => {
     setIsLoadingTI(true); // Establecer isLoadingTI en true antes de hacer la solicitud
@@ -170,12 +172,16 @@ const TablaInfo = () => {
               >
                 <span className="etq_name">{"LEAD".toUpperCase()}</span>
               </div>
-              <Button
-              style={{width:"23px", height:"23px", paddingTop:"0px", marginTop:"-1px"}}
-                icon={<ReloadOutlined
-                  style={{ color: "#56b43c", fontSize:"small", padding:"0px"}}
-                  onClick={() => setIsModalVisible(true)}
-                />}
+              <ReloadOutlined
+                style={{
+                  color: "#56b43c",
+                  fontSize: "small",
+                  padding: "0px",
+                  marginLeft: "5px",
+                }}
+                onClick={() => (
+                  setIsModalVisible(true), setCliAct(c.cli_nombre)
+                )}
               />
             </div>
           </>
@@ -224,7 +230,7 @@ const TablaInfo = () => {
 
       {isModalVisible ? (
         <Modal
-          title="Actualizar cliente"
+          title="CONVERTIR LEAD A CLIENTE"
           open={isModalVisible}
           onCancel={() => setIsModalVisible(false)}
           footer={[
@@ -237,12 +243,49 @@ const TablaInfo = () => {
               onClick={() => setIsModalVisible(false)}
             >
               Actualizar
-            </Button>
+            </Button>,
           ]}
         >
-          <p>Aquí puedes agregar el contenido del modal.</p>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              marginTop: "15px",
+              marginBottom: "20px",
+            }}
+          >
+            <div
+              className="selected_tag"
+              style={{ background: "#56b43c", display: "inline-block" }}
+            >
+              <span className="etq_name" style={{ fontWeight: "bold" }}>
+                LEAD
+              </span>
+            </div>
+
+            <span style={{ marginLeft: "5px" }}>{cliAct}</span>
+          </div>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              marginBottom: "20px",
+            }}
+          >
+            <label
+              style={{
+                marginBottom: "5px",
+              }}
+            >
+              Seleccione Cliente:
+            </label>
+            <Select style={{ minWidth: "250px" }}>
+              <Option value="1">Cliente 1</Option>
+            </Select>
+          </div>
         </Modal>
-      ) : (null)}
+      ) : null}
     </>
   );
 };
