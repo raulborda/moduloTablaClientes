@@ -125,6 +125,11 @@ const TablaInfo = () => {
     setCliSelect(parseInt(record.key));
   };
 
+  const handleActualizarLead = (value) => {
+    console.log(value)
+    setIsModalVisible(false);
+  };
+
   localStorage.setItem("cliSelect", cliSelect);
 
   const filterData = (data) => {
@@ -240,7 +245,7 @@ const TablaInfo = () => {
             <Button
               key="submit"
               type="primary"
-              onClick={() => setIsModalVisible(false)}
+              onClick={() => handleActualizarLead(cliAct)}
             >
               Actualizar
             </Button>,
