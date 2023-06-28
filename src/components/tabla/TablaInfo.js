@@ -26,8 +26,6 @@ const TablaInfo = () => {
     etiquetasSelec,
   } = useContext(GlobalContext);
 
-  //console.log(etiquetasSelec)
-
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [cliAct, setCliAct] = useState("");
 
@@ -125,8 +123,10 @@ const TablaInfo = () => {
     setCliSelect(parseInt(record.key));
   };
 
+  console.log(infoClientes);
+
   const handleActualizarLead = (value) => {
-    console.log(value)
+    console.log(value);
     setIsModalVisible(false);
   };
 
@@ -201,6 +201,14 @@ const TablaInfo = () => {
       telefono: c.cli_telefono1,
     }))
   );
+
+  const clientesOptions = infoClientes ? (
+    infoClientes.map((cliente) => (
+      <Option key={cliente.cli_id} value={cliente.cli_id}>
+        {cliente.cli_nombre}
+      </Option>
+    ))
+  ) : null;
 
   return (
     <>
@@ -285,8 +293,15 @@ const TablaInfo = () => {
             >
               Seleccione Cliente:
             </label>
-            <Select style={{ minWidth: "250px" }}>
-              <Option value="1">Cliente 1</Option>
+            <Select
+              style={{ minWidth: "250px" }}
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option && option.children && option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+            >
+              {clientesOptions}
             </Select>
           </div>
         </Modal>
