@@ -142,7 +142,7 @@ const TablasCli = () => {
             />
             <Button
               type="primary"
-              style={{ width: "100px", padding: "0px", marginLeft: "10px" }}
+              style={{ width: "100px", padding: "0px", marginLeft: "10px", borderRadius:"0px" }}
               onClick={showDrawer}
             >
               Nuevo Lead
