@@ -2,10 +2,10 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../context/GlobalContext";
-import { Spin, Table, Select, Modal, Button } from "antd";
+import { Spin, Table, Select, Modal, Button, notification } from "antd";
 import "./style.css";
 import { Option } from "antd/es/mentions";
-import { ReloadOutlined } from "@ant-design/icons";
+import { AlertOutlined, ReloadOutlined } from "@ant-design/icons";
 
 const TablaProduc = () => {
   const URLDOS = process.env.REACT_APP_URL;
@@ -211,7 +211,19 @@ const TablaProduc = () => {
       response.text().then((resp) => {
         const data = resp;
         const objetoData = JSON.parse(data);
-        console.log(objetoData);
+        //console.log(objetoData);
+        notification.open({
+          message: "LEAD CONVERTIDO",
+          description: "DATOS ACTUALIZADOS CORRECTAMENTE",
+          duration: 3,
+          placement: "bottomRight",
+          icon: <AlertOutlined style={{ color: "#52c41a" }} />,
+          style: {
+            borderRadius: "4px",
+            backgroundColor: "#f6ffed",
+            boxShadow: "0 2px 8px rgba(0, 0, 0, 0.15)",
+          },
+        });
       });
     });
 
@@ -423,13 +435,6 @@ const TablaProduc = () => {
     ),
   };
 
-  // const clientesOptions = infoClientes
-  //   ? infoClientes.map((cliente) => (
-  //       <Option key={cliente.cli_id} value={cliente.cli_id}>
-  //         {cliente.cli_nombre}
-  //       </Option>
-  //     ))
-  //   : null;
 
   const clientesOptions = infoClientes
   ? infoClientes
