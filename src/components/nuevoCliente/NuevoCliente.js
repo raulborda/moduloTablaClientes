@@ -8,7 +8,6 @@ import "./style.css";
 const NuevoCliente = () => {
   const URLDOS = process.env.REACT_APP_URL;
 
-
   const formRef = useRef(null);
 
   const { idUsu, setIsDrawerVisibleForm, actualizarData, setActualizarData } =
@@ -159,13 +158,13 @@ const NuevoCliente = () => {
         ref={formRef}
         initialValues={initialValues}
         labelCol={{ span: 10 }}
-        wrapperCol={{ span: 20 }}
+        //wrapperCol={{ span: 20 }}
         layout="vertical"
         onFinish={nuevoCli}
-        style={{ marginLeft: "35px" }}
+        //style={{ marginLeft: "35px" }}
       >
-        <div style={{ display: "flex" }}>
-          <div style={{ flex: 1, marginRight: "20px" }}>
+        <div style={{ display: "flex", flexDirection: "column" }}>
+          <div>
             <Form.Item
               label="Razón Social"
               name="razonSocial"
@@ -179,21 +178,19 @@ const NuevoCliente = () => {
             >
               <Input />
             </Form.Item>
+
             <Form.Item label="Descripción" name="descripcion">
               <TextArea />
             </Form.Item>
+
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "row", justifyContent:"space-between"}}>
             <Form.Item
               label="Teléfono"
               name="telefono"
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor ingresa el teléfono",
-                },
-              ]}
-              className="hidden-asterisk"
             >
-              <Input style={{ width: "150px" }} />
+              <Input style={{ width: "170px" }} />
             </Form.Item>
             <Form.Item
               label="Celular"
@@ -206,8 +203,18 @@ const NuevoCliente = () => {
               ]}
               className="hidden-asterisk"
             >
-              <Input style={{ width: "150px" }} />
+              <Input style={{ width: "170px" }} />
             </Form.Item>
+          </div>
+
+          <Form.Item
+            label="Email"
+            name="email"
+          >
+            <Input />
+          </Form.Item>
+
+          <div style={{ display: "flex", flexDirection: "row", justifyContent:"space-between"}}>
             <Form.Item
               label="CUIT"
               name="cuit"
@@ -219,23 +226,63 @@ const NuevoCliente = () => {
               ]}
               className="hidden-asterisk"
             >
-              <Input style={{ width: "150px" }} />
+              <Input style={{ width: "170px" }} />
             </Form.Item>
+            
             <Form.Item
-              label="Email"
-              name="email"
+              label="Tamaño"
+              name="tamano"
               rules={[
                 {
                   required: true,
-                  message: "Por favor ingresa el email",
+                  message: "Por favor seleccione el tamaño",
                 },
               ]}
               className="hidden-asterisk"
             >
-              <Input style={{ width: "220px" }} />
+              {tamaño ? (
+                <Select style={{ width: "170px"}}>
+                  {tamaño.map((tam) => (
+                    <Select.Option key={tam.tam_id} value={tam.tam_id}>
+                      {tam.tam_desc}
+                    </Select.Option>
+                  ))}
+                </Select>
+              ) : (
+                <Select.Option value="CARGANDO">
+                  CARGANDO OPCIONES...
+                </Select.Option>
+              )}
             </Form.Item>
+
           </div>
-          <div style={{ flex: 1 }}>
+
+          <div style={{ display: "flex", flexDirection: "row", justifyContent:"space-between"}}>
+            <Form.Item
+                label="Tipo Clientes"
+                name="tipoClientes"
+                rules={[
+                  {
+                    required: true,
+                    message: "Por favor seleccione el tipo de Cliente",
+                  },
+                ]}
+                className="hidden-asterisk"
+              >
+              {tiposCliente ? (
+                <Select style={{ width: "170px" }}>
+                  {tiposCliente.map((tip) => (
+                    <Select.Option key={tip.tip_id} value={tip.tip_id}>
+                      {tip.tip_desc}
+                    </Select.Option>
+                  ))}
+                </Select>
+              ) : (
+                <Select.Option value="CARGANDO">
+                  CARGANDO OPCIONES...
+                </Select.Option>
+              )}
+            </Form.Item>            
             <Form.Item
               label="Act. Comercial"
               name="sector"
@@ -261,56 +308,10 @@ const NuevoCliente = () => {
                 </Select.Option>
               )}
             </Form.Item>
-            <Form.Item
-              label="Tipo Clientes"
-              name="tipoClientes"
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor seleccione el tipo de Cliente",
-                },
-              ]}
-              className="hidden-asterisk"
-            >
-              {tiposCliente ? (
-                <Select style={{ width: "170px" }}>
-                  {tiposCliente.map((tip) => (
-                    <Select.Option key={tip.tip_id} value={tip.tip_id}>
-                      {tip.tip_desc}
-                    </Select.Option>
-                  ))}
-                </Select>
-              ) : (
-                <Select.Option value="CARGANDO">
-                  CARGANDO OPCIONES...
-                </Select.Option>
-              )}
-            </Form.Item>
-            <Form.Item
-              label="Tamaño"
-              name="tamano"
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor seleccione el tamaño",
-                },
-              ]}
-              className="hidden-asterisk"
-            >
-              {tamaño ? (
-                <Select style={{ width: "170px" }}>
-                  {tamaño.map((tam) => (
-                    <Select.Option key={tam.tam_id} value={tam.tam_id}>
-                      {tam.tam_desc}
-                    </Select.Option>
-                  ))}
-                </Select>
-              ) : (
-                <Select.Option value="CARGANDO">
-                  CARGANDO OPCIONES...
-                </Select.Option>
-              )}
-            </Form.Item>
+
+          </div>
+
+          <div style={{ display: "flex", flexDirection: "row", justifyContent:"space-between"}}>
             <Form.Item
               label="Zona"
               name="zona"
@@ -348,7 +349,7 @@ const NuevoCliente = () => {
               className="hidden-asterisk"
             >
               {grupoDos ? (
-                <Select style={{ width: "180px" }}>
+                <Select style={{ width: "170px" }}>
                   {grupoDos.map((dos) => (
                     <Select.Option key={dos.grudos_id} value={dos.grudos_id}>
                       {dos.grudos_desc}
@@ -362,6 +363,10 @@ const NuevoCliente = () => {
               )}
             </Form.Item>
           </div>
+          
+          
+          
+          
         </div>
         <Divider style={{ marginTop: "0px" }} />
         <div
