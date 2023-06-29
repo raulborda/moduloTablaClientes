@@ -1,8 +1,11 @@
+/* eslint-disable no-sequences */
 /* eslint-disable react-hooks/exhaustive-deps */
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../context/GlobalContext";
-import { Spin, Table } from "antd";
+import { Spin, Table, Select, Modal, Button } from "antd";
 import "./style.css";
+import { Option } from "antd/es/mentions";
+import { ReloadOutlined } from "@ant-design/icons";
 
 const TablaProduc = () => {
   const URLDOS = process.env.REACT_APP_URL;
@@ -22,7 +25,13 @@ const TablaProduc = () => {
     setIsLoadingTI,
     activeTab,
     etiquetasSelec,
+    actualizarData,
+    setActualizarData,
   } = useContext(GlobalContext);
+
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [cliLead, setCliLead] = useState("");
+  const [cliAct, setCliAct] = useState({});
 
   //const [isTotalRow, setIsTotalRow] = useState(false);
 
@@ -69,7 +78,7 @@ const TablaProduc = () => {
     if (activeTab === "2" && idUsu) {
       cargarTablaInfo();
     }
-  }, [activeTab, idUsu]);
+  }, [activeTab, idUsu, actualizarData]);
 
   // const rowClassName = (record, index) => {
   //   if (isTotalRow && index === 0) {
@@ -188,6 +197,28 @@ const TablaProduc = () => {
     setCliSelect(parseInt(record.key));
   };
 
+  const handleActualizarLead = () => {
+    console.log(cliLead.cli_id);
+    console.log(cliAct);
+
+    const data = new FormData();
+    data.append("lead", Number(cliLead.cli_id));
+    data.append("idCli", Number(cliAct));
+    fetch(`${URLDOS}tablaClientes_actualizarLeadCliente.php`, {
+      method: "POST",
+      body: data,
+    }).then(function (response) {
+      response.text().then((resp) => {
+        const data = resp;
+        const objetoData = JSON.parse(data);
+        console.log(objetoData);
+      });
+    });
+
+    setIsModalVisible(false);
+    setActualizarData(!actualizarData);
+  };
+
   localStorage.setItem("cliSelect", cliSelect);
 
   const filterData = (data) => {
@@ -234,11 +265,22 @@ const TablaProduc = () => {
       cuenta:
         c.cli_idsistema === "0" ? (
           <>
-            <div
-              className="selected_tag"
-              style={{ background: "#56b43c", display: "inline-block" }}
-            >
-              <span className="etq_name">{"LEAD".toUpperCase()}</span>
+            <div style={{ display: "flex", flexDirection: "row" }}>
+              <div
+                className="selected_tag"
+                style={{ background: "#56b43c", display: "inline-block" }}
+              >
+                <span className="etq_name">{"LEAD".toUpperCase()}</span>
+              </div>
+              <ReloadOutlined
+                style={{
+                  color: "#56b43c",
+                  fontSize: "small",
+                  padding: "0px",
+                  marginLeft: "5px",
+                }}
+                onClick={() => (setIsModalVisible(true), setCliLead(c))}
+              />
             </div>
           </>
         ) : (
@@ -381,11 +423,13 @@ const TablaProduc = () => {
     ),
   };
 
-  //dataProductivo.unshift(totalRow);
-
-  // useEffect(() => {
-  //   setIsTotalRow(true);
-  // }, [dataProductivo]);
+  const clientesOptions = infoClientes
+    ? infoClientes.map((cliente) => (
+        <Option key={cliente.cli_id} value={cliente.cli_id}>
+          {cliente.cli_nombre}
+        </Option>
+      ))
+    : null;
 
   return (
     <>
@@ -408,7 +452,13 @@ const TablaProduc = () => {
           size="small"
           // rowClassName={rowClassName}
           onRow={(record) => ({
-            onClick: () => handleCliente(record),
+            onClick: (event) => {
+              if (event.target.tagName !== "DIV") {
+                // Verificar si el clic no se hizo en el elemento <span> del nombre del cliente
+                return;
+              }
+              handleCliente(record);
+            },
           })}
           summary={() => (
             <Table.Summary fixed>
@@ -449,6 +499,74 @@ const TablaProduc = () => {
           )}
         />
       )}
+      {isModalVisible ? (
+        <Modal
+          title="CONVERTIR LEAD A CLIENTE"
+          open={isModalVisible}
+          onCancel={() => setIsModalVisible(false)}
+          footer={[
+            <Button key="cancel" onClick={() => setIsModalVisible(false)}>
+              Cancelar
+            </Button>,
+            <Button
+              key="submit"
+              type="primary"
+              onClick={() => handleActualizarLead()}
+            >
+              Actualizar
+            </Button>,
+          ]}
+        >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              marginTop: "15px",
+              marginBottom: "20px",
+            }}
+          >
+            <div
+              className="selected_tag"
+              style={{ background: "#56b43c", display: "inline-block" }}
+            >
+              <span className="etq_name" style={{ fontWeight: "bold" }}>
+                LEAD
+              </span>
+            </div>
+
+            <span style={{ marginLeft: "5px" }}>{cliLead.cli_nombre}</span>
+          </div>
+          <div
+            style={{
+              width: "100%",
+              display: "flex",
+              flexDirection: "column",
+              marginBottom: "20px",
+            }}
+          >
+            <label
+              style={{
+                marginBottom: "5px",
+              }}
+            >
+              Seleccione Cliente:
+            </label>
+            <Select
+              style={{ minWidth: "250px" }}
+              showSearch
+              optionFilterProp="children"
+              filterOption={(input, option) =>
+                option &&
+                option.children &&
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+              }
+              onChange={(option) => setCliAct(option)}
+            >
+              {clientesOptions}
+            </Select>
+          </div>
+        </Modal>
+      ) : null}
     </>
   );
 };

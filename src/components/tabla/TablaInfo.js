@@ -1,3 +1,4 @@
+/* eslint-disable no-sequences */
 /* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Modal, Select, Spin, Table } from "antd";
 import React, { useContext, useEffect, useState } from "react";
@@ -23,6 +24,7 @@ const TablaInfo = () => {
     setIsLoadingTI,
     activeTab,
     actualizarData,
+    setActualizarData,
     etiquetasSelec,
   } = useContext(GlobalContext);
 
@@ -124,10 +126,26 @@ const TablaInfo = () => {
     setCliSelect(parseInt(record.key));
   };
 
-  const handleActualizarLead = (value, option) => {
-    console.log(cliLead);
+  const handleActualizarLead = () => {
+    console.log(cliLead.cli_id);
     console.log(cliAct);
+
+    const data = new FormData();
+    data.append("lead", Number(cliLead.cli_id));
+    data.append("idCli", Number(cliAct));
+    fetch(`${URLDOS}tablaClientes_actualizarLeadCliente.php`, {
+      method: "POST",
+      body: data,
+    }).then(function (response) {
+      response.text().then((resp) => {
+        const data = resp;
+        const objetoData = JSON.parse(data);
+        console.log(objetoData);
+      });
+    });
+
     setIsModalVisible(false);
+    setActualizarData(!actualizarData);
   };
 
   localStorage.setItem("cliSelect", cliSelect);
@@ -185,7 +203,7 @@ const TablaInfo = () => {
                   marginLeft: "5px",
                 }}
                 onClick={() => (
-                  setIsModalVisible(true), setCliLead(c.cli_nombre)
+                  setIsModalVisible(true), setCliLead(c)
                 )}
               />
             </div>
@@ -276,7 +294,7 @@ const TablaInfo = () => {
               </span>
             </div>
 
-            <span style={{ marginLeft: "5px" }}>{cliLead}</span>
+            <span style={{ marginLeft: "5px" }}>{cliLead.cli_nombre}</span>
           </div>
           <div
             style={{
