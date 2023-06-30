@@ -34,6 +34,12 @@ const TablaInfo = () => {
   const [cliLead, setCliLead] = useState("");
   const [cliAct, setCliAct] = useState({});
 
+  const [sortConfig, setSortConfig] = useState({
+    column: null,
+    order: "ascend",
+  });
+  
+
   const cargarTablaInfo = () => {
     setIsLoadingTI(true); // Establecer isLoadingTI en true antes de hacer la solicitud
     const data = new FormData();
@@ -45,11 +51,12 @@ const TablaInfo = () => {
       response.text().then((resp) => {
         const data = resp;
         const objetoData = JSON.parse(data);
+
         setInfoclientes(objetoData);
         setIsLoadingTI(false); // Establecer isLoadingTI en false después de recibir la respuesta
         setIsLoadingTP(true); // Establecer isLoadingTI en false el spin de tabla productivo
         setIsLoadingTR(true); // Establecer isLoadingTP en false el spin de tabla rubro
-        //console.log(infoClientes);
+        console.log(infoClientes);
       });
     });
   };
@@ -76,6 +83,7 @@ const TablaInfo = () => {
       key: "cuenta",
       align: "center",
       width: "50px",
+      sorter: (a, b) => parseInt(a.cuenta) - parseInt(b.cuenta), // Agregar esta propiedad para habilitar el ordenamiento
     },
     {
       title: "CLIENTE",
@@ -85,6 +93,7 @@ const TablaInfo = () => {
       render: (text, record) => (
         <span style={{ color: "#00b33c" }}>{text}</span>
       ),
+      sorter: (a, b) => (a.clientes?.localeCompare(b.clientes)) || 0,
     },
     {
       title: "ZONA",
