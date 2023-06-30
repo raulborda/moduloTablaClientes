@@ -357,13 +357,6 @@ const TablaRubros = () => {
     ),
   };
 
-  // const clientesOptions = infoClientes
-  //   ? infoClientes.map((cliente) => (
-  //       <Option key={cliente.cli_id} value={cliente.cli_id}>
-  //         {cliente.cli_nombre}
-  //       </Option>
-  //     ))
-  //   : null;
 
   const clientesOptions = infoClientes
   ? infoClientes
