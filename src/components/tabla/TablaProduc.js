@@ -96,6 +96,7 @@ const TablaProduc = () => {
       key: "cuenta",
       align: "center",
       width: "50px",
+      sorter: (a, b) => parseInt(a.cuenta) - parseInt(b.cuenta), // Agregar esta propiedad para habilitar el ordenamiento
     },
     {
       title: "CLIENTE",
@@ -110,6 +111,7 @@ const TablaProduc = () => {
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
+            cursor:"pointer"
           }}
         >
           {/* <Popover content={text}>{text}</Popover> */}
@@ -117,6 +119,7 @@ const TablaProduc = () => {
         </div>
       ),
       width: "130px",
+      sorter: (a, b) => (a.clientes?.localeCompare(b.clientes)) || 0,
     },
     {
       title: "HAS. TOTALES",

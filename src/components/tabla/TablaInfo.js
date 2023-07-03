@@ -91,7 +91,7 @@ const TablaInfo = () => {
       key: "clientes",
       align: "left",
       render: (text, record) => (
-        <span style={{ color: "#00b33c" }}>{text}</span>
+        <span style={{ color: "#00b33c", cursor:"pointer" }}>{text}</span>
       ),
       sorter: (a, b) => (a.clientes?.localeCompare(b.clientes)) || 0,
     },

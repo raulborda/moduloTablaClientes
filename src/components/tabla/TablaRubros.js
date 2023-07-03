@@ -96,6 +96,7 @@ const TablaRubros = () => {
       key: "cuenta",
       align: "center",
       width: "50px",
+      sorter: (a, b) => parseInt(a.cuenta) - parseInt(b.cuenta), // Agregar esta propiedad para habilitar el ordenamiento
     },
     {
       title: "CLIENTE",
@@ -110,12 +111,14 @@ const TablaRubros = () => {
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
+            cursor:"pointer"
           }}
         >
           {text}
         </div>
       ),
       width: "300px",
+      sorter: (a, b) => (a.clientes?.localeCompare(b.clientes)) || 0,
     },
     {
       title: "HAS. TOTALES",
