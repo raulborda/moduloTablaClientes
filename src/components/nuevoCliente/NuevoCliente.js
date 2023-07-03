@@ -195,12 +195,6 @@ const NuevoCliente = () => {
             <Form.Item
               label="Celular"
               name="celular"
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor ingresa el celular",
-                },
-              ]}
               className="hidden-asterisk"
             >
               <Input style={{ width: "170px" }} />
@@ -218,12 +212,6 @@ const NuevoCliente = () => {
             <Form.Item
               label="CUIT"
               name="cuit"
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor ingresa el cuit",
-                },
-              ]}
               className="hidden-asterisk"
             >
               <Input style={{ width: "170px" }} />
@@ -232,12 +220,6 @@ const NuevoCliente = () => {
             <Form.Item
               label="Tamaño"
               name="tamano"
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor seleccione el tamaño",
-                },
-              ]}
               className="hidden-asterisk"
             >
               {tamaño ? (
@@ -259,14 +241,11 @@ const NuevoCliente = () => {
 
           <div style={{ display: "flex", flexDirection: "row", justifyContent:"space-between"}}>
             <Form.Item
-                label="Tipo Clientes"
+                label="Tipo Cliente"
+                labelCol={{ span: 20 }} 
+                wrapperCol={{ span: 20 }} 
+                //label={<span style={{ width: "100%", maxWidth: "170px", display: "inline-block" }}>Tipo Clientes</span>}
                 name="tipoClientes"
-                rules={[
-                  {
-                    required: true,
-                    message: "Por favor seleccione el tipo de Cliente",
-                  },
-                ]}
                 className="hidden-asterisk"
               >
               {tiposCliente ? (
@@ -284,14 +263,10 @@ const NuevoCliente = () => {
               )}
             </Form.Item>            
             <Form.Item
-              label="Act. Comercial"
+              label="Activividad Comercial"
+              labelCol={{ span: 20 }}
+              wrapperCol={{ span: 20 }} 
               name="sector"
-              rules={[
-                {
-                  required: true,
-                  message: "Por favor seleccione la act. Comercial",
-                },
-              ]}
               className="hidden-asterisk"
             >
               {sector ? (
