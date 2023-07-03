@@ -244,7 +244,6 @@ const NuevoCliente = () => {
                 label="Tipo Cliente"
                 labelCol={{ span: 20 }} 
                 wrapperCol={{ span: 20 }} 
-                //label={<span style={{ width: "100%", maxWidth: "170px", display: "inline-block" }}>Tipo Clientes</span>}
                 name="tipoClientes"
                 className="hidden-asterisk"
               >
@@ -263,7 +262,7 @@ const NuevoCliente = () => {
               )}
             </Form.Item>            
             <Form.Item
-              label="Activividad Comercial"
+              label="Actividad Comercial"
               labelCol={{ span: 20 }}
               wrapperCol={{ span: 20 }} 
               name="sector"
