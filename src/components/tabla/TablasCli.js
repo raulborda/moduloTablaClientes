@@ -176,22 +176,25 @@ const TablasCli = () => {
       </div>
       {selectedCliente && selectedCliente.cuenta !== "" && (
         <Drawer
+        className="drawerCli"
           open={isDrawerVisible}
           onClose={() => setIsDrawerVisible(false)}
-          title={selectedCliente.clientes}
+          // title={selectedCliente.clientes}
+          title={null}
           placement="bottom"
           height={"100vh"}
           style={{ whiteSpace: "nowrap", marginTop: "-10px" }}
-          closeIcon={
-            <CloseOutlined
-              style={{ position: "absolute", top: "10px", right: "10px" }}
-            />
-          }
+          closeIcon={null}
+          // closeIcon={
+          //   <CloseOutlined
+          //     style={{ position: "absolute", top: "10px", right: "10px" }}
+          //   />
+          // }
         >
           <iframe
             loading="lazy"
-            src={`${URL}/duoc/modulos/vista_cliente/?idC=${cliSelect}`} // para el resto de los crm
-            //src={`${URL}/tati/modulos/vista_cliente/?idC=${cliSelect}`} // para probar en tati
+            //src={`${URL}/duoc/modulos/vista_cliente/?idC=${cliSelect}`} // para el resto de los crm
+            src={`${URL}/tati/modulos/vista_cliente/?idC=${cliSelect}`} // para probar en tati
             width={"100%"}
             // height={"600"}
             height={"1000"}
