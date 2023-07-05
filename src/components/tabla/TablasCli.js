@@ -187,14 +187,14 @@ const TablasCli = () => {
           //closeIcon={null}
           closeIcon={
             <CloseOutlined
-              style={{ position: "absolute", right: "10px" }}
+              style={{ position: "absolute", top: "-2px", right: "10px" }}
             />
           }
         >
           <iframe
             loading="lazy"
-            //src={`${URL}/duoc/modulos/vista_cliente/?idC=${cliSelect}`} // para el resto de los crm
-            src={`${URL}/tati/modulos/vista_cliente/?idC=${cliSelect}`} // para probar en tati
+            src={`${URL}/duoc/modulos/vista_cliente/?idC=${cliSelect}`} // para el resto de los crm
+            //src={`${URL}/tati/modulos/vista_cliente/?idC=${cliSelect}`} // para probar en tati
             width={"100%"}
             // height={"600"}
             height={"1000"}
