@@ -187,7 +187,7 @@ const TablasCli = () => {
           //closeIcon={null}
           closeIcon={
             <CloseOutlined
-              style={{ position: "absolute", top: "2px", right: "10px" }}
+              style={{ position: "absolute", right: "10px" }}
             />
           }
         >
