@@ -179,17 +179,17 @@ const TablasCli = () => {
         className="drawerCli"
           open={isDrawerVisible}
           onClose={() => setIsDrawerVisible(false)}
-          // title={selectedCliente.clientes}
-          title={null}
+          //title={selectedCliente.clientes}
+          //title={null}
           placement="bottom"
           height={"100vh"}
           style={{ whiteSpace: "nowrap", marginTop: "-10px" }}
-          closeIcon={null}
-          // closeIcon={
-          //   <CloseOutlined
-          //     style={{ position: "absolute", top: "10px", right: "10px" }}
-          //   />
-          // }
+          //closeIcon={null}
+          closeIcon={
+            <CloseOutlined
+              style={{ position: "absolute", top: "2px", right: "10px" }}
+            />
+          }
         >
           <iframe
             loading="lazy"
