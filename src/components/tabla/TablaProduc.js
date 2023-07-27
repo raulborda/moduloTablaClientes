@@ -56,6 +56,8 @@ const TablaProduc = () => {
     });
   };
 
+  console.log("tablaProduct: ", infoClientes)
+
   //* PARA ORDENAR LOS VALORES EN LA TABLA, TENIENDO EN CUENTA LOS CARACTERES ESPECIALES Y LETRAS
   const convertToNumber = (value) => {
     const cleanedString = value
