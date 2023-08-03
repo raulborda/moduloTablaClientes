@@ -97,8 +97,21 @@ const tamanosUnicos = [...new Set(infoClientes.map((c) => c.tam_desc).filter((va
       key: "clientes",
       align: "left",
       render: (text, record) => (
-        <span style={{ color: "#00b33c", cursor:"pointer" }}>{text}</span>
+        <div
+          style={{
+            color: "#00b33c",
+            maxWidth: "100px", // Ajusta el valor según el ancho deseado
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+            whiteSpace: "nowrap",
+            cursor:"pointer"
+          }}
+        >
+          {/* <Popover content={text}>{text}</Popover> */}
+          {text}
+        </div>
       ),
+      width: "130px",
       sorter: (a, b) => (a.clientes?.localeCompare(b.clientes)) || 0,
     },
     {
