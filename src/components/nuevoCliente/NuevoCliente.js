@@ -262,7 +262,7 @@ const NuevoCliente = () => {
               )}
             </Form.Item>            
             <Form.Item
-              label="Actividad Comercial"
+              label="Sector"
               labelCol={{ span: 20 }}
               wrapperCol={{ span: 20 }} 
               name="sector"

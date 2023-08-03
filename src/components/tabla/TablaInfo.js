@@ -97,6 +97,7 @@ const tamanosUnicos = [...new Set(infoClientes.map((c) => c.tam_desc).filter((va
       key: "clientes",
       align: "left",
       render: (text, record) => (
+        //<span style={{ color: "#00b33c", cursor:"pointer" }}>{text}</span>
         <div
           style={{
             color: "#00b33c",
@@ -107,7 +108,6 @@ const tamanosUnicos = [...new Set(infoClientes.map((c) => c.tam_desc).filter((va
             cursor:"pointer"
           }}
         >
-          {/* <Popover content={text}>{text}</Popover> */}
           {text}
         </div>
       ),
@@ -139,7 +139,7 @@ const tamanosUnicos = [...new Set(infoClientes.map((c) => c.tam_desc).filter((va
       onFilter: (value, record) => record.tipo === value,
     },
     {
-      title: "ACTIVIDAD",
+      title: "SECTOR",
       dataIndex: "actividad",
       key: "actividad",
       align: "center",
@@ -314,7 +314,7 @@ const tamanosUnicos = [...new Set(infoClientes.map((c) => c.tam_desc).filter((va
           size="small"
           onRow={(record) => ({
             onClick: (event) => {
-              if (event.target.tagName !== "SPAN") {
+              if (event.target.tagName !== "DIV") {
                 // Verificar si el clic no se hizo en el elemento <span> del nombre del cliente
                 return;
               }
