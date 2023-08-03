@@ -67,14 +67,20 @@ const TablaInfo = () => {
     }
   }, [activeTab, idUsu, actualizarData]);
 
-  const zonasUnicas = [...new Set(infoClientes.map((c) => c.gruuno_desc))];
-  const centrosUnicos = [...new Set(infoClientes.map((c) => c.grudos_desc))];
+  console.log("info clientes: ", infoClientes)
+
+  const zonasUnicas = [...new Set(infoClientes.map((c) => c.gruuno_desc).filter((value) => value !== null))];
+const centrosUnicos = [...new Set(infoClientes.map((c) => c.grudos_desc).filter((value) => value !== null))];
+const tiposUnicos = [...new Set(infoClientes.map((c) => c.tip_desc).filter((value) => value !== null))];
+const actividadesUnicas = [...new Set(infoClientes.map((c) => c.sec_desc).filter((value) => value !== null))];
+const tamanosUnicos = [...new Set(infoClientes.map((c) => c.tam_desc).filter((value) => value !== null))];
+
 
   const zonaFilters = zonasUnicas.map((zona) => ({ text: zona, value: zona }));
-  const centroFilters = centrosUnicos.map((centro) => ({
-    text: centro,
-    value: centro,
-  }));
+  const centroFilters = centrosUnicos.map((centro) => ({ text: centro, value: centro}));
+  const tipoFilters = tiposUnicos.map((tipo) => ({ text: tipo, value: tipo }));
+  const actividadFilters = actividadesUnicas.map((act) => ({ text: act, value: act }));
+  const tamanoFilters = tamanosUnicos.map((tam) => ({ text: tam, value: tam }));
 
   const columns = [
     {
@@ -112,10 +118,28 @@ const TablaInfo = () => {
       onFilter: (value, record) => record.centro === value,
     },
     {
-      title: "PROPIETARIO",
-      dataIndex: "propietario",
-      key: "propietario",
+      title: "TIPO",
+      dataIndex: "tipo",
+      key: "tipo",
       align: "center",
+      filters: tipoFilters,
+      onFilter: (value, record) => record.tipo === value,
+    },
+    {
+      title: "ACTIVIDAD",
+      dataIndex: "actividad",
+      key: "actividad",
+      align: "center",
+      filters: actividadFilters,
+      onFilter: (value, record) => record.actividad === value,
+    },
+    {
+      title: "TAMAÑO",
+      dataIndex: "tamaño",
+      key: "tamaño",
+      align: "center",
+      filters: tamanoFilters,
+      onFilter: (value, record) => record.tamaño === value,
     },
     {
       title: "EMAIL",
@@ -237,7 +261,9 @@ const TablaInfo = () => {
       clientes: c.cli_nombre,
       zonas: c.gruuno_desc,
       centro: c.grudos_desc,
-      propietario: c.usu_nombre,
+      tipo: c.tip_desc,
+      actividad: c.sec_desc,
+      tamaño: c.tam_desc,
       email: c.cli_email1,
       telefono: c.cli_telefono1,
     }))
