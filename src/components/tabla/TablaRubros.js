@@ -111,14 +111,14 @@ const TablaRubros = () => {
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
-            cursor:"pointer"
+            cursor: "pointer",
           }}
         >
           {text}
         </div>
       ),
       width: "300px",
-      sorter: (a, b) => (a.clientes?.localeCompare(b.clientes)) || 0,
+      sorter: (a, b) => a.clientes?.localeCompare(b.clientes) || 0,
     },
     {
       title: "HAS. TOTALES",
@@ -169,9 +169,6 @@ const TablaRubros = () => {
   };
 
   const handleActualizarLead = () => {
-    console.log(cliLead.cli_id);
-    console.log(cliAct);
-
     const data = new FormData();
     data.append("lead", Number(cliLead.cli_id));
     data.append("idCli", Number(cliAct));
@@ -182,7 +179,6 @@ const TablaRubros = () => {
       response.text().then((resp) => {
         const data = resp;
         const objetoData = JSON.parse(data);
-        //console.log(objetoData);
         notification.open({
           message: "LEAD CONVERTIDO",
           description: "DATOS ACTUALIZADOS CORRECTAMENTE",
@@ -360,16 +356,15 @@ const TablaRubros = () => {
     ),
   };
 
-
   const clientesOptions = infoClientes
-  ? infoClientes
-      .filter((cliente) => cliente.cli_idsistema != 0)
-      .map((cliente) => (
-        <Option key={cliente.cli_id} value={cliente.cli_id}>
-          {cliente.cli_nombre}
-        </Option>
-      ))
-  : null;
+    ? infoClientes
+        .filter((cliente) => cliente.cli_idsistema != 0)
+        .map((cliente) => (
+          <Option key={cliente.cli_id} value={cliente.cli_id}>
+            {cliente.cli_nombre}
+          </Option>
+        ))
+    : null;
 
   return (
     <>

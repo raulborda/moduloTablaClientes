@@ -56,8 +56,6 @@ const TablaProduc = () => {
     });
   };
 
-  console.log("tablaProduct: ", infoClientes)
-
   //* PARA ORDENAR LOS VALORES EN LA TABLA, TENIENDO EN CUENTA LOS CARACTERES ESPECIALES Y LETRAS
   const convertToNumber = (value) => {
     const cleanedString = value
@@ -113,7 +111,7 @@ const TablaProduc = () => {
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
-            cursor:"pointer"
+            cursor: "pointer",
           }}
         >
           {/* <Popover content={text}>{text}</Popover> */}
@@ -121,7 +119,7 @@ const TablaProduc = () => {
         </div>
       ),
       width: "130px",
-      sorter: (a, b) => (a.clientes?.localeCompare(b.clientes)) || 0,
+      sorter: (a, b) => a.clientes?.localeCompare(b.clientes) || 0,
     },
     {
       title: "HAS. TOTALES",
@@ -198,16 +196,12 @@ const TablaProduc = () => {
   ];
 
   const handleCliente = (record) => {
-    console.log("handleCliente: ", record);
     setSelectedCliente(record);
     setIsDrawerVisible(true);
     setCliSelect(parseInt(record.key));
   };
 
   const handleActualizarLead = () => {
-    console.log(cliLead.cli_id);
-    console.log(cliAct);
-
     const data = new FormData();
     data.append("lead", Number(cliLead.cli_id));
     data.append("idCli", Number(cliAct));
@@ -218,7 +212,6 @@ const TablaProduc = () => {
       response.text().then((resp) => {
         const data = resp;
         const objetoData = JSON.parse(data);
-        //console.log(objetoData);
         notification.open({
           message: "LEAD CONVERTIDO",
           description: "DATOS ACTUALIZADOS CORRECTAMENTE",
@@ -442,16 +435,15 @@ const TablaProduc = () => {
     ),
   };
 
-
   const clientesOptions = infoClientes
-  ? infoClientes
-      .filter((cliente) => cliente.cli_idsistema != 0)
-      .map((cliente) => (
-        <Option key={cliente.cli_id} value={cliente.cli_id}>
-          {cliente.cli_nombre}
-        </Option>
-      ))
-  : null;
+    ? infoClientes
+        .filter((cliente) => cliente.cli_idsistema != 0)
+        .map((cliente) => (
+          <Option key={cliente.cli_id} value={cliente.cli_id}>
+            {cliente.cli_nombre}
+          </Option>
+        ))
+    : null;
 
   return (
     <>

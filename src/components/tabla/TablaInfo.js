@@ -38,12 +38,12 @@ const TablaInfo = () => {
     column: null,
     order: "ascend",
   });
-  
 
   const cargarTablaInfo = () => {
     setIsLoadingTI(true); // Establecer isLoadingTI en true antes de hacer la solicitud
     const data = new FormData();
     data.append("idU", idUsu);
+
     fetch(`${URLDOS}tablaInfo.php`, {
       method: "POST",
       body: data,
@@ -56,7 +56,6 @@ const TablaInfo = () => {
         setIsLoadingTI(false); // Establecer isLoadingTI en false después de recibir la respuesta
         setIsLoadingTP(true); // Establecer isLoadingTI en false el spin de tabla productivo
         setIsLoadingTR(true); // Establecer isLoadingTP en false el spin de tabla rubro
-        console.log(infoClientes);
       });
     });
   };
@@ -67,19 +66,42 @@ const TablaInfo = () => {
     }
   }, [activeTab, idUsu, actualizarData]);
 
-  console.log("info clientes: ", infoClientes)
-
-  const zonasUnicas = [...new Set(infoClientes.map((c) => c.gruuno_desc).filter((value) => value !== null))];
-const centrosUnicos = [...new Set(infoClientes.map((c) => c.grudos_desc).filter((value) => value !== null))];
-const tiposUnicos = [...new Set(infoClientes.map((c) => c.tip_desc).filter((value) => value !== null))];
-const actividadesUnicas = [...new Set(infoClientes.map((c) => c.sec_desc).filter((value) => value !== null))];
-const tamanosUnicos = [...new Set(infoClientes.map((c) => c.tam_desc).filter((value) => value !== null))];
-
+  const zonasUnicas = [
+    ...new Set(
+      infoClientes.map((c) => c.gruuno_desc).filter((value) => value !== null)
+    ),
+  ];
+  const centrosUnicos = [
+    ...new Set(
+      infoClientes.map((c) => c.grudos_desc).filter((value) => value !== null)
+    ),
+  ];
+  const tiposUnicos = [
+    ...new Set(
+      infoClientes.map((c) => c.tip_desc).filter((value) => value !== null)
+    ),
+  ];
+  const actividadesUnicas = [
+    ...new Set(
+      infoClientes.map((c) => c.sec_desc).filter((value) => value !== null)
+    ),
+  ];
+  const tamanosUnicos = [
+    ...new Set(
+      infoClientes.map((c) => c.tam_desc).filter((value) => value !== null)
+    ),
+  ];
 
   const zonaFilters = zonasUnicas.map((zona) => ({ text: zona, value: zona }));
-  const centroFilters = centrosUnicos.map((centro) => ({ text: centro, value: centro}));
+  const centroFilters = centrosUnicos.map((centro) => ({
+    text: centro,
+    value: centro,
+  }));
   const tipoFilters = tiposUnicos.map((tipo) => ({ text: tipo, value: tipo }));
-  const actividadFilters = actividadesUnicas.map((act) => ({ text: act, value: act }));
+  const actividadFilters = actividadesUnicas.map((act) => ({
+    text: act,
+    value: act,
+  }));
   const tamanoFilters = tamanosUnicos.map((tam) => ({ text: tam, value: tam }));
 
   const columns = [
@@ -101,18 +123,18 @@ const tamanosUnicos = [...new Set(infoClientes.map((c) => c.tam_desc).filter((va
         <div
           style={{
             color: "#00b33c",
-            maxWidth: "100px", // Ajusta el valor según el ancho deseado
+            maxWidth: "250px", // Ajusta el valor según el ancho deseado
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
-            cursor:"pointer"
+            cursor: "pointer",
           }}
         >
           {text}
         </div>
       ),
       width: "130px",
-      sorter: (a, b) => (a.clientes?.localeCompare(b.clientes)) || 0,
+      sorter: (a, b) => a.clientes?.localeCompare(b.clientes) || 0,
     },
     {
       title: "ZONA",
@@ -154,12 +176,12 @@ const tamanosUnicos = [...new Set(infoClientes.map((c) => c.tam_desc).filter((va
       filters: tamanoFilters,
       onFilter: (value, record) => record.tamaño === value,
     },
-    {
-      title: "EMAIL",
-      dataIndex: "email",
-      key: "email",
-      align: "center",
-    },
+    // {
+    //   title: "EMAIL",
+    //   dataIndex: "email",
+    //   key: "email",
+    //   align: "center",
+    // },
     {
       title: "TELEFONO",
       dataIndex: "telefono",
@@ -175,9 +197,6 @@ const tamanosUnicos = [...new Set(infoClientes.map((c) => c.tam_desc).filter((va
   };
 
   const handleActualizarLead = () => {
-    console.log(cliLead.cli_id);
-    console.log(cliAct);
-
     const data = new FormData();
     data.append("lead", Number(cliLead.cli_id));
     data.append("idCli", Number(cliAct));
@@ -188,7 +207,6 @@ const tamanosUnicos = [...new Set(infoClientes.map((c) => c.tam_desc).filter((va
       response.text().then((resp) => {
         const data = resp;
         const objetoData = JSON.parse(data);
-        //console.log(objetoData);
         notification.open({
           message: "LEAD CONVERTIDO",
           description: "DATOS ACTUALIZADOS CORRECTAMENTE",
@@ -262,9 +280,7 @@ const tamanosUnicos = [...new Set(infoClientes.map((c) => c.tam_desc).filter((va
                   padding: "0px",
                   marginLeft: "5px",
                 }}
-                onClick={() => (
-                  setIsModalVisible(true), setCliLead(c)
-                )}
+                onClick={() => (setIsModalVisible(true), setCliLead(c))}
               />
             </div>
           </>
@@ -282,16 +298,15 @@ const tamanosUnicos = [...new Set(infoClientes.map((c) => c.tam_desc).filter((va
     }))
   );
 
-
   const clientesOptions = infoClientes
-  ? infoClientes
-      .filter((cliente) => cliente.cli_idsistema != 0)
-      .map((cliente) => (
-        <Option key={cliente.cli_id} value={cliente.cli_id}>
-          {cliente.cli_nombre}
-        </Option>
-      ))
-  : null;
+    ? infoClientes
+        .filter((cliente) => cliente.cli_idsistema != 0)
+        .map((cliente) => (
+          <Option key={cliente.cli_id} value={cliente.cli_id}>
+            {cliente.cli_nombre}
+          </Option>
+        ))
+    : null;
 
   return (
     <>
@@ -381,7 +396,9 @@ const tamanosUnicos = [...new Set(infoClientes.map((c) => c.tam_desc).filter((va
               showSearch
               optionFilterProp="children"
               filterOption={(input, option) =>
-                option && option.children && option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
+                option &&
+                option.children &&
+                option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
               }
               onChange={(option) => setCliAct(option)}
             >

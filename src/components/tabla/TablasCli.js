@@ -15,7 +15,6 @@ const TablasCli = () => {
   const PROTOCOL = window.location.protocol;
   const HOSTNAME = window.location.hostname;
   const URL = `${PROTOCOL}//${HOSTNAME}:${PORT}`;
-  //console.log("url: ", URL);
 
   const {
     searchValue,
@@ -62,39 +61,29 @@ const TablasCli = () => {
 
   const handleCambio = (tabKey) => {
     setActiveTab(tabKey);
-    cargarTabla(tabKey);
   };
 
-  const cargarTabla = (tabKey) => {
-    let tablaComponente;
-
-    switch (tabKey) {
-      case "1":
-        tablaComponente = <TablaInfo />;
-        break;
-      case "2":
-        tablaComponente = <TablaProduc />;
-        break;
-      case "3":
-        tablaComponente = <TablaRubros />;
-        break;
-      default:
-        tablaComponente = null;
-        break;
-    }
-
-    return tablaComponente;
-  };
+  const items = [
+    {
+      key: "1",
+      label: `INFORMATIVA`,
+      children: <TablaInfo />,
+    },
+    {
+      key: "2",
+      label: `PRODUCTIVA COMERCIAL`,
+      children: <TablaProduc />,
+    },
+    {
+      key: "3",
+      label: `PRODUCTIVA POR RUBRO`,
+      children: <TablaRubros />,
+    },
+  ];
 
   useEffect(() => {
-    cargarTabla(activeTab);
-  }, []);
-
-  useEffect(() => {
-    const data = new FormData();
     fetch(`${URLDOS}etiquetaVistaCliente.php`, {
-      method: "POST",
-      body: data,
+      method: "GET",
     }).then(function (response) {
       response.text().then((resp) => {
         const data = resp;
@@ -103,8 +92,6 @@ const TablasCli = () => {
       });
     });
   }, []);
-
-  //console.log(etiquetasSelec);
 
   return (
     <>
@@ -142,7 +129,12 @@ const TablasCli = () => {
             />
             <Button
               type="primary"
-              style={{ width: "100px", padding: "0px", marginLeft: "10px", borderRadius:"0px" }}
+              style={{
+                width: "100px",
+                padding: "0px",
+                marginLeft: "10px",
+                borderRadius: "0px",
+              }}
               onClick={showDrawer}
             >
               Nuevo Lead
@@ -159,32 +151,21 @@ const TablasCli = () => {
         >
           <NuevoCliente />
         </Drawer>
-
-        <Tabs activeKey={activeTab} onChange={handleCambio}>
-          <>
-            <Tabs.Tab key="1" tab="INFORMATIVA">
-              {cargarTabla(activeTab)}
-            </Tabs.Tab>
-            <Tabs.Tab key="2" tab="PRODUCTIVA COMERCIAL">
-              {cargarTabla(activeTab)}
-            </Tabs.Tab>
-            <Tabs.Tab key="3" tab="PRODUCTIVA POR RUBRO">
-              {cargarTabla(activeTab)}
-            </Tabs.Tab>
-          </>
-        </Tabs>
+        <Tabs
+          defaultActiveKey="1"
+          activeKey={activeTab}
+          items={items}
+          onChange={handleCambio}
+        />
       </div>
       {selectedCliente && selectedCliente.cuenta !== "" && (
         <Drawer
-        className="drawerCli"
+          className="drawerCli"
           open={isDrawerVisible}
           onClose={() => setIsDrawerVisible(false)}
-          //title={selectedCliente.clientes}
-          //title={null}
           placement="bottom"
           height={"100vh"}
           style={{ whiteSpace: "nowrap", marginTop: "-10px" }}
-          //closeIcon={null}
           closeIcon={
             <CloseOutlined
               style={{ position: "absolute", top: "-2px", right: "10px" }}
@@ -193,10 +174,8 @@ const TablasCli = () => {
         >
           <iframe
             loading="lazy"
-            src={`${URL}/duoc/modulos/vista_cliente/?idC=${cliSelect}`} // para el resto de los crm
-            //src={`${URL}/tati/modulos/vista_cliente/?idC=${cliSelect}`} // para probar en tati
+            src={`${URLDOS}vista_cliente/?idC=${cliSelect}`}
             width={"100%"}
-            // height={"600"}
             height={"1000"}
             style={{ border: "none" }}
             title="drawer"

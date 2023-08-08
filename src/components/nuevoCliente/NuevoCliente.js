@@ -141,7 +141,6 @@ const NuevoCliente = () => {
     }).then(function (response) {
       response.text().then((resp) => {
         const data = resp;
-        console.log(data);
       });
     });
 
@@ -182,14 +181,16 @@ const NuevoCliente = () => {
             <Form.Item label="Descripción" name="descripcion">
               <TextArea />
             </Form.Item>
-
           </div>
 
-          <div style={{ display: "flex", flexDirection: "row", justifyContent:"space-between"}}>
-            <Form.Item
-              label="Teléfono"
-              name="telefono"
-            >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <Form.Item label="Teléfono" name="telefono">
               <Input style={{ width: "170px" }} />
             </Form.Item>
             <Form.Item
@@ -201,29 +202,24 @@ const NuevoCliente = () => {
             </Form.Item>
           </div>
 
-          <Form.Item
-            label="Email"
-            name="email"
-          >
+          <Form.Item label="Email" name="email">
             <Input />
           </Form.Item>
 
-          <div style={{ display: "flex", flexDirection: "row", justifyContent:"space-between"}}>
-            <Form.Item
-              label="CUIT"
-              name="cuit"
-              className="hidden-asterisk"
-            >
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
+            <Form.Item label="CUIT" name="cuit" className="hidden-asterisk">
               <Input style={{ width: "170px" }} />
             </Form.Item>
-            
-            <Form.Item
-              label="Tamaño"
-              name="tamano"
-              className="hidden-asterisk"
-            >
+
+            <Form.Item label="Tamaño" name="tamano" className="hidden-asterisk">
               {tamaño ? (
-                <Select style={{ width: "170px"}}>
+                <Select style={{ width: "170px" }}>
                   {tamaño.map((tam) => (
                     <Select.Option key={tam.tam_id} value={tam.tam_id}>
                       {tam.tam_desc}
@@ -236,17 +232,22 @@ const NuevoCliente = () => {
                 </Select.Option>
               )}
             </Form.Item>
-
           </div>
 
-          <div style={{ display: "flex", flexDirection: "row", justifyContent:"space-between"}}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
             <Form.Item
-                label="Tipo Cliente"
-                labelCol={{ span: 20 }} 
-                wrapperCol={{ span: 20 }} 
-                name="tipoClientes"
-                className="hidden-asterisk"
-              >
+              label="Tipo Cliente"
+              labelCol={{ span: 20 }}
+              wrapperCol={{ span: 20 }}
+              name="tipoClientes"
+              className="hidden-asterisk"
+            >
               {tiposCliente ? (
                 <Select style={{ width: "170px" }}>
                   {tiposCliente.map((tip) => (
@@ -260,11 +261,11 @@ const NuevoCliente = () => {
                   CARGANDO OPCIONES...
                 </Select.Option>
               )}
-            </Form.Item>            
+            </Form.Item>
             <Form.Item
               label="Sector"
               labelCol={{ span: 20 }}
-              wrapperCol={{ span: 20 }} 
+              wrapperCol={{ span: 20 }}
               name="sector"
               className="hidden-asterisk"
             >
@@ -282,10 +283,15 @@ const NuevoCliente = () => {
                 </Select.Option>
               )}
             </Form.Item>
-
           </div>
 
-          <div style={{ display: "flex", flexDirection: "row", justifyContent:"space-between"}}>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "space-between",
+            }}
+          >
             <Form.Item
               label="Zona"
               name="zona"
@@ -337,10 +343,6 @@ const NuevoCliente = () => {
               )}
             </Form.Item>
           </div>
-          
-          
-          
-          
         </div>
         <Divider style={{ marginTop: "0px" }} />
         <div
