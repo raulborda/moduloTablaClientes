@@ -34,6 +34,8 @@ const TablaInfo = () => {
   const [cliLead, setCliLead] = useState("");
   const [cliAct, setCliAct] = useState({});
 
+  const [conf, setConf] = useState(); // getConf.php para cabecera de tabla
+
   const [sortConfig, setSortConfig] = useState({
     column: null,
     order: "ascend",
@@ -104,6 +106,21 @@ const TablaInfo = () => {
   }));
   const tamanoFilters = tamanosUnicos.map((tam) => ({ text: tam, value: tam }));
 
+  useEffect(() => {
+    const url = `${URLDOS}getConf.php`;
+
+    fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Error en la solicitud: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setConf(data);
+      });
+  }, []);
+
   const columns = [
     {
       title: "CUENTA",
@@ -137,7 +154,7 @@ const TablaInfo = () => {
       sorter: (a, b) => a.clientes?.localeCompare(b.clientes) || 0,
     },
     {
-      title: "ZONA",
+      title: conf ? conf[0].grupo1.toUpperCase() : "-",
       dataIndex: "zonas",
       key: "zonas",
       align: "center",
@@ -145,7 +162,7 @@ const TablaInfo = () => {
       onFilter: (value, record) => record.zonas === value,
     },
     {
-      title: "CENTRO",
+      title: conf ? conf[0].grupo2.toUpperCase() : "-",
       dataIndex: "centro",
       key: "centro",
       align: "center",

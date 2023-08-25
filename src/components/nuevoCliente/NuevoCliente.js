@@ -33,6 +33,8 @@ const NuevoCliente = () => {
   const [grupoUno, setGrupoUno] = useState(null);
   const [grupoDos, setGrupoDos] = useState(null);
 
+  const [conf, setConf] = useState();
+
   const cargarSector = () => {
     const data = new FormData();
     data.append("idU", idUsu);
@@ -150,6 +152,20 @@ const NuevoCliente = () => {
     setIsDrawerVisibleForm(false);
     setActualizarData(!actualizarData);
   }
+
+  useEffect(() => {
+    const url = `${URLDOS}getConf.php`;
+    fetch(url)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(`Error en la solicitud: ${response.status}`);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setConf(data);
+      });
+  }, []);
 
   return (
     <>
@@ -293,7 +309,7 @@ const NuevoCliente = () => {
             }}
           >
             <Form.Item
-              label="Zona"
+              label={conf ? conf[0].grupo1 : "-"}
               name="zona"
               rules={[
                 {
@@ -318,7 +334,7 @@ const NuevoCliente = () => {
               )}
             </Form.Item>
             <Form.Item
-              label="Centro"
+              label={conf ? conf[0].grupo2 : "-"}
               name="centro"
               rules={[
                 {
