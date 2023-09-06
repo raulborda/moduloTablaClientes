@@ -145,6 +145,7 @@ const TablaProduc = () => {
       align: "right",
       sorter: (a, b) => sorterWithTotalRow(a, b, "propias"),
       sortDirections: ["ascend", "descend"],
+      className: "hidden-column"
     },
     {
       title: "HAS. ALQ.",
@@ -153,6 +154,7 @@ const TablaProduc = () => {
       align: "right",
       sorter: (a, b) => sorterWithTotalRow(a, b, "alquiladas"),
       sortDirections: ["ascend", "descend"],
+      className: "hidden-column"
     },
     {
       title: "COMPRA USD INS.",
