@@ -8,6 +8,7 @@ import { GlobalContext } from "../context/GlobalContext";
 import "./style.css";
 import { AlertOutlined, ReloadOutlined } from "@ant-design/icons";
 import { Option } from "antd/es/mentions";
+import BtnExcel from "./BtnExcel";
 
 const TablaRubros = () => {
   const URLDOS = process.env.REACT_APP_URL;
@@ -36,6 +37,8 @@ const TablaRubros = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [cliLead, setCliLead] = useState("");
   const [cliAct, setCliAct] = useState({});
+  const [nombreGrupos, setNombreGrupos] = useState ();
+
 
   const cargarTablaInfo = () => {
     setIsLoadingTR(true); // Establecer isLoadingTR en true antes de hacer la solicitud
@@ -79,15 +82,17 @@ const TablaRubros = () => {
   useEffect(() => {
     if (activeTab === "3" && idUsu) {
       cargarTablaInfo();
+      getConf();
     }
   }, [activeTab, idUsu, actualizarData]);
 
-  // const rowClassName = (record, index) => {
-  //   if (isTotalRow && index === 0) {
-  //     return "total-row"; // Agrega una clase CSS para la fila totalRow
-  //   }
-  //   return "";
-  // };
+    //Obtiene nombres de grupo1 y grupo2: http://10.0.0.153/duoc/modulos/getConf.php
+    const getConf = async () => {
+      const data = await fetch(`${URLDOS}getConf.php`);
+      const jsonData = await data.json();
+      setNombreGrupos(jsonData[0]);
+  
+    }
 
   const columnsRubros = [
     {
@@ -95,7 +100,7 @@ const TablaRubros = () => {
       dataIndex: "cuenta",
       key: "cuenta",
       align: "center",
-      width: "50px",
+      className: 'col-cuenta-ancho', //Puesto como style en .css porque de lo contrario afecta negativamente a la hora de exportar como archivo .xlsx, ya que pasa el width como parametro oculto a la hora de generar el xlxs y abrirlo (solo en Excel).
       sorter: (a, b) => parseInt(a.cuenta) - parseInt(b.cuenta), // Agregar esta propiedad para habilitar el ordenamiento
     },
     {
@@ -107,7 +112,6 @@ const TablaRubros = () => {
         <div
           style={{
             color: "#00b33c",
-            maxWidth: "250px", // Ajusta el valor según el ancho deseado
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
@@ -117,7 +121,7 @@ const TablaRubros = () => {
           {text}
         </div>
       ),
-      width: "300px",
+      className: 'col-cliente-ancho', //Puesto como style en .css porque de lo contrario afecta negativamente a la hora de exportar como archivo .xlsx, ya que pasa el width como parametro oculto a la hora de generar el xlxs y abrirlo (solo en Excel).      
       sorter: (a, b) => a.clientes?.localeCompare(b.clientes) || 0,
     },
     {
@@ -159,6 +163,18 @@ const TablaRubros = () => {
       align: "right",
       sorter: (a, b) => sorterWithTotalRow(a, b, "mixto"),
       sortDirections: ["ascend", "descend"],
+    },
+    {
+      title: `${nombreGrupos?.grupo1.toUpperCase()}`,
+      dataIndex: "zonas",
+      key: "zonas",
+      className: "hidden-column"
+    },
+    {
+      title: `${nombreGrupos?.grupo2.toUpperCase()}`,
+      dataIndex: "centro",
+      key: "centro",
+      className: "hidden-column"
     },
   ];
 
@@ -301,6 +317,9 @@ const TablaRubros = () => {
               .replace(/,/g, ".")
           : c.Mixto
         : "S/D",
+
+        zonas: c.gruuno_desc,
+        centro: c.grudos_desc,
     }))
   );
 
@@ -368,6 +387,8 @@ const TablaRubros = () => {
 
   return (
     <>
+      <BtnExcel columns={columnsRubros} dataSource={dataRubros} saveAsName={'tablaProdRubro'} />
+
       {isLoadingTR ? (
         <div
           style={{
@@ -385,7 +406,7 @@ const TablaRubros = () => {
           dataSource={dataRubros}
           columns={columnsRubros}
           size="small"
-          // rowClassName={rowClassName}
+          pagination={{showSizeChanger: false}}
           onRow={(record) => ({
             onClick: (event) => {
               if (event.target.tagName !== "DIV") {
