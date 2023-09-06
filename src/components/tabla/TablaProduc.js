@@ -414,16 +414,16 @@ const TablaProduc = () => {
     clientes: (
       <span style={{ color: "#00b33c", fontWeight: "bold" }}>TOTALES</span>
     ),
-    propias: (
-      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
-        {sumColumns(dataProductivo, "propias")}
-      </span>
-    ),
-    alquiladas: (
-      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
-        {sumColumns(dataProductivo, "alquiladas")}
-      </span>
-    ),
+    // propias: (
+    //   <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+    //     {sumColumns(dataProductivo, "propias")}
+    //   </span>
+    // ),
+    // alquiladas: (
+    //   <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+    //     {sumColumns(dataProductivo, "alquiladas")}
+    //   </span>
+    // ),
     hasTotales: (
       <span style={{ color: "#00b33c", fontWeight: "bold" }}>
         {sumColumns(dataProductivo, "hasTotales")}
@@ -512,12 +512,12 @@ const TablaProduc = () => {
                 <Table.Summary.Cell index={2} className="totalCell">
                   {totalRow.hasTotales}
                 </Table.Summary.Cell>
-                <Table.Summary.Cell index={3} className="totalCell">
+                {/* <Table.Summary.Cell index={3} className="totalCell">
                   {totalRow.propias}
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={4} className="totalCell">
                   {totalRow.alquiladas}
-                </Table.Summary.Cell>
+                </Table.Summary.Cell> */}
                 <Table.Summary.Cell index={5} className="totalCell">
                   {totalRow.usdInsumo}
                 </Table.Summary.Cell>
