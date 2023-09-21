@@ -176,7 +176,7 @@ const TablasCli = () => {
             loading="lazy"
             src={`${URLDOS}vista_cliente/?idC=${cliSelect}`}
             width={"100%"}
-            style={{ border: "none", height: "calc(100% - 24px)" }}
+            style={{ border: "none", height: "calc(100% - 10px)" }}
             title="drawer"
           ></iframe>
         </Drawer>
