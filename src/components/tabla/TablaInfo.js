@@ -1,15 +1,12 @@
-/* eslint-disable eqeqeq */
-/* eslint-disable no-unused-vars */
-/* eslint-disable no-sequences */
-/* eslint-disable react-hooks/exhaustive-deps */
 import { Button, Modal, Select, Spin, Table, notification } from "antd";
-import React, { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { GlobalContext } from "../context/GlobalContext";
 import { AlertOutlined, ReloadOutlined } from "@ant-design/icons";
 import { Option } from "antd/es/mentions";
 import BtnExcel from "./BtnExcel";
+import { filtrarClientes } from "../../utils/filtrarClientes";
 
-const TablaInfo = () => {
+const TablaInfo = ({ status, clientesInactivos }) => {
   const URLDOS = process.env.REACT_APP_URL;
 
   const {
@@ -54,7 +51,7 @@ const TablaInfo = () => {
       response.text().then((resp) => {
         const data = resp;
         const objetoData = JSON.parse(data);
-        setInfoclientes(objetoData);
+        if (Array.isArray(objetoData)) setInfoclientes(objetoData);
         setIsLoadingTI(false); // Establecer isLoadingTI en false después de recibir la respuesta
         setIsLoadingTP(true); // Establecer isLoadingTI en false el spin de tabla productivo
         setIsLoadingTR(true); // Establecer isLoadingTP en false el spin de tabla rubro
@@ -70,27 +67,27 @@ const TablaInfo = () => {
 
   const zonasUnicas = [
     ...new Set(
-      infoClientes.map((c) => c.gruuno_desc).filter((value) => value !== null)
+      infoClientes?.map((c) => c.gruuno_desc).filter((value) => value !== null)
     ),
   ];
   const centrosUnicos = [
     ...new Set(
-      infoClientes.map((c) => c.grudos_desc).filter((value) => value !== null)
+      infoClientes?.map((c) => c.grudos_desc).filter((value) => value !== null)
     ),
   ];
   const tiposUnicos = [
     ...new Set(
-      infoClientes.map((c) => c.tip_desc).filter((value) => value !== null)
+      infoClientes?.map((c) => c.tip_desc).filter((value) => value !== null)
     ),
   ];
   const actividadesUnicas = [
     ...new Set(
-      infoClientes.map((c) => c.sec_desc).filter((value) => value !== null)
+      infoClientes?.map((c) => c.sec_desc).filter((value) => value !== null)
     ),
   ];
   const tamanosUnicos = [
     ...new Set(
-      infoClientes.map((c) => c.tam_desc).filter((value) => value !== null)
+      infoClientes?.map((c) => c.tam_desc).filter((value) => value !== null)
     ),
   ];
 
@@ -127,7 +124,7 @@ const TablaInfo = () => {
       dataIndex: "cuenta",
       key: "cuenta",
       align: "center",
-      className: 'col-cuenta-ancho', //Puesto como style en .css porque de lo contrario afecta negativamente a la hora de exportar como archivo .xlsx, ya que pasa el width como parametro oculto a la hora de generar el xlxs y abrirlo (solo en Excel).
+      className: "col-cuenta-ancho", //Puesto como style en .css porque de lo contrario afecta negativamente a la hora de exportar como archivo .xlsx, ya que pasa el width como parametro oculto a la hora de generar el xlxs y abrirlo (solo en Excel).
       sorter: (a, b) => parseInt(a.cuenta) - parseInt(b.cuenta), // Agregar esta propiedad para habilitar el ordenamiento
     },
     {
@@ -148,7 +145,7 @@ const TablaInfo = () => {
           {text}
         </div>
       ),
-      className: 'col-cliente-ancho', //Puesto como style en .css porque de lo contrario afecta negativamente a la hora de exportar como archivo .xlsx, ya que pasa el width como parametro oculto a la hora de generar el xlxs y abrirlo (solo en Excel).
+      className: "col-cliente-ancho", //Puesto como style en .css porque de lo contrario afecta negativamente a la hora de exportar como archivo .xlsx, ya que pasa el width como parametro oculto a la hora de generar el xlxs y abrirlo (solo en Excel).
       sorter: (a, b) => a.clientes?.localeCompare(b.clientes) || 0,
     },
     {
@@ -256,27 +253,8 @@ const TablaInfo = () => {
     });
   };
 
-  const filtrarClientes = () => {
-    return infoClientes.filter((cliente) => {
-      if (etiquetasSelec.length > 0) {
-        const etiquetaCliente = cliente.etiqueta
-          ? cliente.etiqueta.split(",")
-          : [];
-        const intersec = etiquetaCliente.filter((etq) =>
-          etiquetasSelec.includes(etq.trim())
-        );
-
-        if (intersec.length === 0) {
-          return false;
-        }
-      }
-      return true;
-    });
-  };
-
   const data = filterData(
-    //infoClientes.map((c, index) => ({
-    filtrarClientes().map((c, index) => ({
+    filtrarClientes(infoClientes, status, clientesInactivos, etiquetasSelec)?.map((c, index) => ({
       key: c.cli_id,
       cuenta:
         c.cli_idsistema === "0" ? (
@@ -325,7 +303,7 @@ const TablaInfo = () => {
 
   return (
     <>
-      <BtnExcel columns={columns} dataSource={data} saveAsName={'tablaInfo'} />
+      <BtnExcel columns={columns} dataSource={data} saveAsName={"tablaInfo"} />
       {isLoadingTI ? (
         <div
           style={{
@@ -343,7 +321,7 @@ const TablaInfo = () => {
           dataSource={data}
           columns={columns}
           size="small"
-          pagination={{showSizeChanger: false}}
+          pagination={{ showSizeChanger: false }}
           onRow={(record) => ({
             onClick: (event) => {
               if (event.target.tagName !== "DIV") {

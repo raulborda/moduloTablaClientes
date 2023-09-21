@@ -9,8 +9,9 @@ import "./style.css";
 import { Option } from "antd/es/mentions";
 import { AlertOutlined, ReloadOutlined } from "@ant-design/icons";
 import BtnExcel from "./BtnExcel";
+import { filtrarClientes } from "../../utils/filtrarClientes";
 
-const TablaProduc = () => {
+const TablaProduc = ({status, clientesInactivos}) => {
   const URLDOS = process.env.REACT_APP_URL;
 
   const {
@@ -50,7 +51,7 @@ const TablaProduc = () => {
       response.text().then((resp) => {
         const data = resp;
         const objetoData = JSON.parse(data);
-        setInfoclientes(objetoData);
+        if (Array.isArray(objetoData)) setInfoclientes(objetoData);
         setIsLoadingTP(false); // Establecer isLoadingTP en false después de recibir la respuesta
         setIsLoadingTI(true); // Establecer isLoadingTI en false el spin de tabla informacion
         setIsLoadingTR(true); // Establecer isLoadingTP en false el spin de tabla rubro
@@ -91,13 +92,6 @@ const TablaProduc = () => {
       getConf();
     }
   }, [activeTab, idUsu, actualizarData]);
-
-  // const rowClassName = (record, index) => {
-  //   if (isTotalRow && index === 0) {
-  //     return "total-row"; // Agrega una clase CSS para la fila totalRow
-  //   }
-  //   return "";
-  // };
 
   const columnsProductivo = [
     {
@@ -269,24 +263,6 @@ const TablaProduc = () => {
     });
   };
 
-  const filtrarClientes = () => {
-    return infoClientes.filter((cliente) => {
-      if (etiquetasSelec.length > 0) {
-        const etiquetaCliente = cliente.etiqueta
-          ? cliente.etiqueta.split(",")
-          : [];
-        const intersec = etiquetaCliente.filter((etq) =>
-          etiquetasSelec.includes(etq)
-        );
-
-        if (intersec.length === 0) {
-          return false;
-        }
-      }
-      return true;
-    });
-  };
-
   const numberFormatOptions = {
     useGrouping: true,
     minimumFractionDigits: 0,
@@ -295,7 +271,7 @@ const TablaProduc = () => {
 
   const dataProductivo = filterData(
     //infoClientes.map((c, index) => ({
-    filtrarClientes().map((c, index) => ({
+      filtrarClientes(infoClientes, status, clientesInactivos, etiquetasSelec).map((c, index) => ({
       key: c.cli_id,
       cuenta:
         c.cli_idsistema === "0" ? (

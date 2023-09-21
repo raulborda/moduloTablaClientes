@@ -1,100 +1,112 @@
-.div_wrapper{
-    height: 100%;
-    width: auto;
-    padding-left: 10px;
-    padding-right: 10px;
+.div_wrapper {
+  height: 100%;
+  width: auto;
+  padding-left: 10px;
+  padding-right: 10px;
 }
 
 .titulos {
-    font-family: 'Open Sans', sans-serif;
-    font-size: 15px;
-    color: #605d5f !important;
+  font-family: "Open Sans", sans-serif;
+  font-size: 15px;
+  color: #605d5f !important;
 }
-
 
 div.ant-drawer-header-title {
-    margin-left: -25px;
+  margin-left: -25px;
 }
 
-div.ant-drawer-body{
-    padding-top: 10px !important;
+div.ant-drawer-body {
+  padding-top: 10px !important;
 }
 
 .total-row {
-    background-color: #f5fef5; /* Cambia este valor al color verde pastel deseado */
-  }
-
-.totalCell{
-    text-align: right !important;
+  background-color: #f5fef5; /* Cambia este valor al color verde pastel deseado */
 }
 
-
-.selected_tags{
-    display: flex;
-    flex-direction: row;
+.totalCell {
+  text-align: right !important;
 }
 
-.selected_tag{
-    margin-left: 2px;
-    margin-right: 4px;
-    height: 20px;
-    /*width: 110px;*/
-    border-radius: 3px;
-    text-align: center;    
+.selected_tags {
+  display: flex;
+  flex-direction: row;
 }
 
-.etq_name{
-    color:white;
-   
-    padding: 10px;
+.selected_tag {
+  margin-left: 2px;
+  margin-right: 4px;
+  height: 20px;
+  /*width: 110px;*/
+  border-radius: 3px;
+  text-align: center;
 }
-  
+
+.etq_name {
+  color: white;
+
+  padding: 10px;
+}
+
 /* .drawerCli .ant-drawer-header{
     display: none;
 } */
 
 /*Boton exportar a excel*/
 .btn-export {
-    border-radius: 0px;
-    width: 100px;
+  border-radius: 0px;
+  width: 100px;
 }
 
 .btn-export-contenedor {
-    display: flex;
-    justify-content: flex-end;
-    padding-bottom: 8px;
-    margin-top: -5px;
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 8px;
+  margin-top: -5px;
 }
 
 /*Ocultar columna antD*/
 .hidden-column {
-    display: none;
+  display: none;
 }
-
 
 /*Formulario Nuevo Lead*/
 /*Inputs width*/
 .input-width {
-    width: 170px; 
+  width: 170px;
 }
 
 .inline-inputs-contenedor {
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 }
 
 .btn-guardar {
-    width: 100%;
-    margin-top: 20px; 
+  width: 100%;
+  margin-top: 20px;
 }
 
 /*Columnas tabla*/
 .col-cuenta-ancho {
-    width: 50px;
+  width: 50px;
 }
 
 .col-cliente-ancho {
-    width: 130px;
-    max-width: 250px;
+  width: 130px;
+  max-width: 250px;
+}
+.clientes-header {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.clientes-header .ant-radio-button-wrapper:first-child {
+  border-start-start-radius: 0px;
+  border-end-start-radius: 0px;
+}
+.clientes-header .ant-radio-button-wrapper:last-child {
+  border-start-end-radius: 0px;
+  border-end-end-radius: 0px;
 }

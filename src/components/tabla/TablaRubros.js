@@ -9,8 +9,9 @@ import "./style.css";
 import { AlertOutlined, ReloadOutlined } from "@ant-design/icons";
 import { Option } from "antd/es/mentions";
 import BtnExcel from "./BtnExcel";
+import { filtrarClientes } from "../../utils/filtrarClientes";
 
-const TablaRubros = () => {
+const TablaRubros = ({ status, clientesInactivos }) => {
   const URLDOS = process.env.REACT_APP_URL;
 
   const {
@@ -37,8 +38,7 @@ const TablaRubros = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [cliLead, setCliLead] = useState("");
   const [cliAct, setCliAct] = useState({});
-  const [nombreGrupos, setNombreGrupos] = useState ();
-
+  const [nombreGrupos, setNombreGrupos] = useState();
 
   const cargarTablaInfo = () => {
     setIsLoadingTR(true); // Establecer isLoadingTR en true antes de hacer la solicitud
@@ -51,7 +51,7 @@ const TablaRubros = () => {
       response.text().then((resp) => {
         const data = resp;
         const objetoData = JSON.parse(data);
-        setInfoclientes(objetoData);
+        if (Array.isArray(objetoData)) setInfoclientes(objetoData);
         setIsLoadingTR(false); // Establecer isLoadingTR en false después de recibir la respuesta
         setIsLoadingTI(true); // Establecer isLoadingTI en false el spin de tabla informacion
         setIsLoadingTP(true); // Establecer isLoadingTP en false el spin de tabla productivo
@@ -86,13 +86,12 @@ const TablaRubros = () => {
     }
   }, [activeTab, idUsu, actualizarData]);
 
-    //Obtiene nombres de grupo1 y grupo2: http://10.0.0.153/duoc/modulos/getConf.php
-    const getConf = async () => {
-      const data = await fetch(`${URLDOS}getConf.php`);
-      const jsonData = await data.json();
-      setNombreGrupos(jsonData[0]);
-  
-    }
+  //Obtiene nombres de grupo1 y grupo2: http://10.0.0.153/duoc/modulos/getConf.php
+  const getConf = async () => {
+    const data = await fetch(`${URLDOS}getConf.php`);
+    const jsonData = await data.json();
+    setNombreGrupos(jsonData[0]);
+  };
 
   const columnsRubros = [
     {
@@ -100,7 +99,7 @@ const TablaRubros = () => {
       dataIndex: "cuenta",
       key: "cuenta",
       align: "center",
-      className: 'col-cuenta-ancho', //Puesto como style en .css porque de lo contrario afecta negativamente a la hora de exportar como archivo .xlsx, ya que pasa el width como parametro oculto a la hora de generar el xlxs y abrirlo (solo en Excel).
+      className: "col-cuenta-ancho", //Puesto como style en .css porque de lo contrario afecta negativamente a la hora de exportar como archivo .xlsx, ya que pasa el width como parametro oculto a la hora de generar el xlxs y abrirlo (solo en Excel).
       sorter: (a, b) => parseInt(a.cuenta) - parseInt(b.cuenta), // Agregar esta propiedad para habilitar el ordenamiento
     },
     {
@@ -121,7 +120,7 @@ const TablaRubros = () => {
           {text}
         </div>
       ),
-      className: 'col-cliente-ancho', //Puesto como style en .css porque de lo contrario afecta negativamente a la hora de exportar como archivo .xlsx, ya que pasa el width como parametro oculto a la hora de generar el xlxs y abrirlo (solo en Excel).      
+      className: "col-cliente-ancho", //Puesto como style en .css porque de lo contrario afecta negativamente a la hora de exportar como archivo .xlsx, ya que pasa el width como parametro oculto a la hora de generar el xlxs y abrirlo (solo en Excel).
       sorter: (a, b) => a.clientes?.localeCompare(b.clientes) || 0,
     },
     {
@@ -168,13 +167,13 @@ const TablaRubros = () => {
       title: `${nombreGrupos?.grupo1.toUpperCase()}`,
       dataIndex: "zonas",
       key: "zonas",
-      className: "hidden-column"
+      className: "hidden-column",
     },
     {
       title: `${nombreGrupos?.grupo2.toUpperCase()}`,
       dataIndex: "centro",
       key: "centro",
-      className: "hidden-column"
+      className: "hidden-column",
     },
   ];
 
@@ -229,24 +228,6 @@ const TablaRubros = () => {
     });
   };
 
-  const filtrarClientes = () => {
-    return infoClientes.filter((cliente) => {
-      if (etiquetasSelec.length > 0) {
-        const etiquetaCliente = cliente.etiqueta
-          ? cliente.etiqueta.split(",")
-          : [];
-        const intersec = etiquetaCliente.filter((etq) =>
-          etiquetasSelec.includes(etq)
-        );
-
-        if (intersec.length === 0) {
-          return false;
-        }
-      }
-      return true;
-    });
-  };
-
   const numberFormatOptions = {
     useGrouping: true,
     minimumFractionDigits: 0,
@@ -254,8 +235,12 @@ const TablaRubros = () => {
   };
 
   const dataRubros = filterData(
-    //infoClientes.map((c, index) => ({
-    filtrarClientes().map((c, index) => ({
+    filtrarClientes(
+      infoClientes,
+      status,
+      clientesInactivos,
+      etiquetasSelec
+    ).map((c, index) => ({
       key: c.cli_id,
       cuenta:
         c.cli_idsistema === "0" ? (
@@ -318,8 +303,8 @@ const TablaRubros = () => {
           : c.Mixto
         : "S/D",
 
-        zonas: c.gruuno_desc,
-        centro: c.grudos_desc,
+      zonas: c.gruuno_desc,
+      centro: c.grudos_desc,
     }))
   );
 
@@ -387,7 +372,11 @@ const TablaRubros = () => {
 
   return (
     <>
-      <BtnExcel columns={columnsRubros} dataSource={dataRubros} saveAsName={'tablaProdRubro'} />
+      <BtnExcel
+        columns={columnsRubros}
+        dataSource={dataRubros}
+        saveAsName={"tablaProdRubro"}
+      />
 
       {isLoadingTR ? (
         <div
@@ -406,7 +395,7 @@ const TablaRubros = () => {
           dataSource={dataRubros}
           columns={columnsRubros}
           size="small"
-          pagination={{showSizeChanger: false}}
+          pagination={{ showSizeChanger: false }}
           onRow={(record) => ({
             onClick: (event) => {
               if (event.target.tagName !== "DIV") {

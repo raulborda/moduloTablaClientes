@@ -1,6 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { Button, Drawer, Input, Select, Tabs } from "antd";
-import React, { useContext, useEffect } from "react";
+import { Button, Drawer, Input, Radio, Select, Tabs } from "antd";
+import { useContext, useEffect, useState } from "react";
 import "./style.css";
 import { GlobalContext } from "../context/GlobalContext";
 import { CloseOutlined } from "@ant-design/icons";
@@ -31,11 +31,16 @@ const TablasCli = () => {
     setEtiquetasSistema,
     etiquetasSelec,
     setEtiquetasSelec,
+    idUsu,
   } = useContext(GlobalContext);
 
-  const { Option } = Select;
+  const urlParams = new URLSearchParams(window.location.search);
 
-  //const [etiquetasSelec, setEtiquetasSelec] = useState([]);
+  const [status, setStatus] = useState(urlParams.get("status") || "1");
+
+  const [clientesInactivos, setClientesInactivos] = useState([]);
+
+  const { Option } = Select;
 
   const showDrawer = () => {
     setIsDrawerVisibleForm(true);
@@ -66,20 +71,42 @@ const TablasCli = () => {
   const items = [
     {
       key: "1",
-      label: `INFORMATIVA`,
-      children: <TablaInfo />,
+      label: "INFORMATIVA",
+      children: (
+        <TablaInfo status={status} clientesInactivos={clientesInactivos} />
+      ),
     },
     {
       key: "2",
-      label: `PRODUCTIVA COMERCIAL`,
-      children: <TablaProduc />,
+      label: "PRODUCTIVA COMERCIAL",
+      children: (
+        <TablaProduc status={status} clientesInactivos={clientesInactivos} />
+      ),
     },
     {
       key: "3",
-      label: `PRODUCTIVA POR RUBRO`,
-      children: <TablaRubros />,
+      label: "PRODUCTIVA POR RUBRO",
+      children: (
+        <TablaRubros status={status} clientesInactivos={clientesInactivos} />
+      ),
     },
   ];
+
+  const handleStatusChange = (v) => {
+    let currentUrl = window.location.href;
+
+    // checkea si exiten parametros
+    if (currentUrl.includes("status=")) {
+      // Si existe, reemplace
+      currentUrl = currentUrl.replace(/status=\d+/, `status=${v}`);
+    } else {
+      // Si no existe, agregar el parametro
+      currentUrl += currentUrl.includes("?") ? `&status=${v}` : `?status=${v}`;
+    }
+
+    window.history.replaceState({}, "", currentUrl);
+    setStatus(v);
+  };
 
   useEffect(() => {
     fetch(`${URLDOS}etiquetaVistaCliente.php`, {
@@ -93,23 +120,50 @@ const TablasCli = () => {
     });
   }, []);
 
+  useEffect(() => {
+    const data = new FormData();
+    data.append("idU", idUsu);
+
+    fetch(`${URLDOS}tablaInfoInact.php`, {
+      method: "POST",
+      body: data,
+    }).then(function (response) {
+      response.text().then((resp) => {
+        const data = resp;
+        const objetoData = JSON.parse(data);
+        if (Array.isArray(objetoData)) setClientesInactivos(objetoData);
+      });
+    });
+  }, []);
+
   return (
     <>
       <div className="div_wrapper">
-        <div
-          style={{
-            display: "flex",
-            flexDirection: "row",
-            justifyContent: "space-between",
-            width: "100%",
-          }}
-        >
+        <div className="clientes-header" style={{}}>
           <h1 className="titulos">CLIENTES</h1>
-          <div style={{ display: "flex", flexDirection: "row" }}>
+
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              gap: 10,
+            }}
+          >
+            <Radio.Group
+              buttonStyle="solid"
+              optionType="button"
+              value={status}
+              onChange={(v) => handleStatusChange(v.target.value)}
+              options={[
+                { label: "Todos los clientes", value: "1" },
+                { label: "Clientes sin actividad", value: "0" },
+              ]}
+            />
             <Select
               mode="multiple"
               placeholder="Filtrar por etiquetas"
-              style={{ width: "230px", marginRight: "12px" }}
+              style={{ width: "230px" }}
               value={etiquetasSelec}
               onChange={setEtiquetasSelec}
             >
@@ -121,7 +175,7 @@ const TablasCli = () => {
             </Select>
 
             <Input
-              style={{ width: "200px", height: "33px" }}
+              style={{ width: "200px", height: "32px" }}
               type="text"
               value={searchValue}
               onChange={(e) => setSearchValue(e.target.value)}
@@ -132,7 +186,6 @@ const TablasCli = () => {
               style={{
                 width: "100px",
                 padding: "0px",
-                marginLeft: "10px",
                 borderRadius: "0px",
               }}
               onClick={showDrawer}

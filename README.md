@@ -4,6 +4,11 @@ Linux node -v definir
 Params
 ?idU=1
 
+## .env
+### REACT_APP_URL
+
+## App.js
+### idU
 
 Para desplegar el server:
 
