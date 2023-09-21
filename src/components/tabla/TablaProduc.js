@@ -8,6 +8,7 @@ import { Spin, Table, Select, Modal, Button, notification } from "antd";
 import "./style.css";
 import { Option } from "antd/es/mentions";
 import { AlertOutlined, ReloadOutlined } from "@ant-design/icons";
+import BtnExcel from "./BtnExcel";
 
 const TablaProduc = () => {
   const URLDOS = process.env.REACT_APP_URL;
@@ -34,6 +35,7 @@ const TablaProduc = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [cliLead, setCliLead] = useState("");
   const [cliAct, setCliAct] = useState({});
+  const [nombreGrupos, setNombreGrupos] = useState ();
 
   //const [isTotalRow, setIsTotalRow] = useState(false);
 
@@ -55,6 +57,13 @@ const TablaProduc = () => {
       });
     });
   };
+
+  //Obtiene nombres de grupo1 y grupo2: http://10.0.0.153/duoc/modulos/getConf.php
+  const getConf = async () => {
+    const data = await fetch(`${URLDOS}getConf.php`);
+    const jsonData = await data.json();
+    setNombreGrupos(jsonData[0]);
+  }
 
   //* PARA ORDENAR LOS VALORES EN LA TABLA, TENIENDO EN CUENTA LOS CARACTERES ESPECIALES Y LETRAS
   const convertToNumber = (value) => {
@@ -79,6 +88,7 @@ const TablaProduc = () => {
   useEffect(() => {
     if (activeTab === "2" && idUsu) {
       cargarTablaInfo();
+      getConf();
     }
   }, [activeTab, idUsu, actualizarData]);
 
@@ -95,7 +105,7 @@ const TablaProduc = () => {
       dataIndex: "cuenta",
       key: "cuenta",
       align: "center",
-      width: "50px",
+      className: 'col-cuenta-ancho', //Puesto como style en .css porque de lo contrario afecta negativamente a la hora de exportar como archivo .xlsx, ya que pasa el width como parametro oculto a la hora de generar el xlxs y abrirlo (solo en Excel).
       sorter: (a, b) => parseInt(a.cuenta) - parseInt(b.cuenta), // Agregar esta propiedad para habilitar el ordenamiento
     },
     {
@@ -107,7 +117,6 @@ const TablaProduc = () => {
         <div
           style={{
             color: "#00b33c",
-            maxWidth: "100px", // Ajusta el valor según el ancho deseado
             overflow: "hidden",
             textOverflow: "ellipsis",
             whiteSpace: "nowrap",
@@ -118,7 +127,7 @@ const TablaProduc = () => {
           {text}
         </div>
       ),
-      width: "130px",
+      className: 'col-cliente-ancho', //Puesto como style en .css porque de lo contrario afecta negativamente a la hora de exportar como archivo .xlsx, ya que pasa el width como parametro oculto a la hora de generar el xlxs y abrirlo (solo en Excel).      
       sorter: (a, b) => a.clientes?.localeCompare(b.clientes) || 0,
     },
     {
@@ -136,6 +145,7 @@ const TablaProduc = () => {
       align: "right",
       sorter: (a, b) => sorterWithTotalRow(a, b, "propias"),
       sortDirections: ["ascend", "descend"],
+      className: "hidden-column"
     },
     {
       title: "HAS. ALQ.",
@@ -144,6 +154,7 @@ const TablaProduc = () => {
       align: "right",
       sorter: (a, b) => sorterWithTotalRow(a, b, "alquiladas"),
       sortDirections: ["ascend", "descend"],
+      className: "hidden-column"
     },
     {
       title: "COMPRA USD INS.",
@@ -192,6 +203,18 @@ const TablaProduc = () => {
       align: "right",
       sorter: (a, b) => sorterWithTotalRow(a, b, "tareasAbiertas"),
       sortDirections: ["ascend", "descend"],
+    },
+    {
+      title: `${nombreGrupos?.grupo1.toUpperCase()}`,
+      dataIndex: "zonas",
+      key: "zonas",
+      className: "hidden-column"
+    },
+    {
+      title: `${nombreGrupos?.grupo2.toUpperCase()}`,
+      dataIndex: "centro",
+      key: "centro",
+      className: "hidden-column"
     },
   ];
 
@@ -302,57 +325,57 @@ const TablaProduc = () => {
       propias: c.has_propias
         ? typeof c.has_propias === "string"
           ? parseInt(c.has_propias)
-              .toLocaleString(undefined, numberFormatOptions)
-              .replace(/,/g, ".")
+            .toLocaleString(undefined, numberFormatOptions)
+            .replace(/,/g, ".")
           : c.has_propias
         : "S/D",
       alquiladas: c.has_alquiladas
         ? typeof c.has_alquiladas === "string"
           ? parseInt(c.has_alquiladas)
-              .toLocaleString(undefined, numberFormatOptions)
-              .replace(/,/g, ".")
+            .toLocaleString(undefined, numberFormatOptions)
+            .replace(/,/g, ".")
           : c.has_alquiladas
         : "S/D",
       hasTotales: c.has_totales
         ? typeof c.has_totales === "string"
           ? parseInt(c.has_totales)
-              .toLocaleString(undefined, numberFormatOptions)
-              .replace(/,/g, ".")
+            .toLocaleString(undefined, numberFormatOptions)
+            .replace(/,/g, ".")
           : c.has_totales
         : "S/D",
       usdInsumo: c.usdEntregados
         ? typeof c.usdEntregados === "string"
           ? parseInt(c.usdEntregados)
-              .toLocaleString(undefined, numberFormatOptions)
-              .replace(/,/g, ".")
+            .toLocaleString(undefined, numberFormatOptions)
+            .replace(/,/g, ".")
           : c.usdEntregados
         : "S/D",
       estimadoUSDInsumos: c.costoEstimado
         ? typeof c.costoEstimado === "string"
           ? parseInt(c.costoEstimado)
-              .toLocaleString(undefined, numberFormatOptions)
-              .replace(/,/g, ".")
+            .toLocaleString(undefined, numberFormatOptions)
+            .replace(/,/g, ".")
           : c.costoEstimado
         : "S/D",
       toneladasEntregadas: c.toneladasEntregadas
         ? typeof c.toneladasEntregadas === "string"
           ? parseInt(c.toneladasEntregadas)
-              .toLocaleString(undefined, numberFormatOptions)
-              .replace(/,/g, ".")
+            .toLocaleString(undefined, numberFormatOptions)
+            .replace(/,/g, ".")
           : c.toneladasEntregadas
         : "S/D",
       estimadoToneladas: c.toneladasEstimadas
         ? typeof c.toneladasEstimadas === "string"
           ? parseInt(c.toneladasEstimadas)
-              .toLocaleString(undefined, numberFormatOptions)
-              .replace(/,/g, ".")
+            .toLocaleString(undefined, numberFormatOptions)
+            .replace(/,/g, ".")
           : c.toneladasEstimadas
         : "S/D",
       negUSDAbierto: c.suma_neg_valor
         ? typeof c.suma_neg_valor === "string"
           ? parseInt(c.suma_neg_valor)
-              .toLocaleString(undefined, numberFormatOptions)
-              .replace(/,/g, ".")
+            .toLocaleString(undefined, numberFormatOptions)
+            .replace(/,/g, ".")
           : c.suma_neg_valor
         : "S/D",
       tareasAbiertas: c.cantidad_tareas_pendientes
@@ -360,6 +383,9 @@ const TablaProduc = () => {
           ? parseInt(c.cantidad_tareas_pendientes).toFixed(0)
           : c.cantidad_tareas_pendientes
         : "S/D",
+
+      zonas: c.gruuno_desc,
+      centro: c.grudos_desc,
     }))
   );
 
@@ -388,16 +414,16 @@ const TablaProduc = () => {
     clientes: (
       <span style={{ color: "#00b33c", fontWeight: "bold" }}>TOTALES</span>
     ),
-    propias: (
-      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
-        {sumColumns(dataProductivo, "propias")}
-      </span>
-    ),
-    alquiladas: (
-      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
-        {sumColumns(dataProductivo, "alquiladas")}
-      </span>
-    ),
+    // propias: (
+    //   <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+    //     {sumColumns(dataProductivo, "propias")}
+    //   </span>
+    // ),
+    // alquiladas: (
+    //   <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+    //     {sumColumns(dataProductivo, "alquiladas")}
+    //   </span>
+    // ),
     hasTotales: (
       <span style={{ color: "#00b33c", fontWeight: "bold" }}>
         {sumColumns(dataProductivo, "hasTotales")}
@@ -437,16 +463,18 @@ const TablaProduc = () => {
 
   const clientesOptions = infoClientes
     ? infoClientes
-        .filter((cliente) => cliente.cli_idsistema != 0)
-        .map((cliente) => (
-          <Option key={cliente.cli_id} value={cliente.cli_id}>
-            {cliente.cli_nombre}
-          </Option>
-        ))
+      .filter((cliente) => cliente.cli_idsistema != 0)
+      .map((cliente) => (
+        <Option key={cliente.cli_id} value={cliente.cli_id}>
+          {cliente.cli_nombre}
+        </Option>
+      ))
     : null;
 
   return (
     <>
+      <BtnExcel columns={columnsProductivo} dataSource={dataProductivo} saveAsName={'tablaProdComercial'} />
+
       {isLoadingTP ? (
         <div
           style={{
@@ -464,7 +492,7 @@ const TablaProduc = () => {
           dataSource={dataProductivo}
           columns={columnsProductivo}
           size="small"
-          // rowClassName={rowClassName}
+          pagination={{showSizeChanger: false}}
           onRow={(record) => ({
             onClick: (event) => {
               if (event.target.tagName !== "DIV") {
@@ -484,12 +512,12 @@ const TablaProduc = () => {
                 <Table.Summary.Cell index={2} className="totalCell">
                   {totalRow.hasTotales}
                 </Table.Summary.Cell>
-                <Table.Summary.Cell index={3} className="totalCell">
+                {/* <Table.Summary.Cell index={3} className="totalCell">
                   {totalRow.propias}
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={4} className="totalCell">
                   {totalRow.alquiladas}
-                </Table.Summary.Cell>
+                </Table.Summary.Cell> */}
                 <Table.Summary.Cell index={5} className="totalCell">
                   {totalRow.usdInsumo}
                 </Table.Summary.Cell>
