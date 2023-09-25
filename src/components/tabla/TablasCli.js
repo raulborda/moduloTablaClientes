@@ -7,7 +7,7 @@ import { CloseOutlined } from "@ant-design/icons";
 import TablaInfo from "./TablaInfo";
 import TablaProduc from "./TablaProduc";
 import TablaRubros from "./TablaRubros";
-import NuevoCliente from "../nuevoCliente/NuevoCliente";
+import NuevoLead from "../nuevoLead/NuevoLead";
 
 const TablasCli = () => {
   const URLDOS = process.env.REACT_APP_URL;
@@ -196,13 +196,13 @@ const TablasCli = () => {
         </div>
 
         <Drawer
-          title="Nuevo Cliente"
+          title="Nuevo lead"
           open={isDrawerVisibleForm}
           onClose={closeDrawer}
           width={420}
           closeIcon={<CustomCloseIcon />}
         >
-          <NuevoCliente />
+          <NuevoLead />
         </Drawer>
         <Tabs
           defaultActiveKey="1"

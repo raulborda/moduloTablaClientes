@@ -5,7 +5,7 @@ import React, { useContext, useEffect, useState, useRef } from "react";
 import { GlobalContext } from "../context/GlobalContext";
 import "./style.css";
 
-const NuevoCliente = () => {
+const NuevoLead = () => {
   const URLDOS = process.env.REACT_APP_URL;
 
   const formRef = useRef(null);
@@ -341,4 +341,4 @@ const NuevoCliente = () => {
   );
 };
 
-export default NuevoCliente;
+export default NuevoLead;
