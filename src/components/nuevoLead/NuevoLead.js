@@ -184,7 +184,7 @@ const NuevoLead = () => {
               rules={[
                 {
                   required: true,
-                  message: "Por favor ingresa la razón social",
+                  message: "Campo obligatorio",
                 },
               ]}
               className="hidden-asterisk"
@@ -285,7 +285,7 @@ const NuevoLead = () => {
               rules={[
                 {
                   required: true,
-                  message: "Por favor seleccione la zona",
+                  message: "Campo obligatorio",
                 },
               ]}
               className="hidden-asterisk input-width"
@@ -310,7 +310,7 @@ const NuevoLead = () => {
               rules={[
                 {
                   required: true,
-                  message: "Por favor seleccione el centro",
+                  message: "Campo obligatorio",
                 },
               ]}
               className="hidden-asterisk input-width"
