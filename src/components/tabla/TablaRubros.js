@@ -31,6 +31,8 @@ const TablaRubros = ({ status, clientesInactivos }) => {
     etiquetasSelec,
     actualizarData,
     setActualizarData,
+    switchTables, 
+    setSwitchTables
   } = useContext(GlobalContext);
 
   //const [isTotalRow, setIsTotalRow] = useState(false);
@@ -40,7 +42,14 @@ const TablaRubros = ({ status, clientesInactivos }) => {
   const [cliAct, setCliAct] = useState({});
   const [nombreGrupos, setNombreGrupos] = useState();
 
+  const [currentPage, setCurrentPage] = useState(1);
+
   const cargarTablaInfo = () => {
+    console.log('switchTablesR', switchTables)
+
+
+    //Al cambiar entre tablas, posiciona en la tabla en la primera pagina.
+    setCurrentPage(1);
     setIsLoadingTR(true); // Establecer isLoadingTR en true antes de hacer la solicitud
     const data = new FormData();
     data.append("idU", idUsu);
@@ -395,7 +404,7 @@ const TablaRubros = ({ status, clientesInactivos }) => {
           dataSource={dataRubros}
           columns={columnsRubros}
           size="small"
-          pagination={{ showSizeChanger: false }}
+          pagination={{ showSizeChanger: false, defaultCurrent: currentPage }}
           onRow={(record) => ({
             onClick: (event) => {
               if (event.target.tagName !== "DIV") {
@@ -430,6 +439,11 @@ const TablaRubros = ({ status, clientesInactivos }) => {
               </Table.Summary.Row>
             </Table.Summary>
           )}
+          onChange={(pagination, filter, sorter, currentTable) => {
+
+            setCurrentPage(pagination.current)
+            
+          }}
         />
       )}
       {isModalVisible ? (

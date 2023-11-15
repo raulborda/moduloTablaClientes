@@ -32,6 +32,9 @@ const TablasCli = () => {
     etiquetasSelec,
     setEtiquetasSelec,
     idUsu,
+    setSwitchTables,
+    setActualizarData, 
+    actualizarData
   } = useContext(GlobalContext);
 
   const urlParams = new URLSearchParams(window.location.search);
@@ -66,6 +69,7 @@ const TablasCli = () => {
 
   const handleCambio = (tabKey) => {
     setActiveTab(tabKey);
+    setSwitchTables(true);
   };
 
   const items = [
@@ -135,6 +139,11 @@ const TablasCli = () => {
       });
     });
   }, []);
+
+  const onCloseDrawerCli = () => {
+    setActualizarData(!actualizarData)
+    setIsDrawerVisible(false);
+  };
 
   return (
     <>
@@ -215,7 +224,7 @@ const TablasCli = () => {
         <Drawer
           className="drawerCli"
           open={isDrawerVisible}
-          onClose={() => setIsDrawerVisible(false)}
+          onClose={onCloseDrawerCli}
           placement="bottom"
           height={"100%"}
           style={{ whiteSpace: "nowrap" }}
@@ -224,6 +233,7 @@ const TablasCli = () => {
               style={{ position: "absolute", top: "8px", right: "8px" }}
             />
           }
+          bodyStyle={{padding:"10px"}}
         >
           <iframe
             loading="lazy"

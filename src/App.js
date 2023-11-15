@@ -24,6 +24,7 @@ function App() {
   const [actualizarData, setActualizarData] = useState(false);
   const [etiquetasSistema, setEtiquetasSistema] = useState([]);
   const [etiquetasSelec, setEtiquetasSelec] = useState([]);
+  const [switchTables, setSwitchTables] = useState(false);
 
   return (
     <GlobalContext.Provider
@@ -56,6 +57,8 @@ function App() {
         setEtiquetasSistema,
         etiquetasSelec,
         setEtiquetasSelec,
+        switchTables, 
+        setSwitchTables
       }}
     >
       <ConfigProvider

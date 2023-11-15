@@ -26,13 +26,23 @@ const TablaInfo = ({ status, clientesInactivos }) => {
     actualizarData,
     setActualizarData,
     etiquetasSelec,
+    switchTables, 
+    setSwitchTables
   } = useContext(GlobalContext);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [cliLead, setCliLead] = useState("");
   const [cliAct, setCliAct] = useState({});
 
-  const [conf, setConf] = useState(); // getConf.php para cabecera de tabla
+  const [fVendedor, setFVendedor] = useState(); 
+  const [fDivision, setFDivision] = useState(); 
+  const [fTipo, setFTipo] = useState(); 
+  const [fSector, setFSector] = useState();
+  const [fTamano, setFTamano] = useState(); 
+
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [nombreGrupos, setNombreGrupos] = useState ();
 
   const [sortConfig, setSortConfig] = useState({
     column: null,
@@ -40,6 +50,24 @@ const TablaInfo = ({ status, clientesInactivos }) => {
   });
 
   const cargarTablaInfo = () => {
+    console.log('switchTablesI', switchTables)
+    
+    if(switchTables){ //Reinicia todos los posibles filtros aplicados al cambiar entre tablas.
+      setFVendedor(undefined);
+      setFDivision(undefined);
+      setFTipo(undefined);
+      setFSector(undefined);
+      setFTamano(undefined);
+      setCurrentPage(1);
+      setSwitchTables(false);
+    }else{ //Si seguimos en la misma tabla, que mantenga filtros y pagina.
+      setFVendedor(fVendedor);
+      setFDivision(fDivision);
+      setFTipo(fTipo);
+      setFSector(fSector);
+      setFTamano(fTamano);
+    }
+
     setIsLoadingTI(true); // Establecer isLoadingTI en true antes de hacer la solicitud
     const data = new FormData();
     data.append("idU", idUsu);
@@ -59,9 +87,17 @@ const TablaInfo = ({ status, clientesInactivos }) => {
     });
   };
 
+  //Obtiene nombres de grupo1 y grupo2: http://10.0.0.153/duoc/modulos/getConf.php
+    const getConf = async () => {
+    const data = await fetch(`${URLDOS}getConf.php`);
+    const jsonData = await data.json();
+    setNombreGrupos(jsonData[0]);
+  }
+
   useEffect(() => {
     if (activeTab === "1" && idUsu) {
       cargarTablaInfo();
+      getConf();
     }
   }, [activeTab, idUsu, actualizarData]);
 
@@ -103,20 +139,6 @@ const TablaInfo = ({ status, clientesInactivos }) => {
   }));
   const tamanoFilters = tamanosUnicos.map((tam) => ({ text: tam, value: tam }));
 
-  useEffect(() => {
-    const url = `${URLDOS}getConf.php`;
-
-    fetch(url)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`Error en la solicitud: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then((data) => {
-        setConf(data);
-      });
-  }, []);
 
   const columns = [
     {
@@ -149,20 +171,22 @@ const TablaInfo = ({ status, clientesInactivos }) => {
       sorter: (a, b) => a.clientes?.localeCompare(b.clientes) || 0,
     },
     {
-      title: conf ? conf[0].grupo1.toUpperCase() : "-",
+      title: nombreGrupos ? nombreGrupos.grupo1.toUpperCase() : "-",
       dataIndex: "zonas",
       key: "zonas",
       align: "center",
       filters: zonaFilters,
       onFilter: (value, record) => record.zonas === value,
+      defaultFilteredValue : fVendedor,
     },
     {
-      title: conf ? conf[0].grupo2.toUpperCase() : "-",
+      title: nombreGrupos ? nombreGrupos.grupo2.toUpperCase() : "-",
       dataIndex: "centro",
       key: "centro",
       align: "center",
       filters: centroFilters,
       onFilter: (value, record) => record.centro === value,
+      defaultFilteredValue : fDivision,
     },
     {
       title: "TIPO",
@@ -171,6 +195,7 @@ const TablaInfo = ({ status, clientesInactivos }) => {
       align: "center",
       filters: tipoFilters,
       onFilter: (value, record) => record.tipo === value,
+      defaultFilteredValue : fTipo,
     },
     {
       title: "SECTOR",
@@ -179,6 +204,7 @@ const TablaInfo = ({ status, clientesInactivos }) => {
       align: "center",
       filters: actividadFilters,
       onFilter: (value, record) => record.actividad === value,
+      defaultFilteredValue : fSector,
     },
     {
       title: "TAMAÑO",
@@ -187,6 +213,7 @@ const TablaInfo = ({ status, clientesInactivos }) => {
       align: "center",
       filters: tamanoFilters,
       onFilter: (value, record) => record.tamaño === value,
+      defaultFilteredValue : fTamano,
     },
     // {
     //   title: "EMAIL",
@@ -254,7 +281,7 @@ const TablaInfo = ({ status, clientesInactivos }) => {
   };
 
   const data = filterData(
-    filtrarClientes(infoClientes, status, clientesInactivos, etiquetasSelec)?.map((c, index) => ({
+    filtrarClientes(infoClientes, status, clientesInactivos, etiquetasSelec, fVendedor, fDivision, fTipo, fSector, fTamano)?.map((c, index) => ({
       key: c.cli_id,
       cuenta:
         c.cli_idsistema === "0" ? (
@@ -300,7 +327,7 @@ const TablaInfo = ({ status, clientesInactivos }) => {
           </Option>
         ))
     : null;
-
+          //console.log('data', data)
   return (
     <>
       <BtnExcel columns={columns} dataSource={data} saveAsName={"tablaInfo"} />
@@ -321,7 +348,7 @@ const TablaInfo = ({ status, clientesInactivos }) => {
           dataSource={data}
           columns={columns}
           size="small"
-          pagination={{ showSizeChanger: false }}
+          pagination={{ showSizeChanger: false, defaultCurrent: currentPage }}
           onRow={(record) => ({
             onClick: (event) => {
               if (event.target.tagName !== "DIV") {
@@ -331,6 +358,16 @@ const TablaInfo = ({ status, clientesInactivos }) => {
               handleCliente(record);
             },
           })}
+          onChange={(pagination, filter, sorter, currentTable) => {
+
+            setFVendedor(filter?.zonas)
+            setFDivision(filter?.centro)
+            setFTipo(filter?.tipo)
+            setFSector(filter?.actividad)
+            setFTamano(filter?.tamaño)
+            setCurrentPage(pagination.current)
+
+          }}
         />
       )}
 

@@ -11,7 +11,7 @@ import { AlertOutlined, ReloadOutlined } from "@ant-design/icons";
 import BtnExcel from "./BtnExcel";
 import { filtrarClientes } from "../../utils/filtrarClientes";
 
-const TablaProduc = ({status, clientesInactivos}) => {
+const TablaProduc = ({ status, clientesInactivos }) => {
   const URLDOS = process.env.REACT_APP_URL;
 
   const {
@@ -31,16 +31,36 @@ const TablaProduc = ({status, clientesInactivos}) => {
     etiquetasSelec,
     actualizarData,
     setActualizarData,
+    switchTables,
+    setSwitchTables
   } = useContext(GlobalContext);
 
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [cliLead, setCliLead] = useState("");
   const [cliAct, setCliAct] = useState({});
-  const [nombreGrupos, setNombreGrupos] = useState ();
+  const [nombreGrupos, setNombreGrupos] = useState();
 
+  const [currentPage, setCurrentPage] = useState(1);
+
+  const [fVendedor, setFVendedor] = useState();
+  const [fDivision, setFDivision] = useState();
   //const [isTotalRow, setIsTotalRow] = useState(false);
 
   const cargarTablaInfo = () => {
+    console.log('switchTablesP', switchTables)
+
+    if (switchTables) { //Reinicia todos los posibles filtros aplicados
+      setFVendedor(undefined);
+      setFDivision(undefined);
+      setCurrentPage(1);
+      setSwitchTables(false);
+    } else {
+      setFVendedor(fVendedor);
+      setFDivision(fDivision);
+    }
+
+
+
     setIsLoadingTP(true); // Establecer isLoadingTP en true antes de hacer la solicitud
     const data = new FormData();
     data.append("idU", idUsu);
@@ -93,6 +113,20 @@ const TablaProduc = ({status, clientesInactivos}) => {
     }
   }, [activeTab, idUsu, actualizarData]);
 
+  const zonasUnicos = [
+    ...new Set(
+      infoClientes?.map((c) => c.gruuno_desc).filter((value) => value !== null)
+    ),
+  ];
+  const centrosUnicos = [
+    ...new Set(
+      infoClientes?.map((c) => c.grudos_desc).filter((value) => value !== null)
+    ),
+  ];
+
+  const zonaFilters = zonasUnicos.map((zona) => ({ text: zona, value: zona }));
+  const centroFilters = centrosUnicos.map((centro) => ({ text: centro, value: centro }));
+
   const columnsProductivo = [
     {
       title: "CUENTA",
@@ -101,6 +135,8 @@ const TablaProduc = ({status, clientesInactivos}) => {
       align: "center",
       className: 'col-cuenta-ancho', //Puesto como style en .css porque de lo contrario afecta negativamente a la hora de exportar como archivo .xlsx, ya que pasa el width como parametro oculto a la hora de generar el xlxs y abrirlo (solo en Excel).
       sorter: (a, b) => parseInt(a.cuenta) - parseInt(b.cuenta), // Agregar esta propiedad para habilitar el ordenamiento
+      fixed: 'left',
+      ellipsis: true,
     },
     {
       title: "CLIENTE",
@@ -123,6 +159,8 @@ const TablaProduc = ({status, clientesInactivos}) => {
       ),
       className: 'col-cliente-ancho', //Puesto como style en .css porque de lo contrario afecta negativamente a la hora de exportar como archivo .xlsx, ya que pasa el width como parametro oculto a la hora de generar el xlxs y abrirlo (solo en Excel).      
       sorter: (a, b) => a.clientes?.localeCompare(b.clientes) || 0,
+      fixed: 'left',
+      ellipsis: true,
     },
     {
       title: "HAS. TOTALES",
@@ -131,6 +169,7 @@ const TablaProduc = ({status, clientesInactivos}) => {
       align: "right",
       sorter: (a, b) => sorterWithTotalRow(a, b, "hasTotales"),
       sortDirections: ["ascend", "descend"],
+      ellipsis: true,
     },
     {
       title: "HAS. PROP.",
@@ -139,7 +178,7 @@ const TablaProduc = ({status, clientesInactivos}) => {
       align: "right",
       sorter: (a, b) => sorterWithTotalRow(a, b, "propias"),
       sortDirections: ["ascend", "descend"],
-      className: "hidden-column"
+      className: "hidden-column",
     },
     {
       title: "HAS. ALQ.",
@@ -148,7 +187,7 @@ const TablaProduc = ({status, clientesInactivos}) => {
       align: "right",
       sorter: (a, b) => sorterWithTotalRow(a, b, "alquiladas"),
       sortDirections: ["ascend", "descend"],
-      className: "hidden-column"
+      className: "hidden-column",
     },
     {
       title: "COMPRA USD INS.",
@@ -157,6 +196,7 @@ const TablaProduc = ({status, clientesInactivos}) => {
       align: "right",
       sorter: (a, b) => sorterWithTotalRow(a, b, "usdInsumo"),
       sortDirections: ["ascend", "descend"],
+      ellipsis: true,
     },
     {
       title: "TT ENTREG.",
@@ -165,6 +205,7 @@ const TablaProduc = ({status, clientesInactivos}) => {
       align: "right",
       sorter: (a, b) => sorterWithTotalRow(a, b, "toneladasEntregadas"),
       sortDirections: ["ascend", "descend"],
+      ellipsis: true,
     },
     {
       title: "COMPRA USD ESTIM.",
@@ -173,6 +214,7 @@ const TablaProduc = ({status, clientesInactivos}) => {
       align: "right",
       sorter: (a, b) => sorterWithTotalRow(a, b, "estimadoUSDInsumos"),
       sortDirections: ["ascend", "descend"],
+      ellipsis: true,
     },
     {
       title: "TT ESTIM.",
@@ -181,6 +223,7 @@ const TablaProduc = ({status, clientesInactivos}) => {
       align: "right",
       sorter: (a, b) => sorterWithTotalRow(a, b, "estimadoToneladas"),
       sortDirections: ["ascend", "descend"],
+      ellipsis: true,
     },
     {
       title: "NEG. USD ABIERTO",
@@ -189,6 +232,7 @@ const TablaProduc = ({status, clientesInactivos}) => {
       align: "right",
       sorter: (a, b) => sorterWithTotalRow(a, b, "negUSDAbierto"),
       sortDirections: ["ascend", "descend"],
+      ellipsis: true,
     },
     {
       title: "TAREAS ABIERTAS",
@@ -197,18 +241,27 @@ const TablaProduc = ({status, clientesInactivos}) => {
       align: "right",
       sorter: (a, b) => sorterWithTotalRow(a, b, "tareasAbiertas"),
       sortDirections: ["ascend", "descend"],
+      ellipsis: true,
     },
     {
       title: `${nombreGrupos?.grupo1.toUpperCase()}`,
       dataIndex: "zonas",
       key: "zonas",
-      className: "hidden-column"
+      //className: "hidden-column",
+      filters: zonaFilters,
+      onFilter: (value, record) => record.zonas === value,
+      ellipsis: true,
+      defaultFilteredValue : fVendedor,
     },
     {
       title: `${nombreGrupos?.grupo2.toUpperCase()}`,
       dataIndex: "centro",
       key: "centro",
-      className: "hidden-column"
+      //className: "hidden-column"
+      filters: centroFilters,
+      onFilter: (value, record) => record.centro === value,
+      ellipsis: true,
+      defaultFilteredValue : fDivision,
     },
   ];
 
@@ -271,7 +324,7 @@ const TablaProduc = ({status, clientesInactivos}) => {
 
   const dataProductivo = filterData(
     //infoClientes.map((c, index) => ({
-      filtrarClientes(infoClientes, status, clientesInactivos, etiquetasSelec).map((c, index) => ({
+    filtrarClientes(infoClientes, status, clientesInactivos, etiquetasSelec, fVendedor, fDivision).map((c, index) => ({
       key: c.cli_id,
       cuenta:
         c.cli_idsistema === "0" ? (
@@ -468,7 +521,7 @@ const TablaProduc = ({status, clientesInactivos}) => {
           dataSource={dataProductivo}
           columns={columnsProductivo}
           size="small"
-          pagination={{showSizeChanger: false}}
+          pagination={{ showSizeChanger: false, defaultCurrent: currentPage }}
           onRow={(record) => ({
             onClick: (event) => {
               if (event.target.tagName !== "DIV") {
@@ -515,6 +568,16 @@ const TablaProduc = ({status, clientesInactivos}) => {
               </Table.Summary.Row>
             </Table.Summary>
           )}
+          onChange={(pagination, filter, sorter, currentTable) => {
+
+            setFVendedor(filter?.zonas)
+            setFDivision(filter?.centro)
+            setCurrentPage(pagination.current)
+
+          }}
+          scroll={{
+            x: true
+          }}
         />
       )}
       {isModalVisible ? (
