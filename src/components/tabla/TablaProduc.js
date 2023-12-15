@@ -198,15 +198,15 @@ const TablaProduc = ({ status, clientesInactivos }) => {
       sortDirections: ["ascend", "descend"],
       ellipsis: true,
     },
-    {
-      title: "TT ENTREG.",
-      dataIndex: "toneladasEntregadas",
-      key: "toneladasEntregadas",
-      align: "right",
-      sorter: (a, b) => sorterWithTotalRow(a, b, "toneladasEntregadas"),
-      sortDirections: ["ascend", "descend"],
-      ellipsis: true,
-    },
+    // {
+    //   title: "TT ENTREG.",
+    //   dataIndex: "toneladasEntregadas",
+    //   key: "toneladasEntregadas",
+    //   align: "right",
+    //   sorter: (a, b) => sorterWithTotalRow(a, b, "toneladasEntregadas"),
+    //   sortDirections: ["ascend", "descend"],
+    //   ellipsis: true,
+    // },
     {
       title: "COMPRA USD ESTIM.",
       dataIndex: "estimadoUSDInsumos",
@@ -216,15 +216,15 @@ const TablaProduc = ({ status, clientesInactivos }) => {
       sortDirections: ["ascend", "descend"],
       ellipsis: true,
     },
-    {
-      title: "TT ESTIM.",
-      dataIndex: "estimadoToneladas",
-      key: "estimadoToneladas",
-      align: "right",
-      sorter: (a, b) => sorterWithTotalRow(a, b, "estimadoToneladas"),
-      sortDirections: ["ascend", "descend"],
-      ellipsis: true,
-    },
+    // {
+    //   title: "TT ESTIM.",
+    //   dataIndex: "estimadoToneladas",
+    //   key: "estimadoToneladas",
+    //   align: "right",
+    //   sorter: (a, b) => sorterWithTotalRow(a, b, "estimadoToneladas"),
+    //   sortDirections: ["ascend", "descend"],
+    //   ellipsis: true,
+    // },
     {
       title: "NEG. USD ABIERTO",
       dataIndex: "negUSDAbierto",
@@ -463,21 +463,21 @@ const TablaProduc = ({ status, clientesInactivos }) => {
         {sumColumns(dataProductivo, "usdInsumo")}
       </span>
     ),
-    toneladasEntregadas: (
-      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
-        {sumColumns(dataProductivo, "toneladasEntregadas")}
-      </span>
-    ),
+    // toneladasEntregadas: (
+    //   <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+    //     {sumColumns(dataProductivo, "toneladasEntregadas")}
+    //   </span>
+    // ),
     estimadoUSDInsumos: (
       <span style={{ color: "#00b33c", fontWeight: "bold" }}>
         {sumColumns(dataProductivo, "estimadoUSDInsumos")}
       </span>
     ),
-    estimadoToneladas: (
-      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
-        {sumColumns(dataProductivo, "estimadoToneladas")}
-      </span>
-    ),
+    // estimadoToneladas: (
+    //   <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+    //     {sumColumns(dataProductivo, "estimadoToneladas")}
+    //   </span>
+    // ),
     negUSDAbierto: (
       <span style={{ color: "#00b33c", fontWeight: "bold" }}>
         {sumColumns(dataProductivo, "negUSDAbierto")}
@@ -550,15 +550,15 @@ const TablaProduc = ({ status, clientesInactivos }) => {
                 <Table.Summary.Cell index={5} className="totalCell">
                   {totalRow.usdInsumo}
                 </Table.Summary.Cell>
-                <Table.Summary.Cell index={6} className="totalCell">
+                {/* <Table.Summary.Cell index={6} className="totalCell">
                   {totalRow.toneladasEntregadas}
-                </Table.Summary.Cell>
+                </Table.Summary.Cell> */}
                 <Table.Summary.Cell index={7} className="totalCell">
                   {totalRow.estimadoUSDInsumos}
                 </Table.Summary.Cell>
-                <Table.Summary.Cell index={8} className="totalCell">
+                {/* <Table.Summary.Cell index={8} className="totalCell">
                   {totalRow.estimadoToneladas}
-                </Table.Summary.Cell>
+                </Table.Summary.Cell> */}
                 <Table.Summary.Cell index={9} className="totalCell">
                   {totalRow.negUSDAbierto}
                 </Table.Summary.Cell>
