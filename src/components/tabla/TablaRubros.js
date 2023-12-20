@@ -45,7 +45,6 @@ const TablaRubros = ({ status, clientesInactivos }) => {
   const [currentPage, setCurrentPage] = useState(1);
 
   const cargarTablaInfo = () => {
-    console.log('switchTablesR', switchTables)
 
 
     //Al cambiar entre tablas, posiciona en la tabla en la primera pagina.
@@ -184,6 +183,20 @@ const TablaRubros = ({ status, clientesInactivos }) => {
       key: "centro",
       className: "hidden-column",
     },
+    {
+      title: "POTENCIAL USD",
+      dataIndex: "potencial",
+      key: "potencial",
+      align: "right",
+      sorter: (a, b) => sorterWithTotalRow(a, b, "potencial"),
+    },
+    {
+      title: "COMPRA USD",
+      dataIndex: "ventadol",
+      key: "ventadol",
+      align: "right",
+      sorter: (a, b) => sorterWithTotalRow(a, b, "ventadol"),
+    },
   ];
 
   const handleCliente = (record) => {
@@ -314,6 +327,20 @@ const TablaRubros = ({ status, clientesInactivos }) => {
 
       zonas: c.gruuno_desc,
       centro: c.grudos_desc,
+      potencial: c.potencial
+        ? typeof c.potencial === "string"
+          ? parseInt(c.potencial)
+              .toLocaleString(undefined, numberFormatOptions)
+              .replace(/,/g, ".")
+          : c.potencial
+        : "S/D",
+        ventadol: c.ventadol
+        ? typeof c.ventadol === "string"
+          ? parseInt(c.ventadol)
+              .toLocaleString(undefined, numberFormatOptions)
+              .replace(/,/g, ".")
+          : c.ventadol
+        : "S/D",
     }))
   );
 
@@ -365,6 +392,16 @@ const TablaRubros = ({ status, clientesInactivos }) => {
     mixto: (
       <span style={{ color: "#00b33c", fontWeight: "bold" }}>
         {sumColumns(dataRubros, "mixto")}
+      </span>
+    ),
+    potencial: (
+      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+        {sumColumns(dataRubros, "potencial")}
+      </span>
+    ),
+    ventadol: (
+      <span style={{ color: "#00b33c", fontWeight: "bold" }}>
+        {sumColumns(dataRubros, "ventadol")}
       </span>
     ),
   };
@@ -436,6 +473,13 @@ const TablaRubros = ({ status, clientesInactivos }) => {
                 <Table.Summary.Cell index={6} className="totalCell">
                   {totalRow.mixto}
                 </Table.Summary.Cell>
+                <Table.Summary.Cell index={7} className="totalCell">
+                  {totalRow.potencial}
+                </Table.Summary.Cell>
+                <Table.Summary.Cell index={8} className="totalCell">
+                  {totalRow.ventadol}
+                </Table.Summary.Cell>
+
               </Table.Summary.Row>
             </Table.Summary>
           )}
