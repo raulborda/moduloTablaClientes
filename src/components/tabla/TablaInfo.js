@@ -50,7 +50,7 @@ const TablaInfo = ({ status, clientesInactivos }) => {
   });
 
   const cargarTablaInfo = () => {
-    console.log('switchTablesI', switchTables)
+    // console.log('switchTablesI', switchTables)
     
     if(switchTables){ //Reinicia todos los posibles filtros aplicados al cambiar entre tablas.
       setFVendedor(undefined);

@@ -47,7 +47,7 @@ const TablaProduc = ({ status, clientesInactivos }) => {
   //const [isTotalRow, setIsTotalRow] = useState(false);
 
   const cargarTablaInfo = () => {
-    console.log('switchTablesP', switchTables)
+    // console.log('switchTablesP', switchTables)
 
     if (switchTables) { //Reinicia todos los posibles filtros aplicados
       setFVendedor(undefined);

@@ -87,13 +87,13 @@ const TablasCli = () => {
         <TablaProduc status={status} clientesInactivos={clientesInactivos} />
       ),
     },
-    {
-      key: "3",
-      label: "PRODUCTIVA POR RUBRO",
-      children: (
-        <TablaRubros status={status} clientesInactivos={clientesInactivos} />
-      ),
-    },
+    // { //Version FISA.
+    //   key: "3",
+    //   label: "PRODUCTIVA POR RUBRO",
+    //   children: (
+    //     <TablaRubros status={status} clientesInactivos={clientesInactivos} />
+    //   ),
+    // },
   ];
 
   const handleStatusChange = (v) => {
