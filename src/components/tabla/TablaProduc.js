@@ -163,7 +163,7 @@ const TablaProduc = ({ status, clientesInactivos }) => {
       ellipsis: true,
     },
     {
-      title: "HAS. TOTALES",
+      title: "LTS TOTALES", //FISA
       dataIndex: "hasTotales",
       key: "hasTotales",
       align: "right",
@@ -190,7 +190,7 @@ const TablaProduc = ({ status, clientesInactivos }) => {
       className: "hidden-column",
     },
     {
-      title: "COMPRA USD INS.",
+      title: "COMPRA USD REAL", //FISA
       dataIndex: "usdInsumo",
       key: "usdInsumo",
       align: "right",
@@ -208,7 +208,7 @@ const TablaProduc = ({ status, clientesInactivos }) => {
     //   ellipsis: true,
     // },
     {
-      title: "COMPRA USD ESTIM.",
+      title: "COMPRA USD POTENCIAL", //FISA
       dataIndex: "estimadoUSDInsumos",
       key: "estimadoUSD",
       align: "right",
