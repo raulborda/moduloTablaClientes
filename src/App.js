@@ -25,7 +25,7 @@ function App() {
   const [etiquetasSistema, setEtiquetasSistema] = useState([]);
   const [etiquetasSelec, setEtiquetasSelec] = useState([]);
   const [switchTables, setSwitchTables] = useState(false);
-
+ 
   return (
     <GlobalContext.Provider
       value={{
