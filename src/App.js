@@ -26,7 +26,7 @@ function App() {
   const [etiquetasSelec, setEtiquetasSelec] = useState([]);
   const [switchTables, setSwitchTables] = useState(false);
 
-  console.log('version modulo-tablaClientes: 23.10.24.F');
+  console.log('version modulo-tablaClientes: 23.10.24.F'); 
 
   return (
     <GlobalContext.Provider
